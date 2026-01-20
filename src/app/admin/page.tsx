@@ -58,7 +58,8 @@ export default function AdminPage() {
     // SSR-safe Calendar URL
     useEffect(() => {
         if (typeof window !== "undefined") {
-            setCalendarUrl(`${window.location.origin}/api/calendar`);
+            const baseUrl = `${window.location.origin}/api/calendar`;
+            setCalendarUrl(baseUrl);
         }
     }, []);
 
@@ -99,6 +100,9 @@ export default function AdminPage() {
             const data = await res.json();
             setAuthenticated(!!data.authenticated);
             if (data.authenticated) {
+                if (data.icalToken) {
+                    setCalendarUrl(prev => `${prev}?token=${data.icalToken}`);
+                }
                 await fetchData();
             }
         } catch {

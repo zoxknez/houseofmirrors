@@ -264,8 +264,8 @@ export function AdminCalendar({
                     if (status) {
                         borderClass = "border-transparent";
                         if (status.type === "pending") {
-                            bgClass = "bg-amber-500/10";
-                            textClass = "text-amber-400 font-bold";
+                            bgClass = "bg-[var(--gold)]/10";
+                            textClass = "text-[var(--gold)] font-bold";
                         }
                         if (status.type === "confirmed") {
                             bgClass = "bg-emerald-500/10";
@@ -332,7 +332,7 @@ export function AdminCalendar({
             {/* Legend */}
             <div className="flex flex-wrap items-center justify-center gap-6 mt-10 pt-8 border-t border-white/5">
                 {[
-                    { label: "Na čekanju", color: "bg-amber-500/40" },
+                    { label: "Na čekanju", color: "bg-[var(--gold)]/40" },
                     { label: "Potvrđeno", color: "bg-emerald-500/40" },
                     { label: "Završeno", color: "bg-blue-500/40" },
                     { label: "Blokirano", color: "bg-red-500/40" },

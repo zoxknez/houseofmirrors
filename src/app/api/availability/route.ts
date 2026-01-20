@@ -32,14 +32,16 @@ function parseICalData(icalString: string, source: "booking" | "airbnb"): Booked
             }
             currentEvent = null;
         } else if (currentEvent) {
+            // iCal standard: DTEND is exclusive for DATE values.
+            // Booking.com and Airbnb follow this (DTEND = checkout day).
             if (line.startsWith("DTSTART")) {
-                const value = line.split(":")[1];
-                currentEvent.start = parseICalDate(value);
+                const match = line.match(/:(.*)$/);
+                if (match) currentEvent.start = parseICalDate(match[1]);
             } else if (line.startsWith("DTEND")) {
-                const value = line.split(":")[1];
-                currentEvent.end = parseICalDate(value);
+                const match = line.match(/:(.*)$/);
+                if (match) currentEvent.end = parseICalDate(match[1]);
             } else if (line.startsWith("SUMMARY:")) {
-                currentEvent.summary = line.substring(8);
+                currentEvent.summary = line.substring(8).trim();
             }
         }
     }
@@ -48,6 +50,7 @@ function parseICalData(icalString: string, source: "booking" | "airbnb"): Booked
 }
 
 function parseICalDate(value: string): string {
+    // Input could be 20260110 or 20260110T120000Z
     if (value && value.length >= 8) {
         const year = value.substring(0, 4);
         const month = value.substring(4, 6);

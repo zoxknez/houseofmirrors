@@ -145,9 +145,12 @@ export async function isDateRangeAvailable(
     // Check against blocked dates
     for (const blocked of blockedDates) {
         const blockedStart = new Date(blocked.startDate);
-        const blockedEnd = new Date(blocked.endDate);
+        // Manual blocks are inclusive [start, end]. 
+        // We treat the end as exclusive check-out day by adding 1 day.
+        const blockedEndExclusive = new Date(blocked.endDate);
+        blockedEndExclusive.setDate(blockedEndExclusive.getDate() + 1);
 
-        if (requestStart < blockedEnd && requestEnd > blockedStart) {
+        if (requestStart < blockedEndExclusive && requestEnd > blockedStart) {
             return false;
         }
     }

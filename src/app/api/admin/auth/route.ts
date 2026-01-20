@@ -74,6 +74,7 @@ export async function GET() {
         return NextResponse.json({
             authenticated: true,
             expiresAt: expiry,
+            icalToken: process.env.ICAL_TOKEN,
         });
     } catch (error) {
         console.error("Auth GET error:", error);
