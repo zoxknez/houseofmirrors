@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Maximize, Users, Bed, Bath } from "lucide-react";
@@ -8,22 +8,86 @@ import { propertyData } from "@/data/property";
 import { propertyImages } from "@/data/images";
 import { GlassCard } from "@/components/ui/GlassCard";
 
+const AUTOPLAY_MS = 5000;
+
 export function Hero() {
-    const [currentSlide, setCurrentSlide] = useState(0);
     const images = propertyImages.hero;
+    const count = images.length;
+
+    const [currentSlide, setCurrentSlide] = useState(0);
+    const [isPaused, setIsPaused] = useState(false);
+
+    const timerRef = useRef<number | null>(null);
+
+    const clampIndex = (i: number) => (i + count) % count;
+
+    const goTo = (i: number) => setCurrentSlide(clampIndex(i));
+    const nextSlide = () => setCurrentSlide((p) => clampIndex(p + 1));
+    const prevSlide = () => setCurrentSlide((p) => clampIndex(p - 1));
+
+    const resetTimer = () => {
+        if (timerRef.current) window.clearInterval(timerRef.current);
+        timerRef.current = window.setInterval(() => {
+            setCurrentSlide((p) => clampIndex(p + 1));
+        }, AUTOPLAY_MS);
+    };
+
+    // Autoplay with pause on tab hidden
+    useEffect(() => {
+        const onVisibility = () => setIsPaused(document.hidden);
+
+        document.addEventListener("visibilitychange", onVisibility);
+        return () => document.removeEventListener("visibilitychange", onVisibility);
+    }, []);
 
     useEffect(() => {
-        const timer = setInterval(() => {
-            setCurrentSlide((prev) => (prev + 1) % images.length);
-        }, 5000);
-        return () => clearInterval(timer);
-    }, [images.length]);
+        if (!count) return;
+        if (isPaused) {
+            if (timerRef.current) window.clearInterval(timerRef.current);
+            timerRef.current = null;
+            return;
+        }
+        resetTimer();
+        return () => {
+            if (timerRef.current) window.clearInterval(timerRef.current);
+            timerRef.current = null;
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [count, isPaused]);
 
-    const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % images.length);
-    const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + images.length) % images.length);
+    // Keyboard arrows on desktop
+    useEffect(() => {
+        const onKey = (e: KeyboardEvent) => {
+            if (e.key === "ArrowRight") {
+                resetTimer();
+                nextSlide();
+            }
+            if (e.key === "ArrowLeft") {
+                resetTimer();
+                prevSlide();
+            }
+        };
+        window.addEventListener("keydown", onKey);
+        return () => window.removeEventListener("keydown", onKey);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [count]);
+
+    const stats = useMemo(
+        () => [
+            { label: "Kvadratura", val: propertyData.details.size, icon: Maximize },
+            { label: "Gostiju", val: propertyData.details.maxGuests, icon: Users },
+            { label: "Spavaće", val: propertyData.details.bedrooms, icon: Bed },
+            { label: "Kupatila", val: propertyData.details.bathrooms, icon: Bath },
+        ],
+        []
+    );
 
     return (
-        <section className="relative min-h-[100dvh] flex flex-col overflow-hidden bg-black">
+        <section
+            className="relative min-h-[100dvh] flex flex-col overflow-hidden bg-black"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+        >
             {/* Background Slideshow */}
             <div className="absolute inset-0 z-0">
                 <AnimatePresence mode="wait">
@@ -31,7 +95,7 @@ export function Hero() {
                         key={currentSlide}
                         initial={{ opacity: 0, scale: 1.05 }}
                         animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
+                        exit={{ opacity: 0, scale: 0.98 }}
                         transition={{ duration: 0.7 }}
                         className="absolute inset-0"
                     >
@@ -39,51 +103,82 @@ export function Hero() {
                             src={images[currentSlide].src}
                             alt={images[currentSlide].alt}
                             fill
-                            priority={images[currentSlide].priority}
+                            // priority only for the first hero image (LCP)
+                            priority={currentSlide === 0}
                             className="object-cover"
                             sizes="100vw"
                         />
                     </motion.div>
                 </AnimatePresence>
 
-                {/* Elegant Gradient Overlay */}
+                {/* Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80 z-10" />
             </div>
 
-            {/* Navigation Arrows */}
+            {/* Swipe area (mobile-friendly) */}
+            <motion.div
+                className="absolute inset-0 z-10 md:hidden"
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.2}
+                onDragEnd={(_, info) => {
+                    const threshold = 60;
+                    if (info.offset.x > threshold) {
+                        resetTimer();
+                        prevSlide();
+                    } else if (info.offset.x < -threshold) {
+                        resetTimer();
+                        nextSlide();
+                    }
+                }}
+            />
+
+            {/* Desktop Navigation Arrows */}
             <button
-                onClick={prevSlide}
-                className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all"
+                onClick={() => {
+                    resetTimer();
+                    prevSlide();
+                }}
+                className="hidden md:inline-flex absolute left-8 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all"
                 aria-label="Prethodna slika"
             >
                 <ChevronLeft className="w-6 h-6 text-white" />
             </button>
             <button
-                onClick={nextSlide}
-                className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all"
+                onClick={() => {
+                    resetTimer();
+                    nextSlide();
+                }}
+                className="hidden md:inline-flex absolute right-8 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all"
                 aria-label="Sledeća slika"
             >
                 <ChevronRight className="w-6 h-6 text-white" />
             </button>
 
             {/* Slide Indicators */}
-            <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-20 flex gap-3">
-                {images.map((_, index) => (
-                    <button
-                        key={index}
-                        onClick={() => setCurrentSlide(index)}
-                        className={`h-1 rounded-full transition-all duration-500 ${index === currentSlide
-                            ? "w-12 bg-[var(--gold)] shadow-[0_0_10px_rgba(212,175,55,0.4)]"
-                            : "w-2 bg-white/20 hover:bg-white/40"
-                            }`}
-                        aria-label={`Slika ${index + 1}`}
-                    />
-                ))}
+            <div className="absolute bottom-10 md:bottom-12 left-1/2 -translate-x-1/2 z-20 flex gap-3">
+                {images.map((_, index) => {
+                    const active = index === currentSlide;
+                    return (
+                        <button
+                            key={index}
+                            onClick={() => {
+                                resetTimer();
+                                goTo(index);
+                            }}
+                            className={`h-1 rounded-full transition-all duration-500 ${active
+                                ? "w-12 bg-[var(--gold)] shadow-[0_0_10px_rgba(212,175,55,0.4)]"
+                                : "w-2 bg-white/20 hover:bg-white/40"
+                                }`}
+                            aria-label={`Slika ${index + 1}`}
+                            aria-current={active ? "true" : undefined}
+                        />
+                    );
+                })}
             </div>
 
-            {/* Main Content - Simple Centered Layout */}
+            {/* Main Content */}
             <div className="relative z-20 max-w-[1400px] mx-auto px-6 md:px-10 py-10 md:py-16 text-center flex flex-col items-center justify-center flex-grow">
-
                 {/* Badge */}
                 <div className="mb-10 md:mb-16 inline-flex items-center gap-4">
                     <div className="w-8 md:w-16 h-px bg-gradient-to-r from-transparent to-[var(--gold)]/50" />
@@ -93,40 +188,26 @@ export function Hero() {
                     <div className="w-8 md:w-16 h-px bg-gradient-to-l from-transparent to-[var(--gold)]/50" />
                 </div>
 
-                {/* Title */}
                 <h1 className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter leading-[0.85] text-white mb-6 md:mb-10">
                     {propertyData.name}
                 </h1>
 
-                {/* Subtitle */}
                 <p className="text-[11px] sm:text-xs md:text-base font-bold uppercase tracking-[0.2em] text-white/40 mb-12 md:mb-20 max-w-md md:max-w-2xl mx-auto leading-relaxed">
                     {propertyData.tagline}
                 </p>
 
-                {/* Buttons Row */}
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-6 md:gap-8 mb-16 md:mb-32 w-full sm:w-auto">
-                    <a
-                        href="#booking"
-                        className="btn-primary w-full sm:w-auto !px-12 !py-5"
-                    >
+                    <a href="#booking" className="btn-primary w-full sm:w-auto !px-12 !py-5">
                         Rezerviši sada
                     </a>
-                    <a
-                        href="#gallery"
-                        className="btn-ghost w-full sm:w-auto !px-12 !py-5"
-                    >
+                    <a href="#gallery" className="btn-ghost w-full sm:w-auto !px-12 !py-5">
                         Istraži prostor
                     </a>
                 </div>
 
-                {/* Stats Grid */}
+                {/* Stats */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 w-full max-w-5xl mx-auto">
-                    {[
-                        { label: "Kvadratura", val: propertyData.details.size, icon: Maximize },
-                        { label: "Gostiju", val: propertyData.details.maxGuests, icon: Users },
-                        { label: "Spavaće", val: propertyData.details.bedrooms, icon: Bed },
-                        { label: "Kupatila", val: propertyData.details.bathrooms, icon: Bath }
-                    ].map((stat, i) => (
+                    {stats.map((stat, i) => (
                         <GlassCard
                             key={i}
                             className="group p-6 md:p-10 hover:border-[var(--gold)]/20 transition-all duration-700 text-center flex flex-col items-center justify-center rounded-[32px] hover:bg-white/[0.04] relative overflow-hidden border-white/5"
@@ -142,7 +223,6 @@ export function Hero() {
                         </GlassCard>
                     ))}
                 </div>
-
             </div>
 
             {/* Ambient Glows */}

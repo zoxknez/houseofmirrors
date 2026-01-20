@@ -17,24 +17,31 @@ import { PrimaryButton } from "@/components/ui/PrimaryButton";
 import { Counter } from "@/components/ui/Counter";
 import { useAvailability } from "@/hooks/useAvailability";
 import { calcNights, calcTotals, makeDisabledDays } from "@/lib/booking";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 const dayPickerClassNames = {
-    months: "flex flex-col xl:flex-row gap-12 xl:gap-24 justify-center",
-    month: "space-y-8",
-    month_caption: "flex justify-center relative items-center mb-8",
-    caption_label: "text-xl font-black uppercase tracking-widest text-white",
-    nav: "flex items-center gap-4",
+    root: "w-full",
+    months: "w-full flex flex-col lg:flex-row gap-8 lg:gap-10 justify-center items-start",
+    month: "w-full max-w-[360px] lg:max-w-[420px] space-y-6 lg:space-y-8",
+    month_caption: "relative flex items-center justify-center mb-4 lg:mb-6 px-2",
+    caption_label: "text-base lg:text-xl font-black uppercase tracking-widest text-white",
+    nav: "absolute inset-x-0 flex items-center justify-between z-10",
     button_previous:
-        "absolute left-0 inline-flex items-center justify-center h-10 w-10 rounded-full border border-white/10 text-white hover:bg-[var(--gold)] hover:text-black transition-all",
+        "inline-flex items-center justify-center h-10 w-10 rounded-full bg-[var(--gold)] !text-black hover:bg-white transition-all shadow-[0_0_20px_rgba(212,175,55,0.2)]",
     button_next:
-        "absolute right-0 inline-flex items-center justify-center h-10 w-10 rounded-full border border-white/10 text-white hover:bg-[var(--gold)] hover:text-black transition-all",
+        "inline-flex items-center justify-center h-10 w-10 rounded-full bg-[var(--gold)] !text-black hover:bg-white transition-all shadow-[0_0_20px_rgba(212,175,55,0.2)]",
+
     month_grid: "w-full border-collapse",
-    weekdays: "flex justify-between mb-4",
-    weekday: "text-white/20 font-bold text-[10px] uppercase tracking-[0.2em] w-12 text-center",
-    week: "flex w-full mt-2 justify-between",
+    weekdays: "flex justify-between mb-2 lg:mb-4",
+    weekday: "text-white/20 font-bold text-[10px] uppercase tracking-[0.2em] w-10 h-10 lg:w-12 lg:h-12 flex items-center justify-center",
+    week: "flex w-full mt-1 lg:mt-2 justify-between",
     day: "relative p-0",
+
     day_button:
-        "h-12 w-12 flex items-center justify-center text-sm font-black text-white/70 hover:bg-[var(--gold)] hover:text-black rounded-xl transition-all duration-300",
+        "h-10 w-10 lg:h-12 lg:w-12 flex items-center justify-center text-xs lg:text-sm font-black " +
+        "text-white/70 hover:bg-[var(--gold)] hover:text-black rounded-xl transition-all duration-300 touch-manipulation",
+
+    outside: "text-white/20 opacity-30",
     selected: "!bg-[var(--gold)] !text-black !opacity-100",
     range_middle: "!bg-[var(--gold)]/10 !text-[var(--gold)] !rounded-none",
     range_start: "!bg-[var(--gold)] !text-black rounded-l-xl rounded-r-none",
@@ -48,6 +55,7 @@ export function BookingCalendar() {
     const [dateRange, setDateRange] = useState<DateRange | undefined>();
     const [showForm, setShowForm] = useState(false);
     const [guests, setGuests] = useState(2);
+    const isDesktop = useMediaQuery("(min-width: 1024px)");
 
     const { pricing, details } = propertyData;
     const { bookedDates, loading, refresh } = useAvailability();
@@ -87,7 +95,7 @@ export function BookingCalendar() {
                         transition={{ duration: 0.8 }}
                         className="lg:col-span-2"
                     >
-                        <GlassCard className="p-6 md:p-12 min-h-[600px]">
+                        <GlassCard className="p-6 lg:p-12 min-h-[480px] lg:min-h-[560px]">
                             <div className="flex items-center gap-4 mb-10">
                                 <div className="w-12 h-12 rounded-full bg-[var(--gold)]/10 flex items-center justify-center">
                                     <Calendar className="w-6 h-6 text-[var(--gold)]" />
@@ -102,17 +110,21 @@ export function BookingCalendar() {
                                     <Loader2 className="w-8 h-8 text-[var(--gold)] animate-spin" />
                                 </div>
                             ) : (
-                                <div className="flex justify-center flex-col items-center">
-                                    <DayPicker
-                                        mode="range"
-                                        selected={dateRange}
-                                        onSelect={setDateRange}
-                                        disabled={disabledDays}
-                                        locale={srLatn}
-                                        numberOfMonths={2}
-                                        pagedNavigation
-                                        classNames={dayPickerClassNames}
-                                    />
+                                <div className="w-full overflow-hidden">
+                                    <div className="flex justify-center">
+                                        <DayPicker
+                                            mode="range"
+                                            selected={dateRange}
+                                            onSelect={setDateRange}
+                                            disabled={disabledDays}
+                                            locale={srLatn}
+                                            numberOfMonths={isDesktop ? 2 : 1}
+                                            showOutsideDays
+                                            pagedNavigation
+                                            fixedWeeks
+                                            classNames={dayPickerClassNames}
+                                        />
+                                    </div>
                                 </div>
                             )}
                         </GlassCard>
@@ -125,7 +137,7 @@ export function BookingCalendar() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.8 }}
                     >
-                        <GlassCard className="p-8 md:p-10 sticky top-32">
+                        <GlassCard className="p-8 md:p-10 lg:sticky lg:top-32">
                             <div className="flex items-center gap-4 mb-10">
                                 <div className="w-12 h-12 rounded-full bg-[var(--gold)]/10 flex items-center justify-center">
                                     <CreditCard className="w-6 h-6 text-[var(--gold)]" />

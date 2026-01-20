@@ -1,48 +1,124 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { Send, Loader2, CheckCircle, Phone, Mail, MapPin, User, MessageSquare } from "lucide-react";
+import {
+    Send,
+    Loader2,
+    CheckCircle,
+    Phone,
+    Mail,
+    MapPin,
+    User,
+    MessageSquare,
+    AlertCircle,
+} from "lucide-react";
 import { propertyData } from "@/data/property";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { FormField } from "@/components/ui/FormField";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
 
+type ContactFormData = {
+    name: string;
+    email: string;
+    subject: string;
+    message: string;
+};
+
 export function Contact() {
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<ContactFormData>({
         name: "",
         email: "",
         subject: "",
-        message: ""
+        message: "",
     });
+
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    const abortRef = useRef<AbortController | null>(null);
+    const timeoutRef = useRef<number | null>(null);
+
+    const cleanup = () => {
+        if (abortRef.current) abortRef.current.abort();
+        abortRef.current = null;
+
+        if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+    };
+
+    useEffect(() => cleanup, []);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const { name, value } = e.target;
+
+        setFormData((prev) => ({ ...prev, [name]: value }));
+
+        // UX: čim user krene da kuca ponovo, skloni success i error
+        if (success) setSuccess(false);
+        if (error) setError(null);
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        if (loading) return;
+
         setLoading(true);
+        setError(null);
 
-        // Simulate sending
-        await new Promise((resolve) => setTimeout(resolve, 1500));
+        // abort previous request if any
+        if (abortRef.current) abortRef.current.abort();
+        const controller = new AbortController();
+        abortRef.current = controller;
 
-        setSuccess(true);
-        setFormData({ name: "", email: "", subject: "", message: "" });
-        setLoading(false);
+        try {
+            const payload = {
+                name: formData.name.trim(),
+                email: formData.email.trim(),
+                subject: formData.subject.trim(),
+                message: formData.message.trim(),
+            };
 
-        setTimeout(() => setSuccess(false), 5000);
-    };
+            // Basic sanity (HTML required already exists, this is just extra)
+            if (!payload.name || !payload.email || !payload.subject || !payload.message) {
+                throw new Error("Molimo popunite sva obavezna polja.");
+            }
 
-    const handleChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-    ) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
+            const res = await fetch("/api/contact", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+                signal: controller.signal,
+            });
+
+            let data: any = null;
+            try {
+                data = await res.json();
+            } catch {
+                // ignore
+            }
+
+            if (!res.ok) {
+                throw new Error(data?.error || "Poruka nije poslata. Pokušajte ponovo.");
+            }
+
+            setSuccess(true);
+            setFormData({ name: "", email: "", subject: "", message: "" });
+
+            // auto-hide success, with cleanup
+            timeoutRef.current = window.setTimeout(() => setSuccess(false), 5000);
+        } catch (err) {
+            if ((err as any)?.name === "AbortError") return;
+            setError(err instanceof Error ? err.message : "Poruka nije poslata.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
         <section id="contact" className="relative py-24 md:py-40 bg-black overflow-hidden">
-            {/* Background Glow */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2/3 h-2/3 bg-[var(--gold)]/5 rounded-full blur-[150px] pointer-events-none" />
 
             <div className="max-w-[1400px] mx-auto px-6 md:px-10 relative z-10">
@@ -76,9 +152,12 @@ export function Contact() {
                                         <MapPin className="w-6 h-6 text-[var(--gold)]" />
                                     </div>
                                     <div>
-                                        <p className="text-[10px] font-black uppercase tracking-widest text-[var(--gold)] mb-2">Lokacija</p>
+                                        <p className="text-[10px] font-black uppercase tracking-widest text-[var(--gold)] mb-2">
+                                            Lokacija
+                                        </p>
                                         <p className="text-lg md:text-xl font-black uppercase tracking-tight text-white leading-tight">
-                                            {propertyData.location.address}<br />
+                                            {propertyData.location.address}
+                                            <br />
                                             <span className="text-white/40">{propertyData.location.city}</span>
                                         </p>
                                     </div>
@@ -89,8 +168,13 @@ export function Contact() {
                                         <Phone className="w-6 h-6 text-[var(--gold)]" />
                                     </div>
                                     <div>
-                                        <p className="text-[10px] font-black uppercase tracking-widest text-[var(--gold)] mb-2">Pozovite nas</p>
-                                        <a href="tel:+38160777777" className="text-lg md:text-xl font-black uppercase tracking-tight text-white hover:text-[var(--gold)] transition-colors">
+                                        <p className="text-[10px] font-black uppercase tracking-widest text-[var(--gold)] mb-2">
+                                            Pozovite nas
+                                        </p>
+                                        <a
+                                            href="tel:+38160777777"
+                                            className="text-lg md:text-xl font-black uppercase tracking-tight text-white hover:text-[var(--gold)] transition-colors"
+                                        >
                                             +381 60 777 777
                                         </a>
                                     </div>
@@ -101,8 +185,13 @@ export function Contact() {
                                         <Mail className="w-6 h-6 text-[var(--gold)]" />
                                     </div>
                                     <div>
-                                        <p className="text-[10px] font-black uppercase tracking-widest text-[var(--gold)] mb-2">Email</p>
-                                        <a href="mailto:hello@houseofmirrors.rs" className="text-lg md:text-xl font-black uppercase tracking-tight text-white hover:text-[var(--gold)] transition-colors break-all">
+                                        <p className="text-[10px] font-black uppercase tracking-widest text-[var(--gold)] mb-2">
+                                            Email
+                                        </p>
+                                        <a
+                                            href="mailto:hello@houseofmirrors.rs"
+                                            className="text-lg md:text-xl font-black uppercase tracking-tight text-white hover:text-[var(--gold)] transition-colors break-all"
+                                        >
                                             hello@houseofmirrors.rs
                                         </a>
                                     </div>
@@ -120,10 +209,15 @@ export function Contact() {
                                     <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-green-500 border-4 border-black rounded-full shadow-lg" />
                                 </div>
                                 <div>
-                                    <p className="text-white text-3xl font-black uppercase tracking-tighter mb-1">{propertyData.host.name}</p>
-                                    <p className="text-[var(--gold)] text-xs font-black uppercase tracking-[0.3em]">Premium Host</p>
+                                    <p className="text-white text-3xl font-black uppercase tracking-tighter mb-1">
+                                        {propertyData.host.name}
+                                    </p>
+                                    <p className="text-[var(--gold)] text-xs font-black uppercase tracking-[0.3em]">
+                                        Premium Host
+                                    </p>
                                 </div>
                             </div>
+
                             <div className="bg-[var(--gold)]/5 border border-[var(--gold)]/10 p-6 rounded-[24px]">
                                 <p className="text-white/60 text-sm font-bold leading-relaxed italic text-center">
                                     "Odgovaramo {propertyData.host.responseTime} sa {propertyData.host.responseRate} preciznosti."
@@ -132,7 +226,7 @@ export function Contact() {
                         </div>
                     </motion.div>
 
-                    {/* Contact Form */}
+                    {/* Form */}
                     <motion.div
                         initial={{ opacity: 0, x: 30 }}
                         whileInView={{ opacity: 1, x: 0 }}
@@ -150,10 +244,19 @@ export function Contact() {
                                     initial={{ opacity: 0, scale: 0.95 }}
                                     animate={{ opacity: 1, scale: 1 }}
                                     className="mb-10 p-6 rounded-[24px] bg-green-500/10 border border-green-500/20 flex items-center gap-4"
+                                    role="status"
+                                    aria-live="polite"
                                 >
                                     <CheckCircle className="w-6 h-6 text-green-400 flex-shrink-0" />
                                     <p className="text-green-400 font-bold">Poruka je uspešno poslata! Javićemo vam se uskoro.</p>
                                 </motion.div>
+                            )}
+
+                            {error && (
+                                <div className="mb-10 p-6 rounded-[24px] bg-red-500/10 border border-red-500/20 flex items-center gap-4">
+                                    <AlertCircle className="w-6 h-6 text-red-400 flex-shrink-0" />
+                                    <p className="text-red-400 font-bold">{error}</p>
+                                </div>
                             )}
 
                             <form onSubmit={handleSubmit} className="space-y-8">
@@ -166,7 +269,9 @@ export function Contact() {
                                         value={formData.name}
                                         onChange={handleChange}
                                         placeholder="Petar Petrović"
+                                        autoComplete="name"
                                     />
+
                                     <FormField
                                         label="Email"
                                         required
@@ -176,6 +281,8 @@ export function Contact() {
                                         value={formData.email}
                                         onChange={handleChange}
                                         placeholder="petar@email.com"
+                                        autoComplete="email"
+                                        inputMode="email"
                                     />
                                 </div>
 
@@ -187,6 +294,7 @@ export function Contact() {
                                     value={formData.subject}
                                     onChange={handleChange}
                                     placeholder="Upit za rezervaciju"
+                                    autoComplete="off"
                                 />
 
                                 <FormField
@@ -201,11 +309,7 @@ export function Contact() {
                                 />
 
                                 <div className="pt-6">
-                                    <PrimaryButton
-                                        type="submit"
-                                        disabled={loading}
-                                        className="flex items-center justify-center gap-3"
-                                    >
+                                    <PrimaryButton type="submit" disabled={loading} className="flex items-center justify-center gap-3">
                                         {loading ? (
                                             <>
                                                 <Loader2 className="w-5 h-5 animate-spin" />

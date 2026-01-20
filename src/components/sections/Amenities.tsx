@@ -8,10 +8,15 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { DividerHeading } from "@/components/ui/DividerHeading";
 import { iconMap, categoryNames, groupByCategory, defaultCategoryOrder } from "@/lib/amenities";
 
+function getIcon(key?: string) {
+    if (!key) return Sparkles;
+    return (iconMap as Record<string, any>)[key] ?? Sparkles;
+}
+
 export function Amenities() {
     const grouped = useMemo(
         () => groupByCategory(propertyData.amenities),
-        []
+        [propertyData.amenities]
     );
 
     return (
@@ -32,31 +37,54 @@ export function Amenities() {
                         if (!amenities?.length) return null;
 
                         return (
-                            <motion.div
+                            <motion.section
                                 key={catKey}
+                                aria-labelledby={`amenities-${catKey}`}
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
-                                transition={{ duration: 0.6, delay: index * 0.1 }}
+                                transition={{ duration: 0.6, delay: index * 0.08 }}
                             >
-                                <DividerHeading>{categoryNames[catKey] || catKey}</DividerHeading>
+                                <div id={`amenities-${catKey}`}>
+                                    <DividerHeading>{categoryNames[catKey] || catKey}</DividerHeading>
+                                </div>
 
-                                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-                                    {amenities.map((item, i) => {
-                                        const Icon = iconMap[item.icon as string] || Sparkles;
+                                <ul
+                                    role="list"
+                                    className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6"
+                                >
+                                    {amenities.map((item) => {
+                                        const Icon = getIcon(item.icon as string);
+
                                         return (
-                                            <div key={i} className="amenity-card group">
-                                                <div className="p-2 rounded-lg bg-white/5 group-hover:bg-[var(--accent)]/20 transition-colors">
-                                                    <Icon className="w-5 h-5 text-[var(--gold)] group-hover:text-[var(--accent)] transition-colors" />
+                                            <li
+                                                key={`${catKey}-${item.name}-${item.icon ?? "noicon"}`}
+                                                className="amenity-card group
+                                                    min-h-[56px] md:min-h-[64px]
+                                                    focus-within:ring-1 focus-within:ring-[var(--gold)]/40
+                                                    active:bg-white/10 active:border-[var(--gold)]/40"
+                                            >
+                                                <div
+                                                    className="p-2 rounded-lg bg-white/5 transition-colors
+                                                        group-hover:bg-[var(--accent)]/20
+                                                        group-focus-within:bg-[var(--accent)]/20"
+                                                    aria-hidden="true"
+                                                >
+                                                    <Icon
+                                                        className="w-5 h-5 text-[var(--gold)] transition-colors
+                                                            group-hover:text-[var(--accent)]
+                                                            group-focus-within:text-[var(--accent)]"
+                                                    />
                                                 </div>
-                                                <span className="text-sm md:text-base text-white/80 font-medium group-hover:text-white transition-colors">
+
+                                                <span className="text-sm md:text-base text-white/80 font-medium transition-colors group-hover:text-white group-focus-within:text-white">
                                                     {item.name}
                                                 </span>
-                                            </div>
+                                            </li>
                                         );
                                     })}
-                                </div>
-                            </motion.div>
+                                </ul>
+                            </motion.section>
                         );
                     })}
                 </div>

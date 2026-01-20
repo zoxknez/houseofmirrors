@@ -106,6 +106,12 @@
       scroll-behavior: auto !important;
     }
   }
+
+  /* Scroll margin for fixed navbar */
+  section,
+  #booking {
+    scroll-margin-top: 112px;
+  }
 }
 
 /* ================================

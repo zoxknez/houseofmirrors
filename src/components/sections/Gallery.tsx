@@ -5,38 +5,91 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { propertyImages } from "@/data/images";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { useEffect, useMemo } from "react";
+import { cn } from "@/lib/utils";
 
 export function Gallery() {
     const [selectedCategory, setSelectedCategory] = useState("all");
-    const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+    const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
+    const isDesktop = useMediaQuery("(min-width: 768px)");
 
-    const filteredImages =
-        selectedCategory === "all"
+    const filteredImages = useMemo(() => {
+        return selectedCategory === "all"
             ? propertyImages.gallery
             : propertyImages.gallery.filter((img) => img.category === selectedCategory);
+    }, [selectedCategory]);
 
-    const openLightbox = (index: number) => setLightboxIndex(index);
-    const closeLightbox = () => setLightboxIndex(null);
+    const lightboxIndex = useMemo(() => {
+        if (!lightboxSrc) return null;
+        const idx = filteredImages.findIndex(img => img.src === lightboxSrc);
+        return idx === -1 ? 0 : idx;
+    }, [lightboxSrc, filteredImages]);
+
+    const openLightbox = (src: string) => setLightboxSrc(src);
+    const closeLightbox = () => setLightboxSrc(null);
 
     const nextImage = () => {
         if (lightboxIndex !== null) {
-            setLightboxIndex((lightboxIndex + 1) % filteredImages.length);
+            const nextIdx = (lightboxIndex + 1) % filteredImages.length;
+            setLightboxSrc(filteredImages[nextIdx].src);
         }
     };
 
     const prevImage = () => {
         if (lightboxIndex !== null) {
-            setLightboxIndex((lightboxIndex - 1 + filteredImages.length) % filteredImages.length);
+            const prevIdx = (lightboxIndex - 1 + filteredImages.length) % filteredImages.length;
+            setLightboxSrc(filteredImages[prevIdx].src);
         }
     };
+
+    useEffect(() => {
+        if (lightboxSrc === null) return;
+
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "Escape") closeLightbox();
+            if (e.key === "ArrowRight") nextImage();
+            if (e.key === "ArrowLeft") prevImage();
+        };
+
+        window.addEventListener("keydown", handleKeyDown);
+        const originalOverflow = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+            document.body.style.overflow = originalOverflow;
+        };
+    }, [lightboxSrc, lightboxIndex]); // Re-bind keys when index changes for next/prev logic
 
     return (
         <section id="gallery" className="relative py-24 md:py-40">
             <div className="max-w-[1400px] mx-auto px-6 md:px-10">
+                {/* Category Filters */}
+                <div className="flex flex-wrap justify-center gap-3 mb-12">
+                    {propertyImages.categories.map((cat) => (
+                        <button
+                            key={cat.id}
+                            onClick={() => {
+                                setSelectedCategory(cat.id);
+                                closeLightbox();
+                            }}
+                            className={cn(
+                                "px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-300 border",
+                                selectedCategory === cat.id
+                                    ? "bg-[var(--gold)] text-black border-[var(--gold)] shadow-[0_0_20px_rgba(212,175,55,0.2)]"
+                                    : "bg-white/5 text-white/40 border-white/10 hover:border-white/20 hover:text-white"
+                            )}
+                        >
+                            {cat.label}
+                        </button>
+                    ))}
+                </div>
+
                 {/* Hero Gallery Layout */}
                 <div
                     className="relative group cursor-pointer overflow-hidden rounded-3xl deluxe-card aspect-[21/9]"
-                    onClick={() => openLightbox(0)}
+                    onClick={() => openLightbox(propertyImages.gallery[0].src)}
                 >
                     <Image
                         src={propertyImages.gallery[0].src}
@@ -91,8 +144,7 @@ export function Gallery() {
                                 key={cat.id}
                                 className="deluxe-card aspect-video relative group cursor-pointer overflow-hidden"
                                 onClick={() => {
-                                    const idx = propertyImages.gallery.findIndex(img => img.category === cat.id);
-                                    if (idx !== -1) openLightbox(idx);
+                                    if (firstImgOfCat) openLightbox(firstImgOfCat.src);
                                 }}
                             >
                                 <Image
@@ -116,59 +168,101 @@ export function Gallery() {
 
             {/* Lightbox */}
             <AnimatePresence>
-                {lightboxIndex !== null && (
+                {lightboxSrc !== null && lightboxIndex !== null && (
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="lightbox-overlay"
+                        className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-xl flex items-center justify-center"
                         onClick={closeLightbox}
+                        role="dialog"
+                        aria-modal="true"
                     >
                         {/* Close Button */}
                         <button
                             onClick={closeLightbox}
-                            className="absolute top-4 right-4 z-50 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-all"
+                            className="absolute top-6 right-6 z-[110] p-4 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all"
                             aria-label="Zatvori"
                         >
-                            <X className="w-6 h-6 text-white" />
+                            <X className="w-6 h-6" />
                         </button>
 
-                        {/* Navigation */}
+                        {/* Desktop Navigation */}
                         <button
                             onClick={(e) => { e.stopPropagation(); prevImage(); }}
-                            className="absolute left-4 z-50 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-all"
+                            className="hidden md:inline-flex absolute left-8 top-1/2 -translate-y-1/2 z-[110] p-5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all group"
                             aria-label="Prethodna slika"
                         >
-                            <ChevronLeft className="w-8 h-8 text-white" />
+                            <ChevronLeft className="w-8 h-8 group-hover:-translate-x-1 transition-transform" />
                         </button>
                         <button
                             onClick={(e) => { e.stopPropagation(); nextImage(); }}
-                            className="absolute right-4 z-50 p-3 rounded-full bg-white/10 hover:bg-white/20 transition-all"
+                            className="hidden md:inline-flex absolute right-8 top-1/2 -translate-y-1/2 z-[110] p-5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all group"
                             aria-label="Sledeća slika"
                         >
-                            <ChevronRight className="w-8 h-8 text-white" />
+                            <ChevronRight className="w-8 h-8 group-hover:translate-x-1 transition-transform" />
                         </button>
 
-                        {/* Image */}
+                        {/* Mobile Navigation Bar */}
+                        <div className="md:hidden fixed bottom-10 left-1/2 -translate-x-1/2 z-[110] flex items-center gap-6">
+                            <button
+                                onClick={(e) => { e.stopPropagation(); prevImage(); }}
+                                className="p-4 rounded-full bg-white/5 border border-white/10 text-white active:scale-90 transition-all"
+                                aria-label="Prethodna slika"
+                            >
+                                <ChevronLeft className="w-6 h-6" />
+                            </button>
+                            <div className="px-4 py-2 rounded-full bg-white/5 border border-white/10">
+                                <span className="text-white text-[10px] font-black uppercase tracking-widest">
+                                    {lightboxIndex + 1} / {filteredImages.length}
+                                </span>
+                            </div>
+                            <button
+                                onClick={(e) => { e.stopPropagation(); nextImage(); }}
+                                className="p-4 rounded-full bg-white/5 border border-white/10 text-white active:scale-90 transition-all"
+                                aria-label="Sledeća slika"
+                            >
+                                <ChevronRight className="w-6 h-6" />
+                            </button>
+                        </div>
+
+                        {/* Image Container */}
                         <motion.div
-                            key={lightboxIndex}
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0, scale: 0.9 }}
+                            key={filteredImages[lightboxIndex].src}
+                            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+                            drag="x"
+                            dragConstraints={{ left: 0, right: 0 }}
+                            dragElastic={0.2}
+                            onDragEnd={(_, info) => {
+                                if (info.offset.x > 100) prevImage();
+                                else if (info.offset.x < -100) nextImage();
+                            }}
                             onClick={(e) => e.stopPropagation()}
-                            className="relative max-w-[90vw] max-h-[90vh]"
+                            className="relative w-full h-full flex items-center justify-center p-4 md:p-20"
                         >
-                            <Image
-                                src={filteredImages[lightboxIndex].src}
-                                alt={filteredImages[lightboxIndex].alt}
-                                width={1200}
-                                height={800}
-                                className="lightbox-image"
-                                priority
-                            />
-                            <p className="text-center text-white/80 mt-4">
-                                {filteredImages[lightboxIndex].alt} ({lightboxIndex + 1}/{filteredImages.length})
-                            </p>
+                            <div className="relative w-full h-full max-w-6xl max-h-[70vh] md:max-h-[85vh]">
+                                <Image
+                                    src={filteredImages[lightboxIndex].src}
+                                    alt={filteredImages[lightboxIndex].alt}
+                                    fill
+                                    className="object-contain"
+                                    draggable={false}
+                                />
+                            </div>
+
+                            {/* Info Label - Desktop */}
+                            <div className="absolute bottom-10 left-1/2 -translate-x-1/2 hidden md:block">
+                                <div className="px-6 py-3 rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-center">
+                                    <p className="text-white text-xs font-black uppercase tracking-[0.2em] mb-1">
+                                        {filteredImages[lightboxIndex].alt}
+                                    </p>
+                                    <p className="text-white/40 text-[10px] font-bold uppercase tracking-widest">
+                                        {lightboxIndex + 1} od {filteredImages.length}
+                                    </p>
+                                </div>
+                            </div>
                         </motion.div>
                     </motion.div>
                 )}
