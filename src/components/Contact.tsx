@@ -37,68 +37,82 @@ export function Contact() {
     };
 
     return (
-        <section id="contact" className="section bg-[var(--primary)]/50">
-            <div className="container">
+        <section id="contact" className="section bg-black relative overflow-hidden py-24 md:py-32">
+            {/* Background Glow */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2/3 h-2/3 bg-[var(--gold)]/5 rounded-full blur-[150px] pointer-events-none" />
+
+            <div className="container relative z-10">
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
-                    className="text-center mb-16"
+                    transition={{ duration: 0.8 }}
+                    className="text-center mb-20 md:mb-32"
                 >
-                    <p className="text-[var(--accent)] text-xs font-black uppercase tracking-[0.4em] mb-4">Kontakt</p>
-                    <h2 className="text-5xl md:text-7xl font-black mb-8 tracking-tighter">
-                        Budimo u <span className="opacity-40">kontaktu</span>
+                    {/* Badge with lines */}
+                    <div className="flex items-center justify-center gap-4 mb-6">
+                        <div className="h-px flex-1 max-w-[80px] md:max-w-[120px] bg-gradient-to-r from-transparent to-[var(--gold)]/50" />
+                        <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-[var(--gold)]">
+                            Kontakt
+                        </span>
+                        <div className="h-px flex-1 max-w-[80px] md:max-w-[120px] bg-gradient-to-l from-transparent to-[var(--gold)]/50" />
+                    </div>
+
+                    <h2 className="text-4xl md:text-6xl lg:text-7xl font-black uppercase tracking-tighter text-white mb-6">
+                        Budimo u <span className="text-[var(--gold)]">kontaktu</span>
                     </h2>
+                    <p className="text-sm md:text-base text-white/50 max-w-2xl mx-auto">
+                        Tu smo da odgovorimo na sva vaša pitanja i zahteve
+                    </p>
                 </motion.div>
 
-                <div className="grid lg:grid-cols-5 gap-10 max-w-6xl mx-auto">
+                <div className="grid lg:grid-cols-5 gap-16 md:gap-24 max-w-7xl mx-auto items-start">
                     {/* Contact Info */}
                     <motion.div
                         initial={{ opacity: 0, x: -30 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
-                        transition={{ duration: 0.6 }}
-                        className="lg:col-span-2 space-y-6"
+                        transition={{ duration: 0.8 }}
+                        className="lg:col-span-2 space-y-10"
                     >
-                        <div className="deluxe-card p-10 space-y-8">
-                            <h3 className="text-2xl font-black text-white uppercase tracking-tighter">
+                        <div className="bg-white/[0.02] backdrop-blur-md border border-white/10 rounded-[40px] p-10 md:p-12 space-y-10 group hover:border-[var(--gold)]/20 transition-all duration-500">
+                            <h3 className="text-sm md:text-base font-black uppercase tracking-[0.3em] text-white/40 mb-2">
                                 Detalji
                             </h3>
 
-                            <div className="space-y-8">
-                                <div className="flex items-start gap-6 group">
-                                    <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center flex-shrink-0 group-hover:bg-[var(--accent)]/10 transition-colors border border-white/10 group-hover:border-[var(--accent)]/30">
-                                        <MapPin className="w-6 h-6 text-white group-hover:text-[var(--accent)] transition-colors" />
+                            <div className="space-y-10">
+                                <div className="flex items-start gap-8 group/item">
+                                    <div className="w-16 h-16 rounded-full bg-[var(--gold)]/10 flex items-center justify-center flex-shrink-0 border border-[var(--gold)]/20 group-hover/item:scale-110 group-hover/item:bg-[var(--gold)]/20 transition-all duration-500">
+                                        <MapPin className="w-6 h-6 text-[var(--gold)]" />
                                     </div>
                                     <div>
-                                        <p className="text-white/40 text-[10px] font-black uppercase tracking-widest mb-1">Lokacija</p>
-                                        <p className="text-white font-bold leading-tight">
+                                        <p className="text-[10px] font-black uppercase tracking-widest text-[var(--gold)] mb-2">Lokacija</p>
+                                        <p className="text-lg md:text-xl font-black uppercase tracking-tight text-white leading-tight">
                                             {propertyData.location.address}<br />
-                                            {propertyData.location.city}
+                                            <span className="text-white/40">{propertyData.location.city}</span>
                                         </p>
                                     </div>
                                 </div>
 
-                                <div className="flex items-start gap-6 group">
-                                    <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center flex-shrink-0 group-hover:bg-[var(--accent)]/10 transition-colors border border-white/10 group-hover:border-[var(--accent)]/30">
-                                        <Phone className="w-6 h-6 text-white group-hover:text-[var(--accent)] transition-colors" />
+                                <div className="flex items-start gap-8 group/item">
+                                    <div className="w-16 h-16 rounded-full bg-[var(--gold)]/10 flex items-center justify-center flex-shrink-0 border border-[var(--gold)]/20 group-hover/item:scale-110 group-hover/item:bg-[var(--gold)]/20 transition-all duration-500">
+                                        <Phone className="w-6 h-6 text-[var(--gold)]" />
                                     </div>
                                     <div>
-                                        <p className="text-white/40 text-[10px] font-black uppercase tracking-widest mb-1">Pozovite nas</p>
-                                        <a href="tel:+381600000000" className="text-white font-bold hover:text-[var(--accent)] transition-colors">
+                                        <p className="text-[10px] font-black uppercase tracking-widest text-[var(--gold)] mb-2">Pozovite nas</p>
+                                        <a href="tel:+38160777777" className="text-lg md:text-xl font-black uppercase tracking-tight text-white hover:text-[var(--gold)] transition-colors">
                                             +381 60 777 777
                                         </a>
                                     </div>
                                 </div>
 
-                                <div className="flex items-start gap-6 group">
-                                    <div className="w-14 h-14 rounded-2xl bg-white/5 flex items-center justify-center flex-shrink-0 group-hover:bg-[var(--accent)]/10 transition-colors border border-white/10 group-hover:border-[var(--accent)]/30">
-                                        <Mail className="w-6 h-6 text-white group-hover:text-[var(--accent)] transition-colors" />
+                                <div className="flex items-start gap-8 group/item">
+                                    <div className="w-16 h-16 rounded-full bg-[var(--gold)]/10 flex items-center justify-center flex-shrink-0 border border-[var(--gold)]/20 group-hover/item:scale-110 group-hover/item:bg-[var(--gold)]/20 transition-all duration-500">
+                                        <Mail className="w-6 h-6 text-[var(--gold)]" />
                                     </div>
                                     <div>
-                                        <p className="text-white/40 text-[10px] font-black uppercase tracking-widest mb-1">Email</p>
-                                        <a href="mailto:info@houseofmirrors.rs" className="text-white font-bold hover:text-[var(--accent)] transition-colors">
+                                        <p className="text-[10px] font-black uppercase tracking-widest text-[var(--gold)] mb-2">Email</p>
+                                        <a href="mailto:hello@houseofmirrors.rs" className="text-lg md:text-xl font-black uppercase tracking-tight text-white hover:text-[var(--gold)] transition-colors break-all">
                                             hello@houseofmirrors.rs
                                         </a>
                                     </div>
@@ -107,21 +121,21 @@ export function Contact() {
                         </div>
 
                         {/* Host Info */}
-                        <div className="deluxe-card p-10">
-                            <div className="flex items-center gap-6 mb-8">
+                        <div className="bg-white/[0.02] backdrop-blur-md border border-white/10 rounded-[40px] p-10 md:p-12 hover:border-[var(--gold)]/20 transition-all duration-500">
+                            <div className="flex items-center gap-6 mb-10">
                                 <div className="relative">
-                                    <div className="w-20 h-20 rounded-[24px] bg-gradient-to-br from-[var(--accent)] to-[#ff004c] flex items-center justify-center text-white text-3xl font-black">
+                                    <div className="w-24 h-24 rounded-[32px] bg-gradient-to-br from-[var(--gold)] to-[var(--gold)]/40 flex items-center justify-center text-black text-4xl font-black shadow-[0_0_30px_rgba(212,175,55,0.3)]">
                                         {propertyData.host.name[0]}
                                     </div>
-                                    <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 border-4 border-black rounded-full" />
+                                    <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-green-500 border-4 border-black rounded-full shadow-lg" />
                                 </div>
                                 <div>
-                                    <p className="text-white text-2xl font-black tracking-tight">{propertyData.host.name}</p>
-                                    <p className="text-white/40 text-xs font-bold uppercase tracking-widest">Premium Host</p>
+                                    <p className="text-white text-3xl font-black uppercase tracking-tighter mb-1">{propertyData.host.name}</p>
+                                    <p className="text-[var(--gold)] text-xs font-black uppercase tracking-[0.3em]">Premium Host</p>
                                 </div>
                             </div>
-                            <div className="bg-white/5 p-4 rounded-2xl border border-white/5">
-                                <p className="text-white/70 text-sm font-bold leading-relaxed italic">
+                            <div className="bg-[var(--gold)]/5 border border-[var(--gold)]/10 p-6 rounded-[24px]">
+                                <p className="text-white/60 text-sm font-bold leading-relaxed italic text-center">
                                     "Odgovaramo {propertyData.host.responseTime} sa {propertyData.host.responseRate} preciznosti."
                                 </p>
                             </div>
@@ -133,29 +147,29 @@ export function Contact() {
                         initial={{ opacity: 0, x: 30 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
-                        transition={{ duration: 0.6 }}
+                        transition={{ duration: 0.8 }}
                         className="lg:col-span-3"
                     >
-                        <div className="glass-card p-6 md:p-8">
-                            <h3 className="text-xl font-semibold text-white mb-6">
+                        <div className="bg-white/[0.02] backdrop-blur-md border border-white/10 rounded-[40px] p-8 md:p-16">
+                            <h3 className="text-sm font-black uppercase tracking-[0.4em] text-white/40 mb-12">
                                 Pošaljite poruku
                             </h3>
 
                             {success && (
                                 <motion.div
-                                    initial={{ opacity: 0, y: -10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    className="mb-6 p-4 rounded-xl bg-green-500/20 border border-green-500/30 flex items-center gap-3"
+                                    initial={{ opacity: 0, scale: 0.95 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    className="mb-10 p-6 rounded-[24px] bg-green-500/10 border border-green-500/20 flex items-center gap-4"
                                 >
-                                    <CheckCircle className="w-5 h-5 text-green-400" />
-                                    <p className="text-green-300">Poruka je uspešno poslata!</p>
+                                    <CheckCircle className="w-6 h-6 text-green-400 flex-shrink-0" />
+                                    <p className="text-green-400 font-bold">Poruka je uspešno poslata! Javićemo vam se uskoro.</p>
                                 </motion.div>
                             )}
 
-                            <form onSubmit={handleSubmit} className="space-y-5">
-                                <div className="grid sm:grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-sm text-white/70 mb-2">
+                            <form onSubmit={handleSubmit} className="space-y-8">
+                                <div className="grid sm:grid-cols-2 gap-8">
+                                    <div className="group">
+                                        <label className="block text-[10px] font-black uppercase tracking-widest text-white/40 mb-4 ml-1">
                                             Ime i prezime
                                         </label>
                                         <input
@@ -164,12 +178,12 @@ export function Contact() {
                                             value={formData.name}
                                             onChange={handleChange}
                                             required
-                                            className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/30 focus:outline-none focus:border-[var(--accent)] transition-colors"
-                                            placeholder="Vaše ime"
+                                            className="w-full px-6 py-4 rounded-[20px] bg-white/[0.03] border border-white/10 text-white font-bold placeholder:text-white/10 focus:outline-none focus:border-[var(--gold)] focus:bg-white/[0.05] transition-all duration-300"
+                                            placeholder="Petar Petrović"
                                         />
                                     </div>
-                                    <div>
-                                        <label className="block text-sm text-white/70 mb-2">
+                                    <div className="group">
+                                        <label className="block text-[10px] font-black uppercase tracking-widest text-white/40 mb-4 ml-1">
                                             Email
                                         </label>
                                         <input
@@ -178,14 +192,14 @@ export function Contact() {
                                             value={formData.email}
                                             onChange={handleChange}
                                             required
-                                            className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/30 focus:outline-none focus:border-[var(--accent)] transition-colors"
-                                            placeholder="vas@email.com"
+                                            className="w-full px-6 py-4 rounded-[20px] bg-white/[0.03] border border-white/10 text-white font-bold placeholder:text-white/10 focus:outline-none focus:border-[var(--gold)] focus:bg-white/[0.05] transition-all duration-300"
+                                            placeholder="petar@email.com"
                                         />
                                     </div>
                                 </div>
 
-                                <div>
-                                    <label className="block text-sm text-white/70 mb-2">
+                                <div className="group">
+                                    <label className="block text-[10px] font-black uppercase tracking-widest text-white/40 mb-4 ml-1">
                                         Tema
                                     </label>
                                     <input
@@ -194,13 +208,13 @@ export function Contact() {
                                         value={formData.subject}
                                         onChange={handleChange}
                                         required
-                                        className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/30 focus:outline-none focus:border-[var(--accent)] transition-colors"
-                                        placeholder="O čemu se radi?"
+                                        className="w-full px-6 py-4 rounded-[20px] bg-white/[0.03] border border-white/10 text-white font-bold placeholder:text-white/10 focus:outline-none focus:border-[var(--gold)] focus:bg-white/[0.05] transition-all duration-300"
+                                        placeholder="Upit za rezervaciju"
                                     />
                                 </div>
 
-                                <div>
-                                    <label className="block text-sm text-white/70 mb-2">
+                                <div className="group">
+                                    <label className="block text-[10px] font-black uppercase tracking-widest text-white/40 mb-4 ml-1">
                                         Poruka
                                     </label>
                                     <textarea
@@ -208,29 +222,31 @@ export function Contact() {
                                         value={formData.message}
                                         onChange={handleChange}
                                         required
-                                        rows={5}
-                                        className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/30 focus:outline-none focus:border-[var(--accent)] transition-colors resize-none"
+                                        rows={6}
+                                        className="w-full px-6 py-4 rounded-[30px] bg-white/[0.03] border border-white/10 text-white font-bold placeholder:text-white/10 focus:outline-none focus:border-[var(--gold)] focus:bg-white/[0.05] transition-all duration-300 resize-none"
                                         placeholder="Napišite vašu poruku..."
                                     />
                                 </div>
 
-                                <button
-                                    type="submit"
-                                    disabled={loading}
-                                    className="btn-primary flex items-center justify-center gap-2 w-full sm:w-auto"
-                                >
-                                    {loading ? (
-                                        <>
-                                            <Loader2 className="w-5 h-5 animate-spin" />
-                                            Šaljem...
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Send className="w-5 h-5" />
-                                            Pošalji poruku
-                                        </>
-                                    )}
-                                </button>
+                                <div className="pt-6">
+                                    <button
+                                        type="submit"
+                                        disabled={loading}
+                                        className="w-full h-18 py-5 rounded-full bg-[var(--gold)] text-black font-black uppercase tracking-[0.3em] text-sm hover:scale-[1.02] active:scale-95 disabled:opacity-30 disabled:hover:scale-100 transition-all duration-300 shadow-[0_0_30px_rgba(212,175,55,0.2)] flex items-center justify-center gap-3"
+                                    >
+                                        {loading ? (
+                                            <>
+                                                <Loader2 className="w-5 h-5 animate-spin" />
+                                                Šaljem...
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Send className="w-5 h-5" />
+                                                Pošalji poruku
+                                            </>
+                                        )}
+                                    </button>
+                                </div>
                             </form>
                         </div>
                     </motion.div>

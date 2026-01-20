@@ -18,32 +18,35 @@ const footerLinks = {
 
 export function Footer() {
     return (
-        <footer className="bg-[var(--primary)] border-t border-white/10">
-            <div className="container py-12">
-                <div className="grid md:grid-cols-4 gap-10">
+        <footer className="bg-black border-t border-white/5 py-24">
+            <div className="container">
+                <div className="grid md:grid-cols-12 gap-16 md:gap-24">
                     {/* Brand */}
-                    <div className="md:col-span-2">
-                        <h3 className="text-3xl font-black text-white uppercase tracking-[0.2em] mb-6">
+                    <div className="md:col-span-6">
+                        <h3 className="text-2xl md:text-3xl font-black text-white uppercase tracking-[0.3em] mb-10">
                             {propertyData.name}
                         </h3>
-                        <p className="text-white/60 mb-4 max-w-md">
+                        <p className="text-white/40 text-sm md:text-base mb-10 max-w-md leading-relaxed font-bold uppercase tracking-tight">
                             {propertyData.shortDescription}
                         </p>
-                        <p className="text-white/40 text-sm">
-                            {propertyData.location.address}<br />
-                            {propertyData.location.postalCode} {propertyData.location.city}
-                        </p>
+                        <div className="space-y-2">
+                            <p className="text-[var(--gold)] text-[10px] font-black uppercase tracking-widest">Lokacija</p>
+                            <p className="text-white font-black uppercase tracking-tight text-sm md:text-base">
+                                {propertyData.location.address}<br />
+                                <span className="text-white/40">{propertyData.location.postalCode} {propertyData.location.city}</span>
+                            </p>
+                        </div>
                     </div>
 
                     {/* Navigation */}
-                    <div>
-                        <h4 className="text-white font-semibold mb-4">Navigacija</h4>
-                        <ul className="space-y-2">
+                    <div className="md:col-span-3">
+                        <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-[var(--gold)] mb-10">Navigacija</h4>
+                        <ul className="space-y-5">
                             {footerLinks.navigation.map((link) => (
                                 <li key={link.href}>
                                     <a
                                         href={link.href}
-                                        className="text-white/60 hover:text-white transition-colors text-sm"
+                                        className="text-white/40 hover:text-white transition-all duration-300 text-sm font-black uppercase tracking-widest"
                                     >
                                         {link.label}
                                     </a>
@@ -53,19 +56,19 @@ export function Footer() {
                     </div>
 
                     {/* External Links */}
-                    <div>
-                        <h4 className="text-white font-semibold mb-4">Takođe nas pronađite</h4>
-                        <ul className="space-y-2">
+                    <div className="md:col-span-3">
+                        <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-[var(--gold)] mb-10">Pronađite nas</h4>
+                        <ul className="space-y-5">
                             {footerLinks.external.map((link) => (
                                 <li key={link.href}>
                                     <a
                                         href={link.href}
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        className="text-white/60 hover:text-white transition-colors text-sm inline-flex items-center gap-1"
+                                        className="text-white/40 hover:text-white transition-all duration-300 text-sm font-black uppercase tracking-widest inline-flex items-center gap-2 group"
                                     >
                                         {link.label}
-                                        <ExternalLink className="w-3 h-3" />
+                                        <ExternalLink className="w-3 h-3 group-hover:text-[var(--gold)] transition-colors" />
                                     </a>
                                 </li>
                             ))}
@@ -74,12 +77,12 @@ export function Footer() {
                 </div>
 
                 {/* Bottom Bar */}
-                <div className="mt-10 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
-                    <p className="text-white/40 text-sm">
+                <div className="mt-24 pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
+                    <p className="text-white/20 text-[10px] font-black uppercase tracking-[0.2em]">
                         © {new Date().getFullYear()} {propertyData.name}. Sva prava zadržana.
                     </p>
-                    <p className="text-white/40 text-sm flex items-center gap-1">
-                        Napravljeno sa <Heart className="w-4 h-4 text-[var(--accent)] fill-[var(--accent)]" /> u Beogradu
+                    <p className="text-white/40 text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-2">
+                        Napravljeno sa <Heart className="w-4 h-4 text-[var(--gold)] fill-[var(--gold)] animate-pulse" /> u Beogradu
                     </p>
                 </div>
             </div>

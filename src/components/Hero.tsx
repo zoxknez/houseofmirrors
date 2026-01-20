@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Star, Users, Bed, Bath, Maximize } from "lucide-react";
+import { ChevronLeft, ChevronRight, Maximize, Users, Bed, Bath } from "lucide-react";
 import { propertyData } from "@/data/property";
 import { propertyImages } from "@/data/images";
 
@@ -22,13 +22,13 @@ export function Hero() {
     const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + images.length) % images.length);
 
     return (
-        <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <section className="relative min-h-[100dvh] flex flex-col overflow-hidden bg-black">
             {/* Background Slideshow */}
             <div className="absolute inset-0 z-0">
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={currentSlide}
-                        initial={{ opacity: 0, scale: 1.1 }}
+                        initial={{ opacity: 0, scale: 1.05 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.95 }}
                         transition={{ duration: 0.7 }}
@@ -44,99 +44,109 @@ export function Hero() {
                         />
                     </motion.div>
                 </AnimatePresence>
-                {/* Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-b from-[rgba(5,5,16,0.3)] via-[rgba(5,5,16,0.2)] to-[rgba(5,5,16,0.8)]" />
+
+                {/* Elegant Gradient Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80 z-10" />
             </div>
 
             {/* Navigation Arrows */}
             <button
                 onClick={prevSlide}
-                className="absolute left-4 md:left-8 z-20 p-3 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all"
+                className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all"
                 aria-label="Prethodna slika"
             >
                 <ChevronLeft className="w-6 h-6 text-white" />
             </button>
             <button
                 onClick={nextSlide}
-                className="absolute right-4 md:right-8 z-20 p-3 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-all"
+                className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all"
                 aria-label="Sledeća slika"
             >
                 <ChevronRight className="w-6 h-6 text-white" />
             </button>
 
             {/* Slide Indicators */}
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+            <div className="absolute bottom-12 left-1/2 -translate-x-1/2 z-20 flex gap-3">
                 {images.map((_, index) => (
                     <button
                         key={index}
                         onClick={() => setCurrentSlide(index)}
-                        className={`w-2 h-2 rounded-full transition-all ${index === currentSlide
-                            ? "w-8 bg-[var(--accent)]"
-                            : "bg-white/40 hover:bg-white/60"
+                        className={`h-1 rounded-full transition-all duration-500 ${index === currentSlide
+                            ? "w-12 bg-[var(--gold)] shadow-[0_0_10px_rgba(212,175,55,0.4)]"
+                            : "w-2 bg-white/20 hover:bg-white/40"
                             }`}
                         aria-label={`Slika ${index + 1}`}
                     />
                 ))}
             </div>
 
-            {/* Content */}
-            <div className="relative z-10 container text-center px-4">
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 1.2, ease: [0.19, 1, 0.22, 1] }}
-                    className="max-w-5xl mx-auto"
-                >
-                    {/* Featured Label */}
-                    <div className="flex justify-center mb-8">
-                        <div className="px-5 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md flex items-center gap-3">
-                            <span className="w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse" />
-                            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/50">Experience Luxury</span>
+            {/* Main Content - Simple Centered Layout */}
+            <div className="relative z-20 container mx-auto px-4 md:px-6 py-10 md:py-16 text-center flex flex-col items-center justify-center flex-grow">
+
+                {/* Badge */}
+                <div className="mb-10 md:mb-16 inline-flex items-center gap-4">
+                    <div className="w-8 md:w-16 h-px bg-gradient-to-r from-transparent to-[var(--gold)]/50" />
+                    <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-[var(--gold)]">
+                        Experience Luxury
+                    </span>
+                    <div className="w-8 md:w-16 h-px bg-gradient-to-l from-transparent to-[var(--gold)]/50" />
+                </div>
+
+                {/* Title */}
+                <h1 className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter leading-[0.85] text-white mb-6 md:mb-10">
+                    {propertyData.name}
+                </h1>
+
+                {/* Subtitle */}
+                <p className="text-[11px] sm:text-xs md:text-base font-bold uppercase tracking-[0.2em] text-white/40 mb-12 md:mb-20 max-w-md md:max-w-2xl mx-auto leading-relaxed">
+                    {propertyData.tagline}
+                </p>
+
+                {/* Buttons Row */}
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-6 md:gap-8 mb-16 md:mb-32 w-full sm:w-auto">
+                    <a
+                        href="#booking"
+                        className="btn-primary w-full sm:w-auto !px-12 !py-5"
+                    >
+                        Rezerviši sada
+                    </a>
+                    <a
+                        href="#gallery"
+                        className="btn-ghost w-full sm:w-auto !px-12 !py-5"
+                    >
+                        Istraži prostor
+                    </a>
+                </div>
+
+                {/* Stats Grid */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 w-full max-w-5xl mx-auto">
+                    {[
+                        { label: "Kvadratura", val: propertyData.details.size, icon: Maximize },
+                        { label: "Gostiju", val: propertyData.details.maxGuests, icon: Users },
+                        { label: "Spavaće", val: propertyData.details.bedrooms, icon: Bed },
+                        { label: "Kupatila", val: propertyData.details.bathrooms, icon: Bath }
+                    ].map((stat, i) => (
+                        <div
+                            key={i}
+                            className="group p-6 md:p-10 bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:border-[var(--gold)]/20 transition-all duration-700 text-center flex flex-col items-center justify-center rounded-[32px] hover:bg-white/[0.04] relative overflow-hidden"
+                        >
+                            <div className="absolute inset-0 bg-gradient-to-br from-[var(--gold)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                            <stat.icon className="w-5 h-5 md:w-6 md:h-6 text-[var(--gold)] mx-auto mb-4 group-hover:scale-110 transition-transform duration-500" />
+                            <p className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] text-white/30 mb-2 group-hover:text-white/50 transition-colors">
+                                {stat.label}
+                            </p>
+                            <p className="text-xl md:text-3xl lg:text-4xl font-black text-white tracking-tight relative z-10">
+                                {stat.val}
+                            </p>
                         </div>
-                    </div>
+                    ))}
+                </div>
 
-                    {/* Title */}
-                    <h1 className="text-7xl md:text-[10rem] font-black mb-6 tracking-[-0.06em] leading-[0.8] uppercase text-white shadow-2xl">
-                        {propertyData.name}
-                    </h1>
-
-                    {/* Tagline */}
-                    <p className="text-lg md:text-2xl font-bold text-white/40 uppercase tracking-[0.2em] mb-12 max-w-3xl mx-auto leading-relaxed">
-                        {propertyData.tagline}
-                    </p>
-
-                    {/* CTA Section */}
-                    <div className="flex flex-col md:flex-row items-center justify-center gap-8 mb-20">
-                        <a href="#booking" className="btn-primary">
-                            <span>Rezerviši sada</span>
-                            <Star className="w-5 h-5 fill-white" />
-                        </a>
-                        <a href="#gallery" className="btn-secondary">
-                            Istraži prostor
-                        </a>
-                    </div>
-
-                    {/* Quick Stats Grid */}
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
-                        {[
-                            { label: "Kvadratura", val: propertyData.details.size, icon: "Maximize" },
-                            { label: "Gostiju", val: propertyData.details.maxGuests, icon: "Users" },
-                            { label: "Spavaće", val: propertyData.details.bedrooms, icon: "Bed" },
-                            { label: "Kupatila", val: propertyData.details.bathrooms, icon: "Bath" }
-                        ].map((stat, i) => (
-                            <div key={i} className="p-6 deluxe-card text-center group hover:bg-[var(--accent)] transition-colors duration-500">
-                                <p className="text-white/30 group-hover:text-white/60 text-[8px] font-black uppercase tracking-[0.3em] mb-2">{stat.label}</p>
-                                <p className="text-2xl font-black text-white">{stat.val}</p>
-                            </div>
-                        ))}
-                    </div>
-                </motion.div>
             </div>
 
-            {/* Decorative Elements */}
-            <div className="absolute top-20 left-10 w-32 h-32 rounded-full bg-[var(--accent)]/10 blur-3xl" />
-            <div className="absolute bottom-20 right-10 w-40 h-40 rounded-full bg-[var(--gold)]/10 blur-3xl" />
+            {/* Ambient Glows */}
+            <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[var(--gold)]/5 rounded-full blur-[120px] pointer-events-none" />
+            <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-[var(--gold)]/3 rounded-full blur-[120px] pointer-events-none" />
         </section>
     );
 }

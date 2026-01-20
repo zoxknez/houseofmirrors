@@ -1,5 +1,6 @@
 import { Hero } from "@/components/Hero";
 import { Gallery } from "@/components/Gallery";
+import { Highlights } from "@/components/Highlights";
 import { Amenities } from "@/components/Amenities";
 import { Location } from "@/components/Location";
 import { HouseRules } from "@/components/HouseRules";
@@ -11,6 +12,7 @@ export default function Home() {
     <main>
       <Hero />
       <Gallery />
+      <Highlights />
       <Amenities />
       <HouseRules />
       <Location />

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, Calendar } from "lucide-react";
 import { propertyData } from "@/data/property";
 
@@ -36,10 +36,9 @@ export function Navbar() {
                 <div className="flex items-center justify-between">
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2 group relative">
-                        <span className="text-xl font-black text-white tracking-[0.4em] uppercase group-hover:text-[var(--accent)] transition-all duration-500">
-                            {propertyData.name}
-                        </span>
-                        <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[var(--accent)] transition-all duration-500 group-hover:w-full opacity-0 group-hover:opacity-100" />
+                        <div className="w-10 h-10 flex items-center justify-center border border-white/10 group-hover:border-[var(--gold)]/50 transition-all duration-700">
+                            <div className="w-2 h-2 bg-[var(--gold)] shadow-[0_0_15px_rgba(212,175,55,0.4)]" />
+                        </div>
                     </Link>
 
                     {/* Desktop Nav */}
@@ -48,15 +47,15 @@ export function Navbar() {
                             <a
                                 key={link.href}
                                 href={link.href}
-                                className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 hover:text-[var(--accent)] transition-all duration-500 relative group"
+                                className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 hover:text-white transition-all duration-500 relative group"
                             >
                                 {link.label}
-                                <span className="absolute -bottom-1 left-0 w-0 h-[1px] bg-[var(--accent)] transition-all duration-500 group-hover:w-full" />
+                                <span className="absolute -bottom-2 left-0 w-0 h-[1px] bg-[var(--gold)] transition-all duration-500 group-hover:w-full" />
                             </a>
                         ))}
                         <a
                             href="#booking"
-                            className="btn-primary !px-5 !py-3 !text-[10px] !tracking-[0.2em]"
+                            className="btn-primary !px-8 !py-3 !text-[9px] !tracking-[0.3em]"
                         >
                             Rezerviši
                         </a>
@@ -65,7 +64,7 @@ export function Navbar() {
                     {/* Mobile Menu Button */}
                     <button
                         onClick={() => setIsOpen(!isOpen)}
-                        className="md:hidden p-2 rounded-lg hover:bg-white/10 transition-colors"
+                        className="md:hidden p-2 rounded-full hover:bg-white/5 border border-transparent hover:border-white/10 transition-all"
                         aria-label="Toggle menu"
                     >
                         {isOpen ? (
@@ -77,34 +76,36 @@ export function Navbar() {
                 </div>
 
                 {/* Mobile Nav */}
-                {isOpen && (
-                    <motion.div
-                        initial={{ opacity: 0, y: -20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="md:hidden absolute top-full left-0 right-0 bg-[var(--primary)]/95 backdrop-blur-xl border-t border-white/10 py-4"
-                    >
-                        <div className="container flex flex-col gap-2">
-                            {navLinks.map((link) => (
+                <AnimatePresence>
+                    {isOpen && (
+                        <motion.div
+                            initial={{ opacity: 0, y: -20, height: 0 }}
+                            animate={{ opacity: 1, y: 0, height: "auto" }}
+                            exit={{ opacity: 0, y: -20, height: 0 }}
+                            className="md:hidden absolute top-full left-0 right-0 bg-black/95 backdrop-blur-2xl border-b border-white/5 py-8 overflow-hidden"
+                        >
+                            <div className="container flex flex-col gap-6 items-center text-center">
+                                {navLinks.map((link) => (
+                                    <a
+                                        key={link.href}
+                                        href={link.href}
+                                        onClick={() => setIsOpen(false)}
+                                        className="text-white/40 hover:text-white text-xs font-black uppercase tracking-[0.3em] transition-colors"
+                                    >
+                                        {link.label}
+                                    </a>
+                                ))}
                                 <a
-                                    key={link.href}
-                                    href={link.href}
+                                    href="#booking"
                                     onClick={() => setIsOpen(false)}
-                                    className="px-4 py-3 text-white/70 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
+                                    className="btn-primary w-full max-w-[200px]"
                                 >
-                                    {link.label}
+                                    Rezerviši
                                 </a>
-                            ))}
-                            <a
-                                href="#booking"
-                                onClick={() => setIsOpen(false)}
-                                className="mx-4 mt-2 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[var(--accent)] text-white font-medium"
-                            >
-                                <Calendar className="w-4 h-4" />
-                                Rezerviši
-                            </a>
-                        </div>
-                    </motion.div>
-                )}
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
         </motion.nav>
     );

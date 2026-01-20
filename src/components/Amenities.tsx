@@ -1,140 +1,171 @@
 "use client";
 
+import React from "react";
 import { motion } from "framer-motion";
 import { propertyData } from "@/data/property";
 import {
-    Sparkles, Heart, Music, Car, Wifi,
-    Wind, Flame, WashingMachine, Lock, Key,
-    Tv, Film, Disc, Laptop, Armchair,
-    Refrigerator, CookingPot, Coffee,
-    UtensilsCrossed, Droplets, Sparkle,
-    TreeDeciduous, Shield, Bell, Activity,
-    Plus, AlertTriangle, Home, ChefHat, Bath, Circle,
+    Wifi,
+    Wind,
+    Flame,
+    WashingMachine,
+    Lock,
+    Key,
+    Tv,
+    Film,
+    Music,
+    Disc,
+    Laptop,
+    Armchair,
+    Heart,
+    Sparkles,
+    Utensils,
+    Refrigerator,
+    CookingPot,
+    Coffee,
+    UtensilsCrossed,
+    Droplets,
+    Sparkle,
+    Car,
+    TreeDeciduous,
+    Shield,
+    Bell,
+    Cross,
+    AlertTriangle,
     LucideIcon
 } from "lucide-react";
 
-const ICON_MAP: Record<string, LucideIcon> = {
-    Sparkles, Heart, Music, Car, Wifi,
-    Wind, Flame, WashingMachine, Lock, Key,
-    Tv, Film, Disc, Laptop, Armchair,
-    Refrigerator, CookingPot, Coffee,
-    UtensilsCrossed, Droplets, Sparkle,
-    TreeDeciduous, Shield, Bell, Activity,
-    Plus, AlertTriangle, Home, ChefHat, Bath
+// Icon mapping
+const iconMap: Record<string, LucideIcon> = {
+    Wifi,
+    Wind,
+    Flame,
+    WashingMachine,
+    Lock,
+    Key,
+    Tv,
+    Film,
+    Music,
+    Disc,
+    Laptop,
+    Armchair,
+    Heart,
+    Sparkles,
+    Utensils,
+    Refrigerator,
+    CookingPot,
+    Coffee,
+    UtensilsCrossed,
+    Droplets,
+    Sparkle,
+    Car,
+    TreeDeciduous,
+    Shield,
+    Bell,
+    Cross,
+    AlertTriangle
 };
 
-function getIcon(iconName: string): LucideIcon {
-    return ICON_MAP[iconName] || Circle;
-}
+// Category display names
+const categoryNames: Record<string, string> = {
+    essentials: "Osnovno",
+    entertainment: "Zabava & Tehnika",
+    wellness: "Wellness & Spa",
+    kitchen: "Kuhinja & Trpezarija",
+    bathroom: "Kupatilo",
+    outdoor: "Parking i Eksterijer",
+    safety: "Sigurnost",
+};
 
 export function Amenities() {
-    const categories = [
-        { id: "essentials", label: "Osnovne pogodnosti", icon: "Home" },
-        { id: "entertainment", label: "Zabava", icon: "Tv" },
-        { id: "wellness", label: "Wellness", icon: "Heart" },
-        { id: "kitchen", label: "Kuhinja", icon: "ChefHat" },
-        { id: "bathroom", label: "Kupatilo", icon: "Bath" },
-        { id: "outdoor", label: "Parking i dvorište", icon: "Car" },
-        { id: "safety", label: "Bezbednost", icon: "Shield" }
+    // Group amenities by category
+    const groupedAmenities = propertyData.amenities.reduce((acc, amenity) => {
+        const category = amenity.category || "ostalo";
+        if (!acc[category]) {
+            acc[category] = [];
+        }
+        acc[category].push(amenity);
+        return acc;
+    }, {} as Record<string, typeof propertyData.amenities>);
+
+    // Order of categories
+    const categoryOrder = [
+        "wellness",
+        "entertainment",
+        "kitchen",
+        "bathroom",
+        "essentials",
+        "outdoor",
+        "safety"
     ];
 
-    const containerVariants = {
-        hidden: { opacity: 0 },
-        visible: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.1
-            }
-        }
-    };
-
-    const itemVariants = {
-        hidden: { opacity: 0, y: 20 },
-        visible: { opacity: 1, y: 0 }
-    };
-
     return (
-        <section id="amenities" className="section bg-[var(--primary)]/50">
-            <div className="container">
+        <section id="amenities" className="section bg-black relative overflow-hidden">
+            {/* Background Elements */}
+            <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-[var(--accent)]/5 rounded-full blur-[120px] pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-[var(--gold)]/5 rounded-full blur-[120px] pointer-events-none" />
+
+            <div className="container relative z-10">
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.8, ease: [0.19, 1, 0.22, 1] }}
-                    className="text-center mb-16"
+                    transition={{ duration: 0.8 }}
+                    className="text-center mb-16 md:mb-24"
                 >
-                    <p className="text-[var(--accent)] text-xs font-black uppercase tracking-[0.4em] mb-4">Ekskluzivno</p>
-                    <h2 className="text-5xl md:text-7xl font-black mb-8 tracking-tighter">
-                        Premium <span className="opacity-40">Oprema</span>
+                    {/* Badge with lines */}
+                    <div className="flex items-center justify-center gap-4 mb-6">
+                        <div className="h-px flex-1 max-w-[80px] md:max-w-[120px] bg-gradient-to-r from-transparent to-[var(--gold)]/50" />
+                        <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-[var(--gold)]">
+                            Sadržaj
+                        </span>
+                        <div className="h-px flex-1 max-w-[80px] md:max-w-[120px] bg-gradient-to-l from-transparent to-[var(--gold)]/50" />
+                    </div>
+
+                    {/* Title */}
+                    <h2 className="text-4xl md:text-5xl lg:text-6xl font-black uppercase tracking-tighter text-white mb-6">
+                        Šta nudimo
                     </h2>
+                    <p className="text-sm md:text-base text-white/50 max-w-2xl mx-auto">
+                        Pažljivo odabrana oprema i pogodnosti za vaš savršen boravak i potpuno opuštanje.
+                    </p>
                 </motion.div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-32">
-                    {propertyData.highlights.map((highlight, index) => {
-                        const IconComponent = getIcon(highlight.icon);
+                <div className="space-y-12 md:space-y-20">
+                    {categoryOrder.map((catKey, index) => {
+                        const amenities = groupedAmenities[catKey];
+                        if (!amenities) return null;
+
                         return (
                             <motion.div
-                                key={index}
+                                key={catKey}
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
-                                transition={{ delay: index * 0.1 }}
-                                className="p-8 deluxe-card group"
+                                transition={{ duration: 0.6, delay: index * 0.1 }}
                             >
-                                <div className="w-12 h-12 mb-6 rounded-2xl bg-[var(--accent)]/10 flex items-center justify-center border border-[var(--accent)]/20">
-                                    <IconComponent className="w-6 h-6 text-[var(--accent)]" />
-                                </div>
-                                <h3 className="text-xl font-black text-white mb-2 tracking-tight uppercase">
-                                    {highlight.title}
-                                </h3>
-                                <p className="text-[var(--text-muted)] text-sm leading-snug font-medium">
-                                    {highlight.description}
-                                </p>
-                            </motion.div>
-                        );
-                    })}
-                </div>
-
-                {/* All Amenities by Category */}
-                <div className="space-y-10">
-                    {categories.map((category) => {
-                        const categoryAmenities = propertyData.amenities.filter(
-                            (a) => a.category === category.id
-                        );
-                        if (categoryAmenities.length === 0) return null;
-
-                        const CategoryIcon = getIcon(category.icon);
-
-                        return (
-                            <motion.div
-                                key={category.id}
-                                variants={containerVariants}
-                                initial="hidden"
-                                whileInView="visible"
-                                viewport={{ once: true }}
-                            >
-                                <div className="flex items-center gap-3 mb-4">
-                                    <CategoryIcon className="w-5 h-5 text-[var(--gold)]" />
-                                    <h3 className="text-xl font-semibold text-white">
-                                        {category.label}
+                                <div className="flex items-center justify-center gap-4 mb-8">
+                                    <div className="h-px flex-1 max-w-[100px] md:max-w-[150px] bg-gradient-to-r from-transparent to-white/20" />
+                                    <h3 className="text-sm md:text-base font-black uppercase tracking-[0.4em] text-white/50 text-center whitespace-nowrap">
+                                        {categoryNames[catKey] || catKey}
                                     </h3>
+                                    <div className="h-px flex-1 max-w-[100px] md:max-w-[150px] bg-gradient-to-l from-transparent to-white/20" />
                                 </div>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                                    {categoryAmenities.map((amenity, index) => {
-                                        const AmenityIcon = getIcon(amenity.icon);
+
+                                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+                                    {amenities.map((item, i) => {
+                                        const Icon = iconMap[item.icon as string] || Sparkles;
                                         return (
-                                            <motion.div
-                                                key={index}
-                                                variants={itemVariants}
-                                                className="flex items-center gap-4 group"
+                                            <div
+                                                key={i}
+                                                className="amenity-card group"
                                             >
-                                                <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center group-hover:bg-[var(--accent)]/10 transition-colors">
-                                                    <AmenityIcon className="w-4 h-4 text-white/40 group-hover:text-[var(--accent)] transition-colors" />
+                                                <div className="p-2 rounded-lg bg-white/5 group-hover:bg-[var(--accent)]/20 transition-colors">
+                                                    <Icon className="w-5 h-5 text-[var(--gold)] group-hover:text-[var(--accent)] transition-colors" />
                                                 </div>
-                                                <span className="text-white/60 group-hover:text-white transition-colors text-xs font-bold uppercase tracking-widest leading-none">
-                                                    {amenity.name}
+                                                <span className="text-sm md:text-base text-white/80 font-medium group-hover:text-white transition-colors">
+                                                    {item.name}
                                                 </span>
-                                            </motion.div>
+                                            </div>
                                         );
                                     })}
                                 </div>

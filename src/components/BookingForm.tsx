@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { format } from "date-fns";
-import { sr } from "date-fns/locale";
+import { srLatn } from "date-fns/locale";
 import {
     X,
     User,
@@ -108,41 +108,44 @@ export function BookingForm({
                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                className="deluxe-card w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+                className="bg-[#050505] border border-white/10 w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-[40px] shadow-2xl relative"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Header */}
-                <div className="sticky top-0 z-10 flex items-center justify-between p-8 border-b border-white/10 bg-black">
-                    <h3 className="text-3xl font-black text-white uppercase tracking-tighter">POTVRDA</h3>
+                <div className="sticky top-0 z-10 flex items-center justify-between p-8 md:p-10 border-b border-white/5 bg-[#050505]/80 backdrop-blur-md">
+                    <div>
+                        <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-[var(--gold)] mb-1">Rezervacija</h3>
+                        <h4 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tighter">POTVRDA</h4>
+                    </div>
                     <button
                         onClick={onClose}
-                        className="p-3 rounded-full hover:bg-white/10 transition-colors border border-white/10"
+                        className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/5 transition-all duration-300 group"
                         aria-label="Zatvori"
                     >
-                        <X className="w-6 h-6 text-white" />
+                        <X className="w-6 h-6 text-white/40 group-hover:text-white transition-colors" />
                     </button>
                 </div>
 
                 {success ? (
                     /* Success Message */
-                    <div className="p-8 text-center">
+                    <div className="p-12 text-center">
                         <motion.div
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            className="w-20 h-20 mx-auto mb-6 rounded-full bg-green-500/20 flex items-center justify-center"
+                            initial={{ scale: 0, rotate: -180 }}
+                            animate={{ scale: 1, rotate: 0 }}
+                            className="w-24 h-24 mx-auto mb-8 rounded-full bg-[var(--gold)]/10 border border-[var(--gold)]/20 flex items-center justify-center"
                         >
-                            <CheckCircle className="w-10 h-10 text-green-400" />
+                            <CheckCircle className="w-12 h-12 text-[var(--gold)]" />
                         </motion.div>
-                        <h4 className="text-2xl font-bold text-white mb-2">
-                            Rezervacija poslata!
+                        <h4 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tighter mb-4">
+                            Zahtev Poslat
                         </h4>
-                        <p className="text-white/70 mb-6">
-                            Primili smo vaš zahtev za rezervaciju. Kontaktiraćemo vas uskoro
-                            na email {formData.email} radi potvrde.
+                        <p className="text-white/40 mb-10 leading-relaxed font-medium">
+                            Primili smo vaš zahtev. Kontaktiraćemo vas uskoro
+                            na <span className="text-white">{formData.email}</span> radi potvrde.
                         </p>
-                        <div className="glass-card p-4 max-w-sm mx-auto">
-                            <div className="text-sm text-white/60">Referentni broj</div>
-                            <div className="text-lg font-mono text-[var(--gold)]">
+                        <div className="bg-white/[0.03] border border-white/5 p-6 rounded-[24px] max-w-sm mx-auto">
+                            <div className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 mb-2">Referentni broj</div>
+                            <div className="text-xl font-black text-[var(--gold)] tracking-widest uppercase">
                                 HOM-{Date.now().toString(36).toUpperCase()}
                             </div>
                         </div>
@@ -150,84 +153,90 @@ export function BookingForm({
                 ) : (
                     <>
                         {/* Booking Summary */}
-                        <div className="p-6 border-b border-white/10 bg-white/5">
-                            <div className="grid sm:grid-cols-3 gap-4">
-                                <div className="flex items-center gap-3">
-                                    <Calendar className="w-5 h-5 text-[var(--accent)]" />
+                        <div className="p-8 md:p-10 border-b border-white/5 bg-white/[0.02]">
+                            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-8">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-10 h-10 rounded-full bg-[var(--gold)]/10 flex items-center justify-center">
+                                        <Calendar className="w-5 h-5 text-[var(--gold)]" />
+                                    </div>
                                     <div>
-                                        <p className="text-xs text-white/50">Check-in</p>
-                                        <p className="text-white font-medium">
-                                            {format(checkIn, "d. MMM yyyy", { locale: sr })}
+                                        <p className="text-[10px] font-black text-white/30 uppercase tracking-widest">Dolazak</p>
+                                        <p className="text-white font-black uppercase tracking-tight">
+                                            {format(checkIn, "d. MMM yyyy", { locale: srLatn })}
                                         </p>
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-3">
-                                    <Calendar className="w-5 h-5 text-[var(--accent)]" />
+                                <div className="flex items-center gap-4">
+                                    <div className="w-10 h-10 rounded-full bg-[var(--gold)]/10 flex items-center justify-center">
+                                        <Calendar className="w-5 h-5 text-[var(--gold)]" />
+                                    </div>
                                     <div>
-                                        <p className="text-xs text-white/50">Check-out</p>
-                                        <p className="text-white font-medium">
-                                            {format(checkOut, "d. MMM yyyy", { locale: sr })}
+                                        <p className="text-[10px] font-black text-white/30 uppercase tracking-widest">Odlazak</p>
+                                        <p className="text-white font-black uppercase tracking-tight">
+                                            {format(checkOut, "d. MMM yyyy", { locale: srLatn })}
                                         </p>
                                     </div>
                                 </div>
-                                <div className="flex items-center gap-3">
-                                    <Users className="w-5 h-5 text-[var(--accent)]" />
+                                <div className="flex items-center gap-4">
+                                    <div className="w-10 h-10 rounded-full bg-[var(--gold)]/10 flex items-center justify-center">
+                                        <Users className="w-5 h-5 text-[var(--gold)]" />
+                                    </div>
                                     <div>
-                                        <p className="text-xs text-white/50">Gosti</p>
-                                        <p className="text-white font-medium">{guests}</p>
+                                        <p className="text-[10px] font-black text-white/30 uppercase tracking-widest">Gosti</p>
+                                        <p className="text-white font-black uppercase tracking-tight">{guests} {guests === 1 ? 'Gost' : 'Gosta'}</p>
                                     </div>
                                 </div>
                             </div>
-                            <div className="mt-4 pt-4 border-t border-white/10 flex justify-between items-center">
-                                <span className="text-white/70">Ukupno za uplatu</span>
-                                <span className="text-2xl font-bold gold-text">€{totalPrice}</span>
+                            <div className="mt-8 pt-8 border-t border-white/5 flex justify-between items-end">
+                                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">Za uplatu</span>
+                                <span className="text-3xl font-black text-[var(--gold)] tracking-tighter">€{totalPrice}</span>
                             </div>
                         </div>
 
                         {/* Form */}
-                        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+                        <form onSubmit={handleSubmit} className="p-8 md:p-10 space-y-8">
                             {error && (
-                                <div className="p-4 rounded-xl bg-red-500/20 border border-red-500/30 flex items-center gap-3">
-                                    <AlertCircle className="w-5 h-5 text-red-400" />
-                                    <p className="text-red-300">{error}</p>
+                                <div className="p-5 rounded-[20px] bg-red-500/10 border border-red-500/20 flex items-center gap-4">
+                                    <AlertCircle className="w-6 h-6 text-red-400 flex-shrink-0" />
+                                    <p className="text-red-400 font-bold text-sm">{error}</p>
                                 </div>
                             )}
 
-                            <div className="grid sm:grid-cols-2 gap-4">
+                            <div className="grid sm:grid-cols-2 gap-6">
                                 {/* First Name */}
                                 <div>
-                                    <label className="block text-sm text-white/70 mb-2">
+                                    <label className="block text-[10px] font-black uppercase tracking-widest text-white/40 mb-3 ml-1">
                                         Ime *
                                     </label>
-                                    <div className="relative">
-                                        <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
+                                    <div className="relative group">
+                                        <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20 group-focus-within:text-[var(--gold)] transition-colors" />
                                         <input
                                             type="text"
                                             name="firstName"
                                             value={formData.firstName}
                                             onChange={handleChange}
                                             required
-                                            className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/30 focus:outline-none focus:border-[var(--accent)] transition-colors"
-                                            placeholder="Vaše ime"
+                                            className="w-full pl-12 pr-4 py-4 rounded-[18px] bg-white/[0.03] border border-white/10 text-white font-bold placeholder:text-white/10 focus:outline-none focus:border-[var(--gold)] focus:bg-white/[0.05] transition-all"
+                                            placeholder="Petar"
                                         />
                                     </div>
                                 </div>
 
                                 {/* Last Name */}
                                 <div>
-                                    <label className="block text-sm text-white/70 mb-2">
+                                    <label className="block text-[10px] font-black uppercase tracking-widest text-white/40 mb-3 ml-1">
                                         Prezime *
                                     </label>
-                                    <div className="relative">
-                                        <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
+                                    <div className="relative group">
+                                        <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20 group-focus-within:text-[var(--gold)] transition-colors" />
                                         <input
                                             type="text"
                                             name="lastName"
                                             value={formData.lastName}
                                             onChange={handleChange}
                                             required
-                                            className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/30 focus:outline-none focus:border-[var(--accent)] transition-colors"
-                                            placeholder="Vaše prezime"
+                                            className="w-full pl-12 pr-4 py-4 rounded-[18px] bg-white/[0.03] border border-white/10 text-white font-bold placeholder:text-white/10 focus:outline-none focus:border-[var(--gold)] focus:bg-white/[0.05] transition-all"
+                                            placeholder="Petrović"
                                         />
                                     </div>
                                 </div>
@@ -235,82 +244,84 @@ export function BookingForm({
 
                             {/* Email */}
                             <div>
-                                <label className="block text-sm text-white/70 mb-2">
+                                <label className="block text-[10px] font-black uppercase tracking-widest text-white/40 mb-3 ml-1">
                                     Email adresa *
                                 </label>
-                                <div className="relative">
-                                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
+                                <div className="relative group">
+                                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20 group-focus-within:text-[var(--gold)] transition-colors" />
                                     <input
                                         type="email"
                                         name="email"
                                         value={formData.email}
                                         onChange={handleChange}
                                         required
-                                        className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/30 focus:outline-none focus:border-[var(--accent)] transition-colors"
-                                        placeholder="vas@email.com"
+                                        className="w-full pl-12 pr-4 py-4 rounded-[18px] bg-white/[0.03] border border-white/10 text-white font-bold placeholder:text-white/10 focus:outline-none focus:border-[var(--gold)] focus:bg-white/[0.05] transition-all"
+                                        placeholder="petar@email.com"
                                     />
                                 </div>
                             </div>
 
                             {/* Phone */}
                             <div>
-                                <label className="block text-sm text-white/70 mb-2">
+                                <label className="block text-[10px] font-black uppercase tracking-widest text-white/40 mb-3 ml-1">
                                     Telefon *
                                 </label>
-                                <div className="relative">
-                                    <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
+                                <div className="relative group">
+                                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20 group-focus-within:text-[var(--gold)] transition-colors" />
                                     <input
                                         type="tel"
                                         name="phone"
                                         value={formData.phone}
                                         onChange={handleChange}
                                         required
-                                        className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/30 focus:outline-none focus:border-[var(--accent)] transition-colors"
-                                        placeholder="+381 xx xxx xxxx"
+                                        className="w-full pl-12 pr-4 py-4 rounded-[18px] bg-white/[0.03] border border-white/10 text-white font-bold placeholder:text-white/10 focus:outline-none focus:border-[var(--gold)] focus:bg-white/[0.05] transition-all"
+                                        placeholder="+381 60 123 4567"
                                     />
                                 </div>
                             </div>
 
                             {/* Message */}
                             <div>
-                                <label className="block text-sm text-white/70 mb-2">
+                                <label className="block text-[10px] font-black uppercase tracking-widest text-white/40 mb-3 ml-1">
                                     Posebni zahtevi (opciono)
                                 </label>
-                                <div className="relative">
-                                    <MessageSquare className="absolute left-3 top-3 w-5 h-5 text-white/40" />
+                                <div className="relative group">
+                                    <MessageSquare className="absolute left-4 top-4 w-5 h-5 text-white/20 group-focus-within:text-[var(--gold)] transition-colors" />
                                     <textarea
                                         name="message"
                                         value={formData.message}
                                         onChange={handleChange}
                                         rows={3}
-                                        className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/30 focus:outline-none focus:border-[var(--accent)] transition-colors resize-none"
-                                        placeholder="Npr. kasni dolazak, posebni zahtevi..."
+                                        className="w-full pl-12 pr-4 py-4 rounded-[20px] bg-white/[0.03] border border-white/10 text-white font-bold placeholder:text-white/10 focus:outline-none focus:border-[var(--gold)] focus:bg-white/[0.05] transition-all resize-none"
+                                        placeholder="Npr. kasni dolazak, bebi krevetac..."
                                     />
                                 </div>
                             </div>
 
                             {/* Submit */}
-                            <button
-                                type="submit"
-                                disabled={loading}
-                                className="w-full btn-primary flex items-center justify-center gap-2 disabled:opacity-70"
-                            >
-                                {loading ? (
-                                    <>
-                                        <Loader2 className="w-5 h-5 animate-spin" />
-                                        Šaljem zahtev...
-                                    </>
-                                ) : (
-                                    <>
-                                        <CreditCard className="w-5 h-5" />
-                                        Pošalji zahtev za rezervaciju
-                                    </>
-                                )}
-                            </button>
+                            <div className="pt-4">
+                                <button
+                                    type="submit"
+                                    disabled={loading}
+                                    className="w-full h-16 rounded-full bg-[var(--gold)] text-black font-black uppercase tracking-[0.2em] text-sm hover:scale-[1.02] active:scale-95 disabled:opacity-30 disabled:hover:scale-100 transition-all duration-300 shadow-[0_0_30px_rgba(212,175,55,0.2)] flex items-center justify-center gap-3"
+                                >
+                                    {loading ? (
+                                        <>
+                                            <Loader2 className="w-5 h-5 animate-spin" />
+                                            Šaljem zahtev...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <CreditCard className="w-5 h-5" />
+                                            Potvrdi Rezervaciju
+                                        </>
+                                    )}
+                                </button>
+                            </div>
 
-                            <p className="text-center text-white/50 text-sm">
+                            <p className="text-center text-[10px] font-black uppercase tracking-widest text-white/20">
                                 Primićete email potvrdu sa detaljima za uplatu.
-                                Rezervacija je potvrđena nakon uplate.
+                                <span className="block mt-1">Rezervacija je finalna nakon potvrde uplate.</span>
                             </p>
                         </form>
                     </>
