@@ -1,0 +1,18 @@
+[
+  {
+    "firstName": "Test",
+    "lastName": "User",
+    "email": "test@example.com",
+    "phone": "0641234567",
+    "message": "sd",
+    "checkIn": "2026-01-26",
+    "checkOut": "2026-02-12",
+    "guests": 2,
+    "totalPrice": 955,
+    "reference": "HOM-VKBCEF",
+    "id": "HOM-MKM82Y5I-J2LD",
+    "createdAt": "2026-01-20T06:38:07.206Z",
+    "status": "pending",
+    "source": "direct"
+  }
+]

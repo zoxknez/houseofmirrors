@@ -1,40 +1,34 @@
 import { NextResponse } from "next/server";
+import { getBookings, getBlockedDates } from "@/lib/data";
+import type { BookedDateInfo } from "@/types";
 
-// In production, these would come from environment variables
+// iCal source URLs from environment
 const ICAL_SOURCES = {
-    // These are placeholder URLs - user will replace with real iCal feeds
     booking: process.env.BOOKING_ICAL_URL || "",
-    airbnb: process.env.AIRBNB_ICAL_URL || ""
+    airbnb: process.env.AIRBNB_ICAL_URL || "",
 };
 
-// Simple in-memory cache
+// Cache
 let cachedAvailability: {
-    data: BookedDate[];
+    data: BookedDateInfo[];
     timestamp: number;
 } | null = null;
 
 const CACHE_TTL = 15 * 60 * 1000; // 15 minutes
 
-interface BookedDate {
-    start: string;
-    end: string;
-    source: string;
-    summary?: string;
-}
-
-// Parse iCal data manually (simple implementation)
-function parseICalData(icalString: string, source: string): BookedDate[] {
-    const events: BookedDate[] = [];
+// Parse iCal data
+function parseICalData(icalString: string, source: "booking" | "airbnb"): BookedDateInfo[] {
+    const events: BookedDateInfo[] = [];
     const lines = icalString.split(/\r?\n/);
 
-    let currentEvent: Partial<BookedDate> | null = null;
+    let currentEvent: Partial<BookedDateInfo> | null = null;
 
     for (const line of lines) {
         if (line.startsWith("BEGIN:VEVENT")) {
             currentEvent = { source };
         } else if (line.startsWith("END:VEVENT") && currentEvent) {
             if (currentEvent.start && currentEvent.end) {
-                events.push(currentEvent as BookedDate);
+                events.push(currentEvent as BookedDateInfo);
             }
             currentEvent = null;
         } else if (currentEvent) {
@@ -54,8 +48,7 @@ function parseICalData(icalString: string, source: string): BookedDate[] {
 }
 
 function parseICalDate(value: string): string {
-    // Handle formats like 20260120 or 20260120T140000Z
-    if (value.length >= 8) {
+    if (value && value.length >= 8) {
         const year = value.substring(0, 4);
         const month = value.substring(4, 6);
         const day = value.substring(6, 8);
@@ -64,15 +57,15 @@ function parseICalDate(value: string): string {
     return value;
 }
 
-async function fetchICalFeed(url: string, source: string): Promise<BookedDate[]> {
+async function fetchICalFeed(url: string, source: "booking" | "airbnb"): Promise<BookedDateInfo[]> {
     if (!url) return [];
 
     try {
         const response = await fetch(url, {
             headers: {
-                "User-Agent": "HouseOfMirrors Calendar Sync"
+                "User-Agent": "HouseOfMirrors Calendar Sync",
             },
-            next: { revalidate: 900 } // Revalidate every 15 minutes
+            next: { revalidate: 900 },
         });
 
         if (!response.ok) {
@@ -88,53 +81,56 @@ async function fetchICalFeed(url: string, source: string): Promise<BookedDate[]>
     }
 }
 
-async function fetchAllAvailability(): Promise<BookedDate[]> {
+async function fetchAllAvailability(): Promise<BookedDateInfo[]> {
     // Check cache
     if (cachedAvailability && Date.now() - cachedAvailability.timestamp < CACHE_TTL) {
         return cachedAvailability.data;
     }
 
-    // Fetch from all sources
-    const [bookingDates, airbnbDates] = await Promise.all([
+    // Fetch from all sources in parallel
+    const [bookingDates, airbnbDates, localBookings, blockedDates] = await Promise.all([
         fetchICalFeed(ICAL_SOURCES.booking, "booking"),
-        fetchICalFeed(ICAL_SOURCES.airbnb, "airbnb")
+        fetchICalFeed(ICAL_SOURCES.airbnb, "airbnb"),
+        getLocalBookings(),
+        getBlockedDatesForAvailability(),
     ]);
 
-    // Get local bookings (from our database/file)
-    const localBookings = await getLocalBookings();
-
-    const allDates = [...bookingDates, ...airbnbDates, ...localBookings];
+    const allDates = [...bookingDates, ...airbnbDates, ...localBookings, ...blockedDates];
 
     // Update cache
     cachedAvailability = {
         data: allDates,
-        timestamp: Date.now()
+        timestamp: Date.now(),
     };
 
     return allDates;
 }
 
-// Get bookings from local storage/database
-async function getLocalBookings(): Promise<BookedDate[]> {
-    // In production, this would fetch from a database
-    // For now, return from a JSON file or empty array
+async function getLocalBookings(): Promise<BookedDateInfo[]> {
     try {
-        const fs = await import("fs/promises");
-        const path = await import("path");
-        const filePath = path.join(process.cwd(), "data", "bookings.json");
-
-        try {
-            const data = await fs.readFile(filePath, "utf-8");
-            const bookings = JSON.parse(data);
-            return bookings.map((b: { checkIn: string; checkOut: string }) => ({
+        const bookings = await getBookings();
+        return bookings
+            .filter((b) => b.status !== "cancelled")
+            .map((b) => ({
                 start: b.checkIn,
                 end: b.checkOut,
-                source: "direct"
+                source: "direct" as const,
+                summary: `${b.firstName} ${b.lastName}`,
             }));
-        } catch {
-            // File doesn't exist yet
-            return [];
-        }
+    } catch {
+        return [];
+    }
+}
+
+async function getBlockedDatesForAvailability(): Promise<BookedDateInfo[]> {
+    try {
+        const blocked = await getBlockedDates();
+        return blocked.map((b) => ({
+            start: b.startDate,
+            end: b.endDate,
+            source: "blocked" as const,
+            summary: b.reason || "Blocked",
+        }));
     } catch {
         return [];
     }
@@ -146,7 +142,7 @@ export async function GET() {
 
         return NextResponse.json({
             bookedDates,
-            lastUpdated: new Date().toISOString()
+            lastUpdated: new Date().toISOString(),
         });
     } catch (error) {
         console.error("Availability API error:", error);
@@ -155,4 +151,10 @@ export async function GET() {
             { status: 500 }
         );
     }
+}
+
+// Force cache refresh
+export async function POST() {
+    cachedAvailability = null;
+    return GET();
 }

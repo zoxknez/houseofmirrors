@@ -1,107 +1,37 @@
 import { NextRequest, NextResponse } from "next/server";
-import fs from "fs/promises";
-import path from "path";
-
-interface BookingRequest {
-    firstName: string;
-    lastName: string;
-    email: string;
-    phone: string;
-    message?: string;
-    checkIn: string;
-    checkOut: string;
-    guests: number;
-    totalPrice: number;
-}
-
-interface Booking extends BookingRequest {
-    id: string;
-    createdAt: string;
-    status: "pending" | "confirmed" | "cancelled";
-}
-
-const DATA_DIR = path.join(process.cwd(), "data");
-const BOOKINGS_FILE = path.join(DATA_DIR, "bookings.json");
-
-async function ensureDataDir() {
-    try {
-        await fs.access(DATA_DIR);
-    } catch {
-        await fs.mkdir(DATA_DIR, { recursive: true });
-    }
-}
-
-async function getBookings(): Promise<Booking[]> {
-    await ensureDataDir();
-    try {
-        const data = await fs.readFile(BOOKINGS_FILE, "utf-8");
-        return JSON.parse(data);
-    } catch {
-        return [];
-    }
-}
-
-async function saveBookings(bookings: Booking[]) {
-    await ensureDataDir();
-    await fs.writeFile(BOOKINGS_FILE, JSON.stringify(bookings, null, 2));
-}
-
-function generateId(): string {
-    return `HOM-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
-}
+import {
+    getBookings,
+    createBooking,
+    isDateRangeAvailable,
+    generateBookingId,
+} from "@/lib/data";
+import {
+    sendBookingConfirmation,
+    sendNewBookingNotification,
+} from "@/lib/email";
+import type { Booking, BookingRequest } from "@/types";
 
 function validateBookingRequest(body: unknown): body is BookingRequest {
     const b = body as BookingRequest;
     return (
         typeof b.firstName === "string" &&
+        b.firstName.trim().length > 0 &&
         typeof b.lastName === "string" &&
+        b.lastName.trim().length > 0 &&
         typeof b.email === "string" &&
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(b.email) &&
         typeof b.phone === "string" &&
+        b.phone.trim().length > 0 &&
         typeof b.checkIn === "string" &&
+        /^\d{4}-\d{2}-\d{2}$/.test(b.checkIn) &&
         typeof b.checkOut === "string" &&
+        /^\d{4}-\d{2}-\d{2}$/.test(b.checkOut) &&
         typeof b.guests === "number" &&
-        typeof b.totalPrice === "number"
+        b.guests >= 1 &&
+        b.guests <= 4 &&
+        typeof b.totalPrice === "number" &&
+        b.totalPrice > 0
     );
-}
-
-async function sendConfirmationEmail(booking: Booking) {
-    // In production, use Nodemailer or Resend
-    // For now, just log
-    console.log("📧 Would send confirmation email to:", booking.email);
-    console.log("Booking details:", {
-        id: booking.id,
-        name: `${booking.firstName} ${booking.lastName}`,
-        checkIn: booking.checkIn,
-        checkOut: booking.checkOut,
-        guests: booking.guests,
-        total: booking.totalPrice
-    });
-
-    // TODO: Implement actual email sending
-    // const nodemailer = await import("nodemailer");
-    // const transporter = nodemailer.createTransport({...});
-    // await transporter.sendMail({...});
-}
-
-async function checkAvailability(checkIn: string, checkOut: string): Promise<boolean> {
-    const bookings = await getBookings();
-
-    const requestStart = new Date(checkIn);
-    const requestEnd = new Date(checkOut);
-
-    for (const booking of bookings) {
-        if (booking.status === "cancelled") continue;
-
-        const bookingStart = new Date(booking.checkIn);
-        const bookingEnd = new Date(booking.checkOut);
-
-        // Check for overlap
-        if (requestStart < bookingEnd && requestEnd > bookingStart) {
-            return false;
-        }
-    }
-
-    return true;
 }
 
 export async function POST(request: NextRequest) {
@@ -110,13 +40,33 @@ export async function POST(request: NextRequest) {
 
         if (!validateBookingRequest(body)) {
             return NextResponse.json(
-                { error: "Invalid booking data" },
+                { error: "Nevažeći podaci za rezervaciju" },
                 { status: 400 }
             );
         }
 
-        // Check if dates are available
-        const isAvailable = await checkAvailability(body.checkIn, body.checkOut);
+        // Validate dates
+        const checkIn = new Date(body.checkIn);
+        const checkOut = new Date(body.checkOut);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        if (checkIn < today) {
+            return NextResponse.json(
+                { error: "Datum prijave ne može biti u prošlosti" },
+                { status: 400 }
+            );
+        }
+
+        if (checkOut <= checkIn) {
+            return NextResponse.json(
+                { error: "Datum odjave mora biti posle datuma prijave" },
+                { status: 400 }
+            );
+        }
+
+        // Check availability
+        const isAvailable = await isDateRangeAvailable(body.checkIn, body.checkOut);
         if (!isAvailable) {
             return NextResponse.json(
                 { error: "Izabrani datumi nisu više dostupni" },
@@ -127,44 +77,44 @@ export async function POST(request: NextRequest) {
         // Create booking
         const booking: Booking = {
             ...body,
-            id: generateId(),
+            id: generateBookingId(),
             createdAt: new Date().toISOString(),
-            status: "pending"
+            status: "pending",
+            source: "direct",
         };
 
-        // Save to database
-        const bookings = await getBookings();
-        bookings.push(booking);
-        await saveBookings(bookings);
+        await createBooking(booking);
 
-        // Send confirmation email
-        await sendConfirmationEmail(booking);
+        // Send emails (don't wait, fire and forget)
+        Promise.all([
+            sendBookingConfirmation(booking),
+            sendNewBookingNotification(booking),
+        ]).catch(console.error);
 
         return NextResponse.json({
             success: true,
             booking: {
                 id: booking.id,
-                status: booking.status
-            }
+                status: booking.status,
+            },
         });
     } catch (error) {
         console.error("Booking API error:", error);
         return NextResponse.json(
-            { error: "Failed to create booking" },
+            { error: "Greška pri kreiranju rezervacije" },
             { status: 500 }
         );
     }
 }
 
 export async function GET() {
-    // For admin use - list all bookings
     try {
         const bookings = await getBookings();
         return NextResponse.json({ bookings });
     } catch (error) {
         console.error("Booking API error:", error);
         return NextResponse.json(
-            { error: "Failed to fetch bookings" },
+            { error: "Greška pri dohvatanju rezervacija" },
             { status: 500 }
         );
     }
