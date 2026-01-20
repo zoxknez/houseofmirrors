@@ -14,11 +14,11 @@ const iconMap: Record<string, LucideIcon> = {
 
 export function Highlights() {
     return (
-        <section className="section bg-black relative overflow-hidden py-20 md:py-32">
+        <section id="highlights" className="relative py-24 md:py-40 bg-black overflow-hidden">
             {/* Background Glow */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-[var(--accent)]/5 rounded-full blur-[150px] pointer-events-none" />
 
-            <div className="container relative z-10">
+            <div className="max-w-[1400px] mx-auto px-6 md:px-10 relative z-10">
                 {/* Section Header */}
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}

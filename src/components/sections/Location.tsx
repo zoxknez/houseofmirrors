@@ -3,39 +3,26 @@
 import { motion } from "framer-motion";
 import { MapPin, Navigation, Bus, TreeDeciduous, Building } from "lucide-react";
 import { propertyData } from "@/data/property";
+import { SectionHeader } from "@/components/ui/SectionHeader";
+import { GlassCard } from "@/components/ui/GlassCard";
 
 export function Location() {
     const { location } = propertyData;
 
     return (
-        <section id="location" className="section bg-black relative overflow-hidden py-24 md:py-32">
-            {/* Background Glow */}
+        <section id="location" className="relative py-24 md:py-40 bg-black overflow-hidden">
             <div className="absolute bottom-0 right-0 w-1/3 h-1/2 bg-[var(--gold)]/5 rounded-full blur-[150px] pointer-events-none" />
 
-            <div className="container relative z-10">
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8 }}
-                    className="text-center mb-16 md:mb-24"
-                >
-                    {/* Badge with lines */}
-                    <div className="flex items-center justify-center gap-4 mb-6">
-                        <div className="h-px flex-1 max-w-[80px] md:max-w-[120px] bg-gradient-to-r from-transparent to-[var(--gold)]/50" />
-                        <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-[var(--gold)]">
-                            Lokacija
-                        </span>
-                        <div className="h-px flex-1 max-w-[80px] md:max-w-[120px] bg-gradient-to-l from-transparent to-[var(--gold)]/50" />
-                    </div>
-
-                    <h2 className="text-4xl md:text-6xl lg:text-7xl font-black uppercase tracking-tighter text-white mb-6">
-                        Gde se <span className="text-[var(--gold)]">nalazimo</span>
-                    </h2>
-                    <p className="text-sm md:text-base text-white/50 max-w-2xl mx-auto">
-                        Smešten u mirnom kvartu Neimar, sa odličnom povezanošću sa centrom grada
-                    </p>
-                </motion.div>
+            <div className="max-w-[1400px] mx-auto px-6 md:px-10 relative z-10">
+                <SectionHeader
+                    badge="Lokacija"
+                    title={
+                        <>
+                            Gde se <span className="text-[var(--gold)]">nalazimo</span>
+                        </>
+                    }
+                    subtitle="Smešten u mirnom kvartu Neimar, sa odličnom povezanošću sa centrom grada"
+                />
 
                 <div className="grid lg:grid-cols-2 gap-12 md:gap-20 items-stretch">
                     {/* Map */}
@@ -70,7 +57,7 @@ export function Location() {
                     >
                         <div className="space-y-6">
                             {/* Address Card */}
-                            <div className="group bg-white/[0.02] backdrop-blur-md border border-white/10 p-8 rounded-[32px] hover:bg-white/[0.04] hover:border-[var(--gold)]/30 transition-all duration-500">
+                            <GlassCard className="p-8 hover:bg-white/[0.04] hover:border-[var(--gold)]/30 transition-all duration-500 rounded-[32px]">
                                 <div className="flex items-center gap-6">
                                     <div className="w-14 h-14 rounded-full bg-[var(--gold)]/10 border border-[var(--gold)]/20 flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:bg-[var(--gold)]/20">
                                         <MapPin className="w-6 h-6 text-[var(--gold)]" />
@@ -83,10 +70,10 @@ export function Location() {
                                         </p>
                                     </div>
                                 </div>
-                            </div>
+                            </GlassCard>
 
                             {/* Neighborhood */}
-                            <div className="group bg-white/[0.02] backdrop-blur-md border border-white/10 p-8 rounded-[32px] hover:bg-white/[0.04] hover:border-[var(--gold)]/30 transition-all duration-500">
+                            <GlassCard className="p-8 hover:bg-white/[0.04] hover:border-[var(--gold)]/30 transition-all duration-500 rounded-[32px]">
                                 <div className="flex items-center gap-6">
                                     <div className="w-14 h-14 rounded-full bg-[var(--gold)]/10 border border-[var(--gold)]/20 flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:bg-[var(--gold)]/20">
                                         <Building className="w-6 h-6 text-[var(--gold)]" />
@@ -99,10 +86,10 @@ export function Location() {
                                         </p>
                                     </div>
                                 </div>
-                            </div>
+                            </GlassCard>
 
                             {/* Nearby Attractions */}
-                            <div className="bg-white/[0.02] backdrop-blur-md border border-white/10 p-8 md:p-10 rounded-[40px]">
+                            <GlassCard className="p-8 md:p-10">
                                 <div className="flex items-center gap-3 mb-8">
                                     <Navigation className="w-5 h-5 text-[var(--gold)]" />
                                     <h3 className="text-sm font-black uppercase tracking-[0.3em] text-white">U blizini</h3>
@@ -120,23 +107,23 @@ export function Location() {
                                         </div>
                                     ))}
                                 </div>
-                            </div>
+                            </GlassCard>
                         </div>
 
                         {/* Transport Info */}
                         <div className="grid grid-cols-2 gap-6">
-                            <div className="bg-white/[0.02] border border-white/10 p-6 rounded-[32px] text-center group hover:bg-white/[0.04] transition-all duration-500">
+                            <GlassCard className="p-6 text-center group hover:bg-white/[0.04] transition-all duration-500 rounded-[32px]">
                                 <Bus className="w-8 h-8 text-[var(--gold)] mx-auto mb-4 group-hover:scale-110 transition-transform" />
                                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--gold)] mb-1">Prevoz</p>
                                 <p className="text-xs md:text-sm text-white font-black uppercase">Autobuska stanica</p>
                                 <p className="text-[10px] text-white/40 font-bold uppercase mt-1">preko puta</p>
-                            </div>
-                            <div className="bg-white/[0.02] border border-white/10 p-6 rounded-[32px] text-center group hover:bg-white/[0.04] transition-all duration-500">
+                            </GlassCard>
+                            <GlassCard className="p-6 text-center group hover:bg-white/[0.04] transition-all duration-500 rounded-[32px]">
                                 <TreeDeciduous className="w-8 h-8 text-[var(--gold)] mx-auto mb-4 group-hover:scale-110 transition-transform" />
                                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--gold)] mb-1">Priroda</p>
                                 <p className="text-xs md:text-sm text-white font-black uppercase">Parkovi i zelenilo</p>
                                 <p className="text-[10px] text-white/40 font-bold uppercase mt-1">5 min pešice</p>
-                            </div>
+                            </GlassCard>
                         </div>
                     </motion.div>
                 </div>

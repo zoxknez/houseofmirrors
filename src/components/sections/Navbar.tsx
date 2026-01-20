@@ -32,7 +32,7 @@ export function Navbar() {
             animate={{ y: 0 }}
             className={`navbar ${scrolled ? "scrolled" : ""}`}
         >
-            <div className="container">
+            <div className="max-w-[1400px] mx-auto px-6 md:px-10">
                 <div className="flex items-center justify-between">
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2 group relative">
@@ -84,7 +84,7 @@ export function Navbar() {
                             exit={{ opacity: 0, y: -20, height: 0 }}
                             className="md:hidden absolute top-full left-0 right-0 bg-black/95 backdrop-blur-2xl border-b border-white/5 py-8 overflow-hidden"
                         >
-                            <div className="container flex flex-col gap-6 items-center text-center">
+                            <div className="max-w-[1400px] mx-auto px-6 md:px-10 flex flex-col gap-6 items-center text-center">
                                 {navLinks.map((link) => (
                                     <a
                                         key={link.href}

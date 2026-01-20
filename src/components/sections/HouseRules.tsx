@@ -2,11 +2,9 @@
 
 import { motion } from "framer-motion";
 import {
-    Clock,
     LogIn,
     LogOut,
     Moon,
-    Ban,
     PawPrint,
     PartyPopper,
     Cigarette,
@@ -14,6 +12,8 @@ import {
     AlertCircle
 } from "lucide-react";
 import { propertyData } from "@/data/property";
+import { SectionHeader } from "@/components/ui/SectionHeader";
+import { GlassCard } from "@/components/ui/GlassCard";
 
 export function HouseRules() {
     const { rules } = propertyData;
@@ -61,36 +61,18 @@ export function HouseRules() {
     ];
 
     return (
-        <section id="rules" className="section bg-black relative overflow-hidden py-24 md:py-32">
-            {/* Background Elements */}
+        <section id="rules" className="relative py-24 md:py-40 bg-black overflow-hidden">
             <div className="absolute top-1/2 left-0 -translate-y-1/2 w-1/4 h-1/2 bg-[var(--gold)]/5 rounded-full blur-[150px] pointer-events-none" />
 
-            <div className="container relative z-10">
-                {/* Section Header */}
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8 }}
-                    className="text-center mb-20 md:mb-28"
-                >
-                    {/* Badge with lines */}
-                    <div className="flex items-center justify-center gap-4 mb-6">
-                        <div className="h-px flex-1 max-w-[80px] md:max-w-[120px] bg-gradient-to-r from-transparent to-[var(--gold)]/50" />
-                        <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.3em] text-[var(--gold)]">
-                            Pravila
-                        </span>
-                        <div className="h-px flex-1 max-w-[80px] md:max-w-[120px] bg-gradient-to-l from-transparent to-[var(--gold)]/50" />
-                    </div>
-
-                    {/* Title */}
-                    <h2 className="text-4xl md:text-6xl lg:text-7xl font-black uppercase tracking-tighter text-white mb-2">
-                        Pravila
-                    </h2>
-                    <h3 className="text-3xl md:text-5xl lg:text-6xl font-black uppercase tracking-tighter text-[var(--gold)]">
-                        Kuće
-                    </h3>
-                </motion.div>
+            <div className="max-w-[1400px] mx-auto px-6 md:px-10 relative z-10">
+                <SectionHeader
+                    badge="Pravila"
+                    title={
+                        <>
+                            Pravila <span className="text-[var(--gold)]">Kuće</span>
+                        </>
+                    }
+                />
 
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -102,11 +84,10 @@ export function HouseRules() {
                     {/* Main Times - Detached Cards */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16 md:mb-24">
                         {ruleItems.slice(0, 3).map((rule, index) => (
-                            <div
+                            <GlassCard
                                 key={index}
-                                className="group relative px-8 py-16 md:py-20 bg-white/[0.02] backdrop-blur-md border border-white/10 rounded-[32px] hover:bg-white/[0.04] hover:border-[var(--gold)]/30 transition-all duration-700 text-center flex flex-col items-center justify-center"
+                                className="group relative px-8 py-16 md:py-20 hover:bg-white/[0.04] hover:border-[var(--gold)]/30 transition-all duration-700 text-center flex flex-col items-center justify-center rounded-[32px]"
                             >
-                                {/* Icon Circle */}
                                 <div className="w-16 h-16 rounded-full bg-[var(--gold)]/5 border border-[var(--gold)]/20 flex items-center justify-center mb-10 group-hover:bg-[var(--gold)]/10 group-hover:border-[var(--gold)]/40 group-hover:scale-110 transition-all duration-500 shadow-[0_0_40px_rgba(212,175,55,0.05)]">
                                     <rule.icon className="w-7 h-7 text-[var(--gold)]" />
                                 </div>
@@ -118,14 +99,13 @@ export function HouseRules() {
                                     {rule.value}
                                 </p>
 
-                                {/* Hover Gold Line */}
                                 <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-[var(--gold)]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 rounded-b-[32px]" />
-                            </div>
+                            </GlassCard>
                         ))}
                     </div>
 
                     {/* Rules Grid - Centered & Airy */}
-                    <div className="bg-white/[0.02] backdrop-blur-md border border-white/10 rounded-[40px] p-8 md:p-16">
+                    <GlassCard className="p-8 md:p-16">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 md:gap-12">
                             {ruleItems.slice(3).map((rule, index) => (
                                 <div
@@ -133,8 +113,8 @@ export function HouseRules() {
                                     className="flex flex-col items-center text-center group"
                                 >
                                     <div className={`w-14 h-14 rounded-full flex items-center justify-center mb-6 transition-colors duration-500 ${rule.allowed
-                                            ? 'bg-green-500/10 group-hover:bg-green-500/20'
-                                            : 'bg-red-500/10 group-hover:bg-red-500/20'
+                                        ? 'bg-green-500/10 group-hover:bg-green-500/20'
+                                        : 'bg-red-500/10 group-hover:bg-red-500/20'
                                         }`}>
                                         <rule.icon className={`w-6 h-6 ${rule.allowed ? 'text-green-400' : 'text-red-400'
                                             }`} />
@@ -160,7 +140,7 @@ export function HouseRules() {
                                 <span className="block mt-2 text-white/60">Molimo vas da se odnosite prema apartmanu kao prema svom domu.</span>
                             </p>
                         </div>
-                    </div>
+                    </GlassCard>
                 </motion.div>
             </div>
         </section>

@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Maximize, Users, Bed, Bath } from "lucide-react";
 import { propertyData } from "@/data/property";
 import { propertyImages } from "@/data/images";
+import { GlassCard } from "@/components/ui/GlassCard";
 
 export function Hero() {
     const [currentSlide, setCurrentSlide] = useState(0);
@@ -81,7 +82,7 @@ export function Hero() {
             </div>
 
             {/* Main Content - Simple Centered Layout */}
-            <div className="relative z-20 container mx-auto px-4 md:px-6 py-10 md:py-16 text-center flex flex-col items-center justify-center flex-grow">
+            <div className="relative z-20 max-w-[1400px] mx-auto px-6 md:px-10 py-10 md:py-16 text-center flex flex-col items-center justify-center flex-grow">
 
                 {/* Badge */}
                 <div className="mb-10 md:mb-16 inline-flex items-center gap-4">
@@ -126,9 +127,9 @@ export function Hero() {
                         { label: "Spavaće", val: propertyData.details.bedrooms, icon: Bed },
                         { label: "Kupatila", val: propertyData.details.bathrooms, icon: Bath }
                     ].map((stat, i) => (
-                        <div
+                        <GlassCard
                             key={i}
-                            className="group p-6 md:p-10 bg-white/[0.02] backdrop-blur-xl border border-white/5 hover:border-[var(--gold)]/20 transition-all duration-700 text-center flex flex-col items-center justify-center rounded-[32px] hover:bg-white/[0.04] relative overflow-hidden"
+                            className="group p-6 md:p-10 hover:border-[var(--gold)]/20 transition-all duration-700 text-center flex flex-col items-center justify-center rounded-[32px] hover:bg-white/[0.04] relative overflow-hidden border-white/5"
                         >
                             <div className="absolute inset-0 bg-gradient-to-br from-[var(--gold)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                             <stat.icon className="w-5 h-5 md:w-6 md:h-6 text-[var(--gold)] mx-auto mb-4 group-hover:scale-110 transition-transform duration-500" />
@@ -138,7 +139,7 @@ export function Hero() {
                             <p className="text-xl md:text-3xl lg:text-4xl font-black text-white tracking-tight relative z-10">
                                 {stat.val}
                             </p>
-                        </div>
+                        </GlassCard>
                     ))}
                 </div>
 

@@ -31,8 +31,8 @@ export function Gallery() {
     };
 
     return (
-        <section id="gallery" className="section">
-            <div className="container">
+        <section id="gallery" className="relative py-24 md:py-40">
+            <div className="max-w-[1400px] mx-auto px-6 md:px-10">
                 {/* Hero Gallery Layout */}
                 <div
                     className="relative group cursor-pointer overflow-hidden rounded-3xl deluxe-card aspect-[21/9]"

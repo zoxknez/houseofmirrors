@@ -1,11 +1,11 @@
-import { Hero } from "@/components/Hero";
-import { Gallery } from "@/components/Gallery";
-import { Highlights } from "@/components/Highlights";
-import { Amenities } from "@/components/Amenities";
-import { Location } from "@/components/Location";
-import { HouseRules } from "@/components/HouseRules";
-import { BookingCalendar } from "@/components/BookingCalendar";
-import { Contact } from "@/components/Contact";
+import { Hero } from "@/components/sections/Hero";
+import { Gallery } from "@/components/sections/Gallery";
+import { Highlights } from "@/components/sections/Highlights";
+import { Amenities } from "@/components/sections/Amenities";
+import { Location } from "@/components/sections/Location";
+import { HouseRules } from "@/components/sections/HouseRules";
+import { BookingCalendar } from "@/components/sections/BookingCalendar";
+import { Contact } from "@/components/sections/Contact";
 
 export default function Home() {
   return (
