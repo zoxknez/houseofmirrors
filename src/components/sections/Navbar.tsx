@@ -125,6 +125,7 @@ export function Navbar() {
                                     "text-[10px] font-black uppercase tracking-[0.3em] transition-all duration-500 relative group",
                                     isActive(link.href) ? "text-white" : "text-white/40 hover:text-white",
                                 ].join(" ")}
+                                aria-current={isActive(link.href) ? "true" : undefined}
                             >
                                 {link.label}
                                 <span
@@ -143,6 +144,7 @@ export function Navbar() {
 
                     {/* Mobile Button */}
                     <button
+                        type="button"
                         onClick={() => setIsOpen((v) => !v)}
                         className="md:hidden p-2 rounded-full hover:bg-white/5 border border-transparent hover:border-white/10 transition-all"
                         aria-label="Toggle menu"
@@ -188,6 +190,7 @@ export function Navbar() {
                                             "text-xs font-black uppercase tracking-[0.3em] transition-colors",
                                             isActive(link.href) ? "text-white" : "text-white/40 hover:text-white",
                                         ].join(" ")}
+                                        aria-current={isActive(link.href) ? "true" : undefined}
                                     >
                                         {link.label}
                                     </a>

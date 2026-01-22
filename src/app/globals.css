@@ -56,6 +56,11 @@
     overflow-x: hidden;
   }
 
+  :focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+  }
+
   /* Noise overlay (ok je, ali ako pravi performance problem smanji opacity ili skloni) */
   body::before {
     content: "";
@@ -100,17 +105,27 @@
 
   /* Reduce motion */
   @media (prefers-reduced-motion: reduce) {
-    * {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
       animation: none !important;
       transition: none !important;
-      scroll-behavior: auto !important;
     }
   }
 
   /* Scroll margin for fixed navbar */
   section,
   #booking {
-    scroll-margin-top: 112px;
+    scroll-margin-top: 96px;
+  }
+
+  section {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 800px;
   }
 }
 
@@ -133,7 +148,7 @@
     background: rgba(255, 255, 255, 0.02);
     backdrop-filter: blur(40px);
     border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 20px;
+    border-radius: 24px;
     /* bilo 4px - delovalo "greškom" */
     transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
     position: relative;
@@ -160,27 +175,29 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 16px 20px;
-    background: var(--glass-bg);
-    border-radius: 12px;
-    border: 1px solid var(--glass-border);
+    padding: 10px 14px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
     transition: all 0.3s ease;
   }
 
   .amenity-card:hover {
     background: rgba(255, 255, 255, 0.08);
-    border-color: var(--gold);
+    border-color: rgba(212, 175, 55, 0.6);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
   }
 
   /* Buttons */
   .btn-primary {
     background: var(--gold);
     color: black;
-    padding: 20px 48px;
+    padding: 16px 40px;
     border-radius: 99px;
     font-weight: 900;
-    font-size: 0.7rem;
-    letter-spacing: 0.4em;
+    font-size: 0.65rem;
+    letter-spacing: 0.32em;
     text-transform: uppercase;
     border: none;
     cursor: pointer;
@@ -204,11 +221,11 @@
     background: transparent;
     backdrop-filter: blur(20px);
     color: white;
-    padding: 20px 44px;
+    padding: 16px 40px;
     border-radius: 99px;
     font-weight: 900;
-    font-size: 0.8rem;
-    letter-spacing: 0.3em;
+    font-size: 0.7rem;
+    letter-spacing: 0.28em;
     text-transform: uppercase;
     border: 1px solid rgba(255, 255, 255, 0.1);
     cursor: pointer;
@@ -224,11 +241,11 @@
   .btn-ghost {
     background: transparent;
     color: white;
-    padding: 20px 48px;
+    padding: 16px 40px;
     border-radius: 99px;
     font-weight: 900;
-    font-size: 0.7rem;
-    letter-spacing: 0.4em;
+    font-size: 0.65rem;
+    letter-spacing: 0.32em;
     text-transform: uppercase;
     border: 1px solid rgba(255, 255, 255, 0.2);
     cursor: pointer;
@@ -253,7 +270,7 @@
     left: 0;
     right: 0;
     z-index: 50;
-    padding: 16px 0;
+    padding: 12px 0;
     transition: all 0.3s ease;
   }
 

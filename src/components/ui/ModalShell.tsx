@@ -25,7 +25,7 @@ export function ModalShell({ open, onClose, children }: ModalShellProps) {
                 initial={{ opacity: 0, scale: 0.9, y: 20 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9, y: 20 }}
-                className="bg-[#050505] border border-white/10 w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-[40px] shadow-2xl relative"
+                className="bg-[#050505] border border-white/10 w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-[32px] shadow-2xl relative"
                 onClick={(e) => e.stopPropagation()}
             >
                 {children}

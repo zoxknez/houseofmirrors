@@ -40,19 +40,19 @@ type RuleItem = TimeRule | PolicyRule;
 function TimeCard({ rule }: { rule: TimeRule }) {
     const Icon = rule.icon;
     return (
-        <GlassCard className="group relative px-8 py-14 md:py-18 hover:bg-white/[0.04] hover:border-[var(--gold)]/30 transition-all duration-700 text-center flex flex-col items-center justify-center rounded-[32px] overflow-hidden">
+        <GlassCard className="group relative px-6 py-10 md:py-12 hover:bg-white/[0.04] hover:border-[var(--gold)]/25 transition-all duration-500 text-center flex flex-col items-center justify-center rounded-[28px] overflow-hidden">
             <div
                 aria-hidden="true"
                 className="absolute inset-0 bg-gradient-to-br from-[var(--gold)]/6 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"
             />
-            <div className="relative w-16 h-16 rounded-full bg-[var(--gold)]/5 border border-[var(--gold)]/20 flex items-center justify-center mb-10 group-hover:bg-[var(--gold)]/10 group-hover:border-[var(--gold)]/40 group-hover:scale-110 transition-all duration-500 shadow-[0_0_40px_rgba(212,175,55,0.05)]">
-                <Icon className="w-7 h-7 text-[var(--gold)]" />
+            <div className="relative w-12 h-12 rounded-full bg-[var(--gold)]/5 border border-[var(--gold)]/20 flex items-center justify-center mb-6 group-hover:bg-[var(--gold)]/10 group-hover:border-[var(--gold)]/40 transition-all duration-500 shadow-[0_0_30px_rgba(212,175,55,0.08)]">
+                <Icon className="w-5 h-5 text-[var(--gold)]" />
             </div>
 
-            <h3 className="relative text-xl md:text-2xl font-black uppercase tracking-[0.1em] text-white mb-4">
+            <h3 className="relative text-sm md:text-base font-black uppercase tracking-[0.18em] text-white mb-2">
                 {rule.label}
             </h3>
-            <p className="relative text-sm md:text-lg font-bold uppercase tracking-widest text-white/50">
+            <p className="relative text-xs md:text-sm font-bold uppercase tracking-[0.2em] text-white/60">
                 {rule.value}
             </p>
 
@@ -72,21 +72,21 @@ function PolicyItem({ rule }: { rule: PolicyRule }) {
         <li className="flex flex-col items-center text-center group">
             <div
                 className={[
-                    "w-14 h-14 rounded-full flex items-center justify-center mb-6 transition-all duration-500",
+                    "w-12 h-12 rounded-full flex items-center justify-center mb-4 transition-all duration-500",
                     ok ? "bg-green-500/10 group-hover:bg-green-500/20" : "bg-red-500/10 group-hover:bg-red-500/20",
                 ].join(" ")}
                 aria-hidden="true"
             >
-                <Icon className={["w-6 h-6", ok ? "text-green-400" : "text-red-400"].join(" ")} />
+                <Icon className={["w-5 h-5", ok ? "text-green-400" : "text-red-400"].join(" ")} />
             </div>
 
-            <h4 className="text-lg md:text-xl font-black uppercase tracking-tight text-white mb-2">
+            <h4 className="text-sm md:text-base font-black uppercase tracking-[0.15em] text-white mb-1">
                 {rule.label}
             </h4>
 
             <p
                 className={[
-                    "text-sm md:text-base font-bold uppercase tracking-wider",
+                    "text-xs md:text-sm font-bold uppercase tracking-[0.2em]",
                     ok ? "text-green-400/80" : "text-red-400/80",
                 ].join(" ")}
             >
@@ -165,7 +165,7 @@ export function HouseRules() {
     const policyRules = items.filter((x): x is PolicyRule => x.kind === "policy");
 
     return (
-        <section id="rules" className="relative py-24 md:py-40 bg-black overflow-hidden">
+        <section id="rules" className="relative py-20 md:py-32 bg-black overflow-hidden">
             <div
                 aria-hidden="true"
                 className="absolute top-1/2 left-0 -translate-y-1/2 w-1/4 h-1/2 bg-[var(--gold)]/5 rounded-full blur-[150px] pointer-events-none"
@@ -190,27 +190,27 @@ export function HouseRules() {
                     className="max-w-5xl mx-auto"
                 >
                     {/* Time cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-12 md:mb-20">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-10 md:mb-16">
                         {timeRules.map((rule) => (
                             <TimeCard key={rule.id} rule={rule} />
                         ))}
                     </div>
 
                     {/* Policies */}
-                    <GlassCard className="p-8 md:p-16 rounded-[40px]">
-                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-8 md:gap-12">
+                    <GlassCard className="p-8 md:p-12 rounded-[32px]">
+                        <ul className="grid grid-cols-1 sm:grid-cols-2 gap-6 md:gap-8">
                             {policyRules.map((rule) => (
                                 <PolicyItem key={rule.id} rule={rule} />
                             ))}
                         </ul>
 
                         {/* Notice */}
-                        <div className="mt-14 md:mt-16 pt-14 md:pt-16 border-t border-white/5 flex flex-col items-center text-center">
+                        <div className="mt-10 md:mt-12 pt-10 md:pt-12 border-t border-white/5 flex flex-col items-center text-center">
                             <div aria-hidden="true" className="w-12 h-12 rounded-full bg-red-500/10 flex items-center justify-center mb-6">
                                 <AlertCircle className="w-6 h-6 text-red-500" />
                             </div>
 
-                            <p className="text-sm md:text-base text-white/80 leading-relaxed max-w-2xl font-bold tracking-wide">
+                            <p className="text-xs md:text-sm text-white/80 leading-relaxed max-w-2xl font-bold tracking-wide">
                                 Gosti su odgovorni za eventualnu štetu na imovini ili opremi.
                                 <span className="block mt-2 text-white font-black uppercase tracking-tight">
                                     Molimo vas da se odnosite prema apartmanu kao prema svom domu.

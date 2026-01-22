@@ -18,8 +18,8 @@ Apartman se nalazi u mirnom i bezbednom kraju Neimar, samo 10 minuta od centra g
     country: "Srbija",
     neighborhood: "Neimar",
     coordinates: {
-      lat: 44.7866,
-      lng: 20.4489
+      lat: 44.78914412726245,
+      lng: 20.472486606257085
     },
     nearbyAttractions: [
       { name: "Hram Svetog Save", distance: "18 min pešice" },

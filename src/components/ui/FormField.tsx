@@ -16,7 +16,7 @@ export function FormField(props: InputProps | TextareaProps) {
 
     return (
         <div>
-            <label className="block text-[10px] font-black uppercase tracking-widest text-white/40 mb-3 ml-1">
+            <label className="block text-[10px] font-black uppercase tracking-widest text-white/40 mb-2 ml-1">
                 {label} {required ? "*" : ""}
             </label>
 
@@ -30,8 +30,8 @@ export function FormField(props: InputProps | TextareaProps) {
                         {...rest}
                         className={[
                             "w-full",
-                            Icon ? "pl-12" : "pl-5",
-                            "pr-4 py-4 rounded-[20px] bg-white/[0.03] border border-white/10 text-white font-bold placeholder:text-white/10",
+                            Icon ? "pl-11" : "pl-4",
+                            "pr-4 py-3 rounded-[16px] bg-white/[0.03] border border-white/10 text-white text-sm font-bold placeholder:text-white/10",
                             "focus:outline-none focus:border-[var(--gold)] focus:bg-white/[0.05] transition-all resize-none",
                             className || "",
                         ].join(" ")}
@@ -41,8 +41,8 @@ export function FormField(props: InputProps | TextareaProps) {
                         {...rest}
                         className={[
                             "w-full",
-                            Icon ? "pl-12" : "pl-5",
-                            "pr-4 py-4 rounded-[18px] bg-white/[0.03] border border-white/10 text-white font-bold placeholder:text-white/10",
+                            Icon ? "pl-11" : "pl-4",
+                            "pr-4 py-3 rounded-[16px] bg-white/[0.03] border border-white/10 text-white text-sm font-bold placeholder:text-white/10",
                             "focus:outline-none focus:border-[var(--gold)] focus:bg-white/[0.05] transition-all",
                             className || "",
                         ].join(" ")}

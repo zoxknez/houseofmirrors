@@ -22,22 +22,22 @@ export function Footer() {
     const year = new Date().getFullYear();
 
     return (
-        <footer className="bg-black border-t border-white/5 py-24">
+        <footer className="bg-black border-t border-white/5 py-20">
             <div className="max-w-[1400px] mx-auto px-6 md:px-10">
-                <div className="grid md:grid-cols-12 gap-16 md:gap-24">
+            <div className="grid md:grid-cols-12 gap-12 md:gap-16">
                     {/* Brand */}
                     <div className="md:col-span-6">
-                        <h3 className="text-2xl md:text-3xl font-black text-white uppercase tracking-[0.3em] mb-10">
+                        <h3 className="text-xl md:text-2xl font-black text-white uppercase tracking-[0.28em] mb-8">
                             {propertyData.name}
                         </h3>
 
-                        <p className="text-white/40 text-sm md:text-base mb-10 max-w-md leading-relaxed font-bold uppercase tracking-tight">
+                        <p className="text-white/40 text-xs md:text-sm mb-8 max-w-md leading-relaxed font-bold uppercase tracking-tight">
                             {propertyData.shortDescription}
                         </p>
 
-                        <div className="space-y-2 mb-10">
+                        <div className="space-y-2 mb-8">
                             <p className="text-[var(--gold)] text-[10px] font-black uppercase tracking-widest">Lokacija</p>
-                            <p className="text-white font-black uppercase tracking-tight text-sm md:text-base">
+                            <p className="text-white font-black uppercase tracking-tight text-xs md:text-sm">
                                 {propertyData.location.address}
                                 <br />
                                 <span className="text-white/40">
@@ -66,21 +66,21 @@ export function Footer() {
 
                     {/* Navigation */}
                     <div className="md:col-span-3">
-                        <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-[var(--gold)] mb-10">Navigacija</h4>
+                        <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-[var(--gold)] mb-8">Navigacija</h4>
                         <ul className="space-y-5">
                             {footerLinks.navigation.map((link) => (
                                 <li key={link.href}>
                                     {link.href === "/" ? (
                                         <Link
                                             href="/"
-                                            className="text-white/40 hover:text-white transition-all duration-300 text-sm font-black uppercase tracking-widest"
+                                            className="text-white/40 hover:text-white transition-all duration-300 text-xs font-black uppercase tracking-widest"
                                         >
                                             {link.label}
                                         </Link>
                                     ) : (
                                         <a
                                             href={link.href}
-                                            className="text-white/40 hover:text-white transition-all duration-300 text-sm font-black uppercase tracking-widest"
+                                            className="text-white/40 hover:text-white transition-all duration-300 text-xs font-black uppercase tracking-widest"
                                         >
                                             {link.label}
                                         </a>
@@ -92,7 +92,7 @@ export function Footer() {
 
                     {/* External Links */}
                     <div className="md:col-span-3">
-                        <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-[var(--gold)] mb-10">Pronađite nas</h4>
+                        <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-[var(--gold)] mb-8">Pronađite nas</h4>
                         <ul className="space-y-5">
                             {footerLinks.external.map((link) => (
                                 <li key={link.href}>
@@ -101,7 +101,7 @@ export function Footer() {
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         aria-label={`${link.label} (otvara se u novom tabu)`}
-                                        className="text-white/40 hover:text-white transition-all duration-300 text-sm font-black uppercase tracking-widest inline-flex items-center gap-2 group"
+                                        className="text-white/40 hover:text-white transition-all duration-300 text-xs font-black uppercase tracking-widest inline-flex items-center gap-2 group"
                                     >
                                         {link.label}
                                         <ExternalLink className="w-3 h-3 group-hover:text-[var(--gold)] transition-colors" />
@@ -113,7 +113,7 @@ export function Footer() {
                 </div>
 
                 {/* Bottom Bar */}
-                <div className="mt-24 pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-8">
+                <div className="mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
                     <p className="text-white/20 text-[10px] font-black uppercase tracking-[0.2em]">
                         © {year} {propertyData.name}. Sva prava zadržana.
                     </p>

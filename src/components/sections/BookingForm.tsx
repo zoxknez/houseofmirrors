@@ -144,46 +144,47 @@ export function BookingForm({
     return (
         <ModalShell open={true} onClose={() => { cleanup(); onClose(); }}>
             {/* Header */}
-            <div className="sticky top-0 z-10 flex items-center justify-between p-8 md:p-10 border-b border-white/5 bg-[#050505]/80 backdrop-blur-md">
+            <div className="sticky top-0 z-10 flex items-center justify-between p-6 md:p-8 border-b border-white/5 bg-[#050505]/80 backdrop-blur-md">
                 <div>
                     <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-[var(--gold)] mb-1">
                         Rezervacija
                     </h3>
-                    <h4 className="text-3xl md:text-4xl font-black text-white uppercase tracking-tighter">
+                    <h4 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tighter">
                         POTVRDA
                     </h4>
                 </div>
 
                 <button
+                    type="button"
                     onClick={() => { cleanup(); onClose(); }}
-                    className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/5 transition-all duration-300 group"
+                    className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/5 transition-all duration-300 group"
                     aria-label="Zatvori"
                     disabled={loading}
                 >
-                    <X className="w-6 h-6 text-white/40 group-hover:text-white transition-colors" />
+                    <X className="w-5 h-5 text-white/40 group-hover:text-white transition-colors" />
                 </button>
             </div>
 
             {success ? (
-                <div className="p-12 text-center">
+                <div className="p-10 text-center">
                     <motion.div
                         initial={{ scale: 0, rotate: -180 }}
                         animate={{ scale: 1, rotate: 0 }}
-                        className="w-24 h-24 mx-auto mb-8 rounded-full bg-[var(--gold)]/10 border border-[var(--gold)]/20 flex items-center justify-center"
+                        className="w-20 h-20 mx-auto mb-6 rounded-full bg-[var(--gold)]/10 border border-[var(--gold)]/20 flex items-center justify-center"
                     >
-                        <CheckCircle className="w-12 h-12 text-[var(--gold)]" />
+                        <CheckCircle className="w-10 h-10 text-[var(--gold)]" />
                     </motion.div>
 
-                    <h4 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tighter mb-4">
+                    <h4 className="text-xl md:text-2xl font-black text-white uppercase tracking-tighter mb-3">
                         Zahtev poslat
                     </h4>
 
-                    <p className="text-white/40 mb-10 leading-relaxed font-medium">
+                    <p className="text-white/40 mb-8 leading-relaxed font-medium text-sm">
                         Primili smo vaš zahtev. Kontaktiraćemo vas uskoro na{" "}
                         <span className="text-white">{formData.email}</span> radi potvrde.
                     </p>
 
-                    <div className="bg-white/[0.03] border border-white/5 p-6 rounded-[24px] max-w-sm mx-auto">
+                    <div className="bg-white/[0.03] border border-white/5 p-5 rounded-[20px] max-w-sm mx-auto">
                         <div className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 mb-2">
                             Referentni broj
                         </div>
@@ -195,11 +196,11 @@ export function BookingForm({
             ) : (
                 <>
                     {/* Summary */}
-                    <div className="p-8 md:p-10 border-b border-white/5 bg-white/[0.02]">
-                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-8">
+                    <div className="p-6 md:p-8 border-b border-white/5 bg-white/[0.02]">
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:gap-6">
                             <div className="flex items-center gap-4">
-                                <div className="w-10 h-10 rounded-full bg-[var(--gold)]/10 flex items-center justify-center">
-                                    <Calendar className="w-5 h-5 text-[var(--gold)]" />
+                                <div className="w-9 h-9 rounded-full bg-[var(--gold)]/10 flex items-center justify-center">
+                                    <Calendar className="w-4 h-4 text-[var(--gold)]" />
                                 </div>
                                 <div>
                                     <p className="text-[10px] font-black text-white/30 uppercase tracking-widest">Dolazak</p>
@@ -210,8 +211,8 @@ export function BookingForm({
                             </div>
 
                             <div className="flex items-center gap-4">
-                                <div className="w-10 h-10 rounded-full bg-[var(--gold)]/10 flex items-center justify-center">
-                                    <Calendar className="w-5 h-5 text-[var(--gold)]" />
+                                <div className="w-9 h-9 rounded-full bg-[var(--gold)]/10 flex items-center justify-center">
+                                    <Calendar className="w-4 h-4 text-[var(--gold)]" />
                                 </div>
                                 <div>
                                     <p className="text-[10px] font-black text-white/30 uppercase tracking-widest">Odlazak</p>
@@ -222,8 +223,8 @@ export function BookingForm({
                             </div>
 
                             <div className="flex items-center gap-4">
-                                <div className="w-10 h-10 rounded-full bg-[var(--gold)]/10 flex items-center justify-center">
-                                    <Users className="w-5 h-5 text-[var(--gold)]" />
+                                <div className="w-9 h-9 rounded-full bg-[var(--gold)]/10 flex items-center justify-center">
+                                    <Users className="w-4 h-4 text-[var(--gold)]" />
                                 </div>
                                 <div>
                                     <p className="text-[10px] font-black text-white/30 uppercase tracking-widest">Gosti</p>
@@ -234,22 +235,26 @@ export function BookingForm({
                             </div>
                         </div>
 
-                        <div className="mt-8 pt-8 border-t border-white/5 flex justify-between items-end">
+                        <div className="mt-6 pt-6 border-t border-white/5 flex justify-between items-end">
                             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">Za uplatu</span>
-                            <span className="text-3xl font-black text-[var(--gold)] tracking-tighter">€{totalPrice}</span>
+                            <span className="text-2xl md:text-3xl font-black text-[var(--gold)] tracking-tighter">€{totalPrice}</span>
                         </div>
                     </div>
 
                     {/* Form */}
-                    <form onSubmit={handleSubmit} className="p-8 md:p-10 space-y-8">
+                    <form onSubmit={handleSubmit} className="p-6 md:p-8 space-y-7" aria-busy={loading}>
                         {error && (
-                            <div className="p-5 rounded-[20px] bg-red-500/10 border border-red-500/20 flex items-center gap-4">
+                            <div
+                                className="p-5 rounded-[20px] bg-red-500/10 border border-red-500/20 flex items-center gap-4"
+                                role="alert"
+                                aria-live="polite"
+                            >
                                 <AlertCircle className="w-6 h-6 text-red-400 flex-shrink-0" />
                                 <p className="text-red-400 font-bold text-sm">{error}</p>
                             </div>
                         )}
 
-                        <div className="grid sm:grid-cols-2 gap-6">
+                        <div className="grid sm:grid-cols-2 gap-5">
                             <FormField
                                 label="Ime"
                                 required
@@ -309,7 +314,7 @@ export function BookingForm({
                             placeholder="Npr. kasni dolazak, bebi krevetac..."
                         />
 
-                        <div className="pt-4">
+                        <div className="pt-3">
                             <PrimaryButton type="submit" disabled={loading} className="flex items-center justify-center gap-3">
                                 {loading ? (
                                     <>

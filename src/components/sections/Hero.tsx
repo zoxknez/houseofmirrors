@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Maximize, Users, Bed, Bath } from "lucide-react";
 import { propertyData } from "@/data/property";
 import { propertyImages } from "@/data/images";
@@ -13,6 +13,7 @@ const AUTOPLAY_MS = 5000;
 export function Hero() {
     const images = propertyImages.hero;
     const count = images.length;
+    const reduceMotion = useReducedMotion();
 
     const [currentSlide, setCurrentSlide] = useState(0);
     const [isPaused, setIsPaused] = useState(false);
@@ -42,7 +43,7 @@ export function Hero() {
 
     useEffect(() => {
         if (!count) return;
-        if (isPaused) {
+        if (isPaused || reduceMotion) {
             if (timerRef.current) window.clearInterval(timerRef.current);
             timerRef.current = null;
             return;
@@ -53,7 +54,7 @@ export function Hero() {
             timerRef.current = null;
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [count, isPaused]);
+    }, [count, isPaused, reduceMotion]);
 
     // Keyboard arrows on desktop
     useEffect(() => {
@@ -96,7 +97,7 @@ export function Hero() {
                         initial={{ opacity: 0, scale: 1.05 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.98 }}
-                        transition={{ duration: 0.7 }}
+                        transition={{ duration: reduceMotion ? 0 : 0.7 }}
                         className="absolute inset-0"
                     >
                         <Image
@@ -135,6 +136,7 @@ export function Hero() {
 
             {/* Desktop Navigation Arrows */}
             <button
+                type="button"
                 onClick={() => {
                     resetTimer();
                     prevSlide();
@@ -145,6 +147,7 @@ export function Hero() {
                 <ChevronLeft className="w-6 h-6 text-white" />
             </button>
             <button
+                type="button"
                 onClick={() => {
                     resetTimer();
                     nextSlide();
@@ -162,6 +165,7 @@ export function Hero() {
                     return (
                         <button
                             key={index}
+                            type="button"
                             onClick={() => {
                                 resetTimer();
                                 goTo(index);
@@ -178,9 +182,9 @@ export function Hero() {
             </div>
 
             {/* Main Content */}
-            <div className="relative z-20 max-w-[1400px] mx-auto px-6 md:px-10 py-10 md:py-16 text-center flex flex-col items-center justify-center flex-grow">
+            <div className="relative z-20 max-w-[1400px] mx-auto px-6 md:px-10 py-8 md:py-12 text-center flex flex-col items-center justify-center flex-grow">
                 {/* Badge */}
-                <div className="mb-10 md:mb-16 inline-flex items-center gap-4">
+                <div className="mb-8 md:mb-12 inline-flex items-center gap-4">
                     <div className="w-8 md:w-16 h-px bg-gradient-to-r from-transparent to-[var(--gold)]/50" />
                     <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-[var(--gold)]">
                         Experience Luxury
@@ -192,32 +196,32 @@ export function Hero() {
                     {propertyData.name}
                 </h1>
 
-                <p className="text-[11px] sm:text-xs md:text-base font-bold uppercase tracking-[0.2em] text-white/40 mb-12 md:mb-20 max-w-md md:max-w-2xl mx-auto leading-relaxed">
+                <p className="text-[11px] sm:text-xs md:text-sm font-bold uppercase tracking-[0.2em] text-white/40 mb-10 md:mb-14 max-w-md md:max-w-2xl mx-auto leading-relaxed">
                     {propertyData.tagline}
                 </p>
 
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-6 md:gap-8 mb-16 md:mb-32 w-full sm:w-auto">
-                    <a href="#booking" className="btn-primary w-full sm:w-auto !px-12 !py-5">
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-5 md:gap-6 mb-12 md:mb-20 w-full sm:w-auto">
+                    <a href="#booking" className="btn-primary w-full sm:w-auto !px-10 !py-4">
                         Rezerviši sada
                     </a>
-                    <a href="#gallery" className="btn-ghost w-full sm:w-auto !px-12 !py-5">
+                    <a href="#gallery" className="btn-ghost w-full sm:w-auto !px-10 !py-4">
                         Istraži prostor
                     </a>
                 </div>
 
                 {/* Stats */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 w-full max-w-5xl mx-auto">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5 w-full max-w-5xl mx-auto">
                     {stats.map((stat, i) => (
                         <GlassCard
                             key={i}
-                            className="group p-6 md:p-10 hover:border-[var(--gold)]/20 transition-all duration-700 text-center flex flex-col items-center justify-center rounded-[32px] hover:bg-white/[0.04] relative overflow-hidden border-white/5"
+                            className="group p-5 md:p-7 hover:border-[var(--gold)]/20 transition-all duration-700 text-center flex flex-col items-center justify-center rounded-[28px] hover:bg-white/[0.04] relative overflow-hidden border-white/5"
                         >
                             <div className="absolute inset-0 bg-gradient-to-br from-[var(--gold)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                            <stat.icon className="w-5 h-5 md:w-6 md:h-6 text-[var(--gold)] mx-auto mb-4 group-hover:scale-110 transition-transform duration-500" />
+                            <stat.icon className="w-5 h-5 md:w-6 md:h-6 text-[var(--gold)] mx-auto mb-3 group-hover:scale-110 transition-transform duration-500" />
                             <p className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] text-white/30 mb-2 group-hover:text-white/50 transition-colors">
                                 {stat.label}
                             </p>
-                            <p className="text-xl md:text-3xl lg:text-4xl font-black text-white tracking-tight relative z-10">
+                            <p className="text-lg md:text-2xl lg:text-3xl font-black text-white tracking-tight relative z-10">
                                 {stat.val}
                             </p>
                         </GlassCard>
@@ -226,8 +230,14 @@ export function Hero() {
             </div>
 
             {/* Ambient Glows */}
-            <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[var(--gold)]/5 rounded-full blur-[120px] pointer-events-none" />
-            <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-[var(--gold)]/3 rounded-full blur-[120px] pointer-events-none" />
+            <div
+                aria-hidden="true"
+                className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[var(--gold)]/5 rounded-full blur-[120px] pointer-events-none"
+            />
+            <div
+                aria-hidden="true"
+                className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-[var(--gold)]/3 rounded-full blur-[120px] pointer-events-none"
+            />
         </section>
     );
 }

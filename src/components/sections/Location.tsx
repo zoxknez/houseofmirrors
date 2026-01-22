@@ -15,8 +15,11 @@ export function Location() {
     const directionsLink = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
 
     return (
-        <section id="location" className="relative py-24 md:py-40 bg-black overflow-hidden">
-            <div className="absolute bottom-0 right-0 w-1/3 h-1/2 bg-[var(--gold)]/5 rounded-full blur-[150px] pointer-events-none" />
+        <section id="location" className="relative py-20 md:py-32 bg-black overflow-hidden">
+            <div
+                aria-hidden="true"
+                className="absolute bottom-0 right-0 w-1/3 h-1/2 bg-[var(--gold)]/5 rounded-full blur-[150px] pointer-events-none"
+            />
 
             <div className="max-w-[1400px] mx-auto px-6 md:px-10 relative z-10">
                 <SectionHeader
@@ -29,7 +32,7 @@ export function Location() {
                     subtitle="Smešten u mirnom kvartu Neimar, sa odličnom povezanošću sa centrom grada"
                 />
 
-                <div className="grid lg:grid-cols-2 gap-12 md:gap-20 items-stretch">
+                <div className="grid lg:grid-cols-2 gap-10 md:gap-14 items-stretch">
                     {/* Map */}
                     <motion.div
                         initial={{ opacity: 0, x: -30 }}
@@ -38,11 +41,11 @@ export function Location() {
                         transition={{ duration: 0.8 }}
                         className="relative group h-full"
                     >
-                        <div className="absolute inset-0 bg-[var(--gold)]/10 blur-2xl rounded-[40px] opacity-0 group-hover:opacity-30 transition-opacity duration-700" />
+                        <div className="absolute inset-0 bg-[var(--gold)]/10 blur-2xl rounded-[36px] opacity-0 group-hover:opacity-30 transition-opacity duration-700" />
 
-                        <div className="relative w-full rounded-[40px] overflow-hidden border border-white/10 shadow-2xl bg-white/5 flex flex-col">
+                        <div className="relative w-full rounded-[32px] overflow-hidden border border-white/10 shadow-2xl bg-white/5 flex flex-col">
                             {/* Map Container */}
-                            <div className="relative aspect-[4/3] md:aspect-auto md:min-h-[500px] w-full">
+                            <div className="relative aspect-[4/3] md:aspect-auto md:min-h-[440px] w-full">
                                 <iframe
                                     title="Lokacija na mapi"
                                     src={embedSrc}
@@ -54,12 +57,12 @@ export function Location() {
                             </div>
 
                             {/* Actions area - optimized for mobile prominence */}
-                            <div className="p-4 sm:p-8 bg-white/[0.02] border-t border-white/5 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                            <div className="p-4 sm:p-6 bg-white/[0.02] border-t border-white/5 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                                 <a
                                     href={mapsLink}
                                     target="_blank"
                                     rel="noreferrer"
-                                    className="inline-flex items-center justify-center gap-3 h-16 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 text-white font-black uppercase tracking-[0.2em] text-[11px] hover:bg-white/10 transition-all shadow-xl"
+                                    className="inline-flex items-center justify-center gap-3 h-14 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 text-white font-black uppercase tracking-[0.2em] text-[11px] hover:bg-white/10 transition-all shadow-xl"
                                 >
                                     Otvori mapu <ExternalLink className="w-4 h-4" />
                                 </a>
@@ -67,7 +70,7 @@ export function Location() {
                                     href={directionsLink}
                                     target="_blank"
                                     rel="noreferrer"
-                                    className="inline-flex items-center justify-center gap-3 h-16 rounded-2xl bg-[var(--gold)] text-black font-black uppercase tracking-[0.2em] text-[11px] hover:scale-[1.02] active:scale-95 transition-all shadow-[0_10px_30px_rgba(212,175,55,0.15)]"
+                                    className="inline-flex items-center justify-center gap-3 h-14 rounded-2xl bg-[var(--gold)] text-black font-black uppercase tracking-[0.2em] text-[11px] hover:scale-[1.02] active:scale-95 transition-all shadow-[0_10px_30px_rgba(212,175,55,0.15)]"
                                 >
                                     Navigacija <Navigation className="w-4 h-4" />
                                 </a>
@@ -81,20 +84,20 @@ export function Location() {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.8 }}
-                        className="flex flex-col justify-between space-y-8"
+                        className="flex flex-col justify-between space-y-6"
                     >
-                        <div className="space-y-6">
+                        <div className="space-y-5">
                             {/* Address */}
-                            <GlassCard className="group p-8 hover:bg-white/[0.04] hover:border-[var(--gold)]/30 transition-all duration-500 rounded-[32px]">
+                            <GlassCard className="group p-7 hover:bg-white/[0.04] hover:border-[var(--gold)]/30 transition-all duration-500 rounded-[28px]">
                                 <div className="flex items-center gap-6">
-                                    <div className="w-14 h-14 rounded-full bg-[var(--gold)]/10 border border-[var(--gold)]/20 flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:bg-[var(--gold)]/20">
-                                        <MapPin className="w-6 h-6 text-[var(--gold)]" />
+                                    <div className="w-12 h-12 rounded-full bg-[var(--gold)]/10 border border-[var(--gold)]/20 flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:bg-[var(--gold)]/20">
+                                        <MapPin className="w-5 h-5 text-[var(--gold)]" />
                                     </div>
                                     <div>
                                         <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--gold)] mb-1">
                                             Adresa
                                         </h3>
-                                        <p className="text-lg md:text-xl font-black uppercase tracking-tight text-white">
+                                        <p className="text-base md:text-lg font-black uppercase tracking-tight text-white">
                                             {location.address}
                                             <br />
                                             <span className="text-white/40 font-bold">
@@ -106,19 +109,19 @@ export function Location() {
                             </GlassCard>
 
                             {/* Neighborhood */}
-                            <GlassCard className="group p-8 hover:bg-white/[0.04] hover:border-[var(--gold)]/30 transition-all duration-500 rounded-[32px]">
+                            <GlassCard className="group p-7 hover:bg-white/[0.04] hover:border-[var(--gold)]/30 transition-all duration-500 rounded-[28px]">
                                 <div className="flex items-center gap-6">
-                                    <div className="w-14 h-14 rounded-full bg-[var(--gold)]/10 border border-[var(--gold)]/20 flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:bg-[var(--gold)]/20">
-                                        <Building className="w-6 h-6 text-[var(--gold)]" />
+                                    <div className="w-12 h-12 rounded-full bg-[var(--gold)]/10 border border-[var(--gold)]/20 flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:bg-[var(--gold)]/20">
+                                        <Building className="w-5 h-5 text-[var(--gold)]" />
                                     </div>
                                     <div>
                                         <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--gold)] mb-1">
                                             Kvart
                                         </h3>
-                                        <p className="text-white mb-2 font-black uppercase tracking-tight">
+                                        <p className="text-white mb-2 font-black uppercase tracking-tight text-sm md:text-base">
                                             {location.neighborhood}
                                         </p>
-                                        <p className="text-sm text-white/40 leading-relaxed max-w-sm">
+                                        <p className="text-xs md:text-sm text-white/40 leading-relaxed max-w-sm">
                                             Miran i bezbedan deo grada sa dosta zelenila, parkova i restorana u blizini.
                                         </p>
                                     </div>
@@ -126,21 +129,21 @@ export function Location() {
                             </GlassCard>
 
                             {/* Nearby */}
-                            <GlassCard className="p-8 md:p-10">
-                                <div className="flex items-center gap-3 mb-8">
+                            <GlassCard className="p-7 md:p-8">
+                                <div className="flex items-center gap-3 mb-6">
                                     <Navigation className="w-5 h-5 text-[var(--gold)]" />
-                                    <h3 className="text-sm font-black uppercase tracking-[0.3em] text-white">U blizini</h3>
+                                    <h3 className="text-xs md:text-sm font-black uppercase tracking-[0.3em] text-white">U blizini</h3>
                                 </div>
-                                <div className="space-y-4">
+                                <div className="space-y-3">
                                     {location.nearbyAttractions.map((attraction, index) => (
                                         <div
                                             key={index}
                                             className="flex items-center justify-between py-3 border-b border-white/5 last:border-0"
                                         >
-                                            <span className="text-white font-bold uppercase tracking-tight text-sm md:text-base">
+                                            <span className="text-white font-bold uppercase tracking-tight text-xs md:text-sm">
                                                 {attraction.name}
                                             </span>
-                                            <span className="text-[var(--gold)] text-sm font-black uppercase tracking-wide">
+                                            <span className="text-[var(--gold)] text-xs md:text-sm font-black uppercase tracking-wide">
                                                 {attraction.distance}
                                             </span>
                                         </div>
@@ -150,18 +153,18 @@ export function Location() {
                         </div>
 
                         {/* Transport */}
-                        <div className="grid grid-cols-2 gap-6">
-                            <GlassCard className="p-6 text-center group hover:bg-white/[0.04] transition-all duration-500 rounded-[32px]">
-                                <Bus className="w-8 h-8 text-[var(--gold)] mx-auto mb-4 group-hover:scale-110 transition-transform" />
+                        <div className="grid grid-cols-2 gap-4">
+                            <GlassCard className="p-5 text-center group hover:bg-white/[0.04] transition-all duration-500 rounded-[28px]">
+                                <Bus className="w-7 h-7 text-[var(--gold)] mx-auto mb-3 group-hover:scale-110 transition-transform" />
                                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--gold)] mb-1">Prevoz</p>
-                                <p className="text-xs md:text-sm text-white font-black uppercase">Autobuska stanica</p>
+                                <p className="text-[11px] md:text-sm text-white font-black uppercase">Autobuska stanica</p>
                                 <p className="text-[10px] text-white/40 font-bold uppercase mt-1">preko puta</p>
                             </GlassCard>
 
-                            <GlassCard className="p-6 text-center group hover:bg-white/[0.04] transition-all duration-500 rounded-[32px]">
-                                <TreeDeciduous className="w-8 h-8 text-[var(--gold)] mx-auto mb-4 group-hover:scale-110 transition-transform" />
+                            <GlassCard className="p-5 text-center group hover:bg-white/[0.04] transition-all duration-500 rounded-[28px]">
+                                <TreeDeciduous className="w-7 h-7 text-[var(--gold)] mx-auto mb-3 group-hover:scale-110 transition-transform" />
                                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--gold)] mb-1">Priroda</p>
-                                <p className="text-xs md:text-sm text-white font-black uppercase">Parkovi i zelenilo</p>
+                                <p className="text-[11px] md:text-sm text-white font-black uppercase">Parkovi i zelenilo</p>
                                 <p className="text-[10px] text-white/40 font-bold uppercase mt-1">5 min pešice</p>
                             </GlassCard>
                         </div>

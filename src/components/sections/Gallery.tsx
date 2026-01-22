@@ -63,13 +63,14 @@ export function Gallery() {
     }, [lightboxSrc, lightboxIndex]); // Re-bind keys when index changes for next/prev logic
 
     return (
-        <section id="gallery" className="relative py-24 md:py-40">
+        <section id="gallery" className="relative py-20 md:py-32">
             <div className="max-w-[1400px] mx-auto px-6 md:px-10">
                 {/* Category Filters */}
-                <div className="flex flex-wrap justify-center gap-3 mb-12">
+                <div className="flex flex-wrap justify-center gap-3 mb-10">
                     {propertyImages.categories.map((cat) => (
                         <button
                             key={cat.id}
+                            type="button"
                             onClick={() => {
                                 setSelectedCategory(cat.id);
                                 closeLightbox();
@@ -87,8 +88,10 @@ export function Gallery() {
                 </div>
 
                 {/* Hero Gallery Layout */}
-                <div
-                    className="relative group cursor-pointer overflow-hidden rounded-3xl deluxe-card aspect-[21/9]"
+                <button
+                    type="button"
+                    aria-label="Otvori galeriju"
+                    className="relative group cursor-pointer overflow-hidden rounded-3xl deluxe-card aspect-[21/9] w-full text-left"
                     onClick={() => openLightbox(propertyImages.gallery[0].src)}
                 >
                     <Image
@@ -110,9 +113,9 @@ export function Gallery() {
                             Dnevni Boravak
                         </h2>
                         <div className="flex items-center gap-4">
-                            <button className="btn-primary !px-6 !py-3 !text-xs">
+                            <span className="btn-primary !px-6 !py-3 !text-xs">
                                 Pogledaj galeriju
-                            </button>
+                            </span>
                             <span className="text-white/60 font-bold uppercase text-[10px] tracking-widest">
                                 {propertyImages.gallery.length} fotografija
                             </span>
@@ -126,23 +129,31 @@ export function Gallery() {
                                 key={i}
                                 className="w-16 h-16 rounded-xl border-2 border-black overflow-hidden relative shadow-2xl transition-transform hover:-translate-y-2"
                             >
-                                <Image src={img.src} alt="preview" fill className="object-cover" />
+                                <Image
+                                    src={img.src}
+                                    alt="preview"
+                                    fill
+                                    className="object-cover"
+                                    sizes="(min-width: 768px) 64px, 48px"
+                                />
                             </div>
                         ))}
                         <div className="w-16 h-16 rounded-xl border-2 border-black bg-[var(--accent)] flex items-center justify-center text-white text-xs font-black shadow-2xl transition-transform hover:-translate-y-2">
                             +{propertyImages.gallery.length - 4}
                         </div>
                     </div>
-                </div>
+                </button>
 
                 {/* Sub-grid for categories */}
-                <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
                     {propertyImages.categories.slice(1, 4).map((cat, i) => {
                         const firstImgOfCat = propertyImages.gallery.find(img => img.category === cat.id);
                         return (
-                            <div
+                            <button
                                 key={cat.id}
-                                className="deluxe-card aspect-video relative group cursor-pointer overflow-hidden"
+                                type="button"
+                                aria-label={`Otvori kategoriju: ${cat.label}`}
+                                className="deluxe-card aspect-video relative group cursor-pointer overflow-hidden w-full text-left"
                                 onClick={() => {
                                     if (firstImgOfCat) openLightbox(firstImgOfCat.src);
                                 }}
@@ -152,6 +163,7 @@ export function Gallery() {
                                     alt={cat.label}
                                     fill
                                     className="object-cover transition-transform duration-500 group-hover:scale-110"
+                                    sizes="(min-width: 768px) 33vw, 100vw"
                                 />
                                 <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors" />
                                 <div className="absolute inset-0 flex flex-col items-center justify-center">
@@ -160,7 +172,7 @@ export function Gallery() {
                                         {propertyImages.gallery.filter(img => img.category === cat.id).length} slika
                                     </span>
                                 </div>
-                            </div>
+                            </button>
                         );
                     })}
                 </div>
@@ -181,6 +193,7 @@ export function Gallery() {
                         {/* Close Button */}
                         <button
                             onClick={closeLightbox}
+                            type="button"
                             className="absolute top-6 right-6 z-[110] p-4 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all"
                             aria-label="Zatvori"
                         >
@@ -190,6 +203,7 @@ export function Gallery() {
                         {/* Desktop Navigation */}
                         <button
                             onClick={(e) => { e.stopPropagation(); prevImage(); }}
+                            type="button"
                             className="hidden md:inline-flex absolute left-8 top-1/2 -translate-y-1/2 z-[110] p-5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all group"
                             aria-label="Prethodna slika"
                         >
@@ -197,6 +211,7 @@ export function Gallery() {
                         </button>
                         <button
                             onClick={(e) => { e.stopPropagation(); nextImage(); }}
+                            type="button"
                             className="hidden md:inline-flex absolute right-8 top-1/2 -translate-y-1/2 z-[110] p-5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all group"
                             aria-label="Sledeća slika"
                         >
@@ -207,6 +222,7 @@ export function Gallery() {
                         <div className="md:hidden fixed bottom-10 left-1/2 -translate-x-1/2 z-[110] flex items-center gap-6">
                             <button
                                 onClick={(e) => { e.stopPropagation(); prevImage(); }}
+                                type="button"
                                 className="p-4 rounded-full bg-white/5 border border-white/10 text-white active:scale-90 transition-all"
                                 aria-label="Prethodna slika"
                             >
@@ -219,6 +235,7 @@ export function Gallery() {
                             </div>
                             <button
                                 onClick={(e) => { e.stopPropagation(); nextImage(); }}
+                                type="button"
                                 className="p-4 rounded-full bg-white/5 border border-white/10 text-white active:scale-90 transition-all"
                                 aria-label="Sledeća slika"
                             >
@@ -249,6 +266,7 @@ export function Gallery() {
                                     fill
                                     className="object-contain"
                                     draggable={false}
+                                    sizes="(min-width: 1024px) 80vw, 100vw"
                                 />
                             </div>
 

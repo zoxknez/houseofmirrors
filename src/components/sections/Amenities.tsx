@@ -20,7 +20,7 @@ export function Amenities() {
     );
 
     return (
-        <section id="amenities" className="relative py-24 md:py-40 bg-black overflow-hidden">
+        <section id="amenities" className="relative py-20 md:py-32 bg-black overflow-hidden">
             <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-[var(--accent)]/5 rounded-full blur-[120px] pointer-events-none" />
             <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-[var(--gold)]/5 rounded-full blur-[120px] pointer-events-none" />
 
@@ -31,7 +31,7 @@ export function Amenities() {
                     subtitle="Pažljivo odabrana oprema i pogodnosti za vaš savršen boravak i potpuno opuštanje."
                 />
 
-                <div className="space-y-12 md:space-y-20">
+                <div className="space-y-10 md:space-y-14">
                     {defaultCategoryOrder.map((catKey, index) => {
                         const amenities = grouped[catKey];
                         if (!amenities?.length) return null;
@@ -51,7 +51,7 @@ export function Amenities() {
 
                                 <ul
                                     role="list"
-                                    className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6"
+                                    className="flex flex-wrap gap-3 md:gap-4"
                                 >
                                     {amenities.map((item) => {
                                         const Icon = getIcon(item.icon as string);
@@ -60,24 +60,23 @@ export function Amenities() {
                                             <li
                                                 key={`${catKey}-${item.name}-${item.icon ?? "noicon"}`}
                                                 className="amenity-card group
-                                                    min-h-[56px] md:min-h-[64px]
                                                     focus-within:ring-1 focus-within:ring-[var(--gold)]/40
                                                     active:bg-white/10 active:border-[var(--gold)]/40"
                                             >
                                                 <div
-                                                    className="p-2 rounded-lg bg-white/5 transition-colors
+                                                    className="p-1.5 md:p-2 rounded-full bg-white/5 transition-colors
                                                         group-hover:bg-[var(--accent)]/20
                                                         group-focus-within:bg-[var(--accent)]/20"
                                                     aria-hidden="true"
                                                 >
                                                     <Icon
-                                                        className="w-5 h-5 text-[var(--gold)] transition-colors
+                                                        className="w-4 h-4 md:w-5 md:h-5 text-[var(--gold)] transition-colors
                                                             group-hover:text-[var(--accent)]
                                                             group-focus-within:text-[var(--accent)]"
                                                     />
                                                 </div>
 
-                                                <span className="text-sm md:text-base text-white/80 font-medium transition-colors group-hover:text-white group-focus-within:text-white">
+                                                <span className="text-xs md:text-sm text-white/80 font-semibold tracking-tight transition-colors group-hover:text-white group-focus-within:text-white">
                                                     {item.name}
                                                 </span>
                                             </li>

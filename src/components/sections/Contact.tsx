@@ -118,8 +118,11 @@ export function Contact() {
     };
 
     return (
-        <section id="contact" className="relative py-24 md:py-40 bg-black overflow-hidden">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2/3 h-2/3 bg-[var(--gold)]/5 rounded-full blur-[150px] pointer-events-none" />
+        <section id="contact" className="relative py-20 md:py-32 bg-black overflow-hidden">
+            <div
+                aria-hidden="true"
+                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2/3 h-2/3 bg-[var(--gold)]/5 rounded-full blur-[150px] pointer-events-none"
+            />
 
             <div className="max-w-[1400px] mx-auto px-6 md:px-10 relative z-10">
                 <SectionHeader
@@ -132,30 +135,30 @@ export function Contact() {
                     subtitle="Tu smo da odgovorimo na sva vaša pitanja i zahteve"
                 />
 
-                <div className="grid lg:grid-cols-5 gap-16 md:gap-24 max-w-7xl mx-auto items-start">
+                <div className="grid lg:grid-cols-5 gap-12 md:gap-16 max-w-7xl mx-auto items-start">
                     {/* Contact Info */}
                     <motion.div
                         initial={{ opacity: 0, x: -30 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.8 }}
-                        className="lg:col-span-2 space-y-10"
+                        className="lg:col-span-2 space-y-8"
                     >
-                        <GlassCard className="p-10 md:p-12 space-y-10 group hover:border-[var(--gold)]/20 transition-all duration-500">
+                        <GlassCard className="p-8 md:p-10 space-y-8 group hover:border-[var(--gold)]/20 transition-all duration-500">
                             <h3 className="text-sm md:text-base font-black uppercase tracking-[0.3em] text-white/40 mb-2">
                                 Detalji
                             </h3>
 
-                            <div className="space-y-10">
+                            <div className="space-y-8">
                                 <div className="flex items-start gap-8 group/item">
-                                    <div className="w-16 h-16 rounded-full bg-[var(--gold)]/10 flex items-center justify-center flex-shrink-0 border border-[var(--gold)]/20 group-hover/item:scale-110 group-hover/item:bg-[var(--gold)]/20 transition-all duration-500">
+                                    <div className="w-14 h-14 rounded-full bg-[var(--gold)]/10 flex items-center justify-center flex-shrink-0 border border-[var(--gold)]/20 group-hover/item:scale-110 group-hover/item:bg-[var(--gold)]/20 transition-all duration-500">
                                         <MapPin className="w-6 h-6 text-[var(--gold)]" />
                                     </div>
                                     <div>
                                         <p className="text-[10px] font-black uppercase tracking-widest text-[var(--gold)] mb-2">
                                             Lokacija
                                         </p>
-                                        <p className="text-lg md:text-xl font-black uppercase tracking-tight text-white leading-tight">
+                                        <p className="text-base md:text-lg font-black uppercase tracking-tight text-white leading-tight">
                                             {propertyData.location.address}
                                             <br />
                                             <span className="text-white/40">{propertyData.location.city}</span>
@@ -164,7 +167,7 @@ export function Contact() {
                                 </div>
 
                                 <div className="flex items-start gap-8 group/item">
-                                    <div className="w-16 h-16 rounded-full bg-[var(--gold)]/10 flex items-center justify-center flex-shrink-0 border border-[var(--gold)]/20 group-hover/item:scale-110 group-hover/item:bg-[var(--gold)]/20 transition-all duration-500">
+                                    <div className="w-14 h-14 rounded-full bg-[var(--gold)]/10 flex items-center justify-center flex-shrink-0 border border-[var(--gold)]/20 group-hover/item:scale-110 group-hover/item:bg-[var(--gold)]/20 transition-all duration-500">
                                         <Phone className="w-6 h-6 text-[var(--gold)]" />
                                     </div>
                                     <div>
@@ -173,7 +176,7 @@ export function Contact() {
                                         </p>
                                         <a
                                             href="tel:+38160777777"
-                                            className="text-lg md:text-xl font-black uppercase tracking-tight text-white hover:text-[var(--gold)] transition-colors"
+                                            className="text-base md:text-lg font-black uppercase tracking-tight text-white hover:text-[var(--gold)] transition-colors"
                                         >
                                             +381 60 777 777
                                         </a>
@@ -181,7 +184,7 @@ export function Contact() {
                                 </div>
 
                                 <div className="flex items-start gap-8 group/item">
-                                    <div className="w-16 h-16 rounded-full bg-[var(--gold)]/10 flex items-center justify-center flex-shrink-0 border border-[var(--gold)]/20 group-hover/item:scale-110 group-hover/item:bg-[var(--gold)]/20 transition-all duration-500">
+                                    <div className="w-14 h-14 rounded-full bg-[var(--gold)]/10 flex items-center justify-center flex-shrink-0 border border-[var(--gold)]/20 group-hover/item:scale-110 group-hover/item:bg-[var(--gold)]/20 transition-all duration-500">
                                         <Mail className="w-6 h-6 text-[var(--gold)]" />
                                     </div>
                                     <div>
@@ -190,7 +193,7 @@ export function Contact() {
                                         </p>
                                         <a
                                             href="mailto:hello@houseofmirrors.rs"
-                                            className="text-lg md:text-xl font-black uppercase tracking-tight text-white hover:text-[var(--gold)] transition-colors break-all"
+                                            className="text-base md:text-lg font-black uppercase tracking-tight text-white hover:text-[var(--gold)] transition-colors break-all"
                                         >
                                             hello@houseofmirrors.rs
                                         </a>
@@ -200,16 +203,16 @@ export function Contact() {
                         </GlassCard>
 
                         {/* Host Info */}
-                        <div className="bg-white/[0.02] backdrop-blur-md border border-white/10 rounded-[40px] p-10 md:p-12 hover:border-[var(--gold)]/20 transition-all duration-500">
-                            <div className="flex items-center gap-6 mb-10">
+                        <div className="bg-white/[0.02] backdrop-blur-md border border-white/10 rounded-[32px] p-8 md:p-10 hover:border-[var(--gold)]/20 transition-all duration-500">
+                            <div className="flex items-center gap-5 mb-8">
                                 <div className="relative">
-                                    <div className="w-24 h-24 rounded-[32px] bg-gradient-to-br from-[var(--gold)] to-[var(--gold)]/40 flex items-center justify-center text-black text-4xl font-black shadow-[0_0_30px_rgba(212,175,55,0.3)]">
+                                    <div className="w-20 h-20 rounded-[24px] bg-gradient-to-br from-[var(--gold)] to-[var(--gold)]/40 flex items-center justify-center text-black text-3xl font-black shadow-[0_0_30px_rgba(212,175,55,0.3)]">
                                         {propertyData.host.name[0]}
                                     </div>
                                     <div className="absolute -bottom-1 -right-1 w-8 h-8 bg-green-500 border-4 border-black rounded-full shadow-lg" />
                                 </div>
                                 <div>
-                                    <p className="text-white text-3xl font-black uppercase tracking-tighter mb-1">
+                                    <p className="text-white text-2xl font-black uppercase tracking-tighter mb-1">
                                         {propertyData.host.name}
                                     </p>
                                     <p className="text-[var(--gold)] text-xs font-black uppercase tracking-[0.3em]">
@@ -218,8 +221,8 @@ export function Contact() {
                                 </div>
                             </div>
 
-                            <div className="bg-[var(--gold)]/5 border border-[var(--gold)]/10 p-6 rounded-[24px]">
-                                <p className="text-white/60 text-sm font-bold leading-relaxed italic text-center">
+                            <div className="bg-[var(--gold)]/5 border border-[var(--gold)]/10 p-5 rounded-[20px]">
+                                <p className="text-white/60 text-xs md:text-sm font-bold leading-relaxed italic text-center">
                                     "Odgovaramo {propertyData.host.responseTime} sa {propertyData.host.responseRate} preciznosti."
                                 </p>
                             </div>
@@ -234,7 +237,7 @@ export function Contact() {
                         transition={{ duration: 0.8 }}
                         className="lg:col-span-3"
                     >
-                        <GlassCard className="p-8 md:p-16">
+                        <GlassCard className="p-8 md:p-12">
                             <h3 className="text-sm font-black uppercase tracking-[0.4em] text-white/40 mb-12">
                                 Pošaljite poruku
                             </h3>
@@ -253,14 +256,18 @@ export function Contact() {
                             )}
 
                             {error && (
-                                <div className="mb-10 p-6 rounded-[24px] bg-red-500/10 border border-red-500/20 flex items-center gap-4">
+                                <div
+                                    className="mb-10 p-6 rounded-[24px] bg-red-500/10 border border-red-500/20 flex items-center gap-4"
+                                    role="alert"
+                                    aria-live="polite"
+                                >
                                     <AlertCircle className="w-6 h-6 text-red-400 flex-shrink-0" />
                                     <p className="text-red-400 font-bold">{error}</p>
                                 </div>
                             )}
 
-                            <form onSubmit={handleSubmit} className="space-y-8">
-                                <div className="grid sm:grid-cols-2 gap-8">
+                            <form onSubmit={handleSubmit} className="space-y-7" aria-busy={loading}>
+                                <div className="grid sm:grid-cols-2 gap-6">
                                     <FormField
                                         label="Ime i prezime"
                                         required
@@ -308,7 +315,7 @@ export function Contact() {
                                     placeholder="Napišite vašu poruku..."
                                 />
 
-                                <div className="pt-6">
+                                <div className="pt-4">
                                     <PrimaryButton type="submit" disabled={loading} className="flex items-center justify-center gap-3">
                                         {loading ? (
                                             <>

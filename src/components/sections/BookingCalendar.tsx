@@ -72,8 +72,11 @@ export function BookingCalendar() {
         !!dateRange?.from && !!dateRange?.to && nights >= pricing.minNights;
 
     return (
-        <section id="booking" className="relative py-24 md:py-40 bg-black overflow-hidden">
-            <div className="absolute top-0 left-1/4 w-1/2 h-1/2 bg-[var(--gold)]/5 rounded-full blur-[150px] pointer-events-none" />
+        <section id="booking" className="relative py-20 md:py-32 bg-black overflow-hidden">
+            <div
+                aria-hidden="true"
+                className="absolute top-0 left-1/4 w-1/2 h-1/2 bg-[var(--gold)]/5 rounded-full blur-[150px] pointer-events-none"
+            />
 
             <div className="max-w-[1400px] mx-auto px-6 md:px-10 relative z-10">
                 <SectionHeader
@@ -86,7 +89,7 @@ export function BookingCalendar() {
                     subtitle="Izaberite datume i broj gostiju za vaš nezaboravan odmor"
                 />
 
-                <div className="grid lg:grid-cols-3 gap-12 max-w-7xl mx-auto items-start">
+                <div className="grid lg:grid-cols-3 gap-10 max-w-7xl mx-auto items-start">
                     {/* Calendar */}
                     <motion.div
                         initial={{ opacity: 0, x: -30 }}
@@ -95,12 +98,12 @@ export function BookingCalendar() {
                         transition={{ duration: 0.8 }}
                         className="lg:col-span-2"
                     >
-                        <GlassCard className="p-6 lg:p-12 min-h-[480px] lg:min-h-[560px]">
-                            <div className="flex items-center gap-4 mb-10">
-                                <div className="w-12 h-12 rounded-full bg-[var(--gold)]/10 flex items-center justify-center">
-                                    <Calendar className="w-6 h-6 text-[var(--gold)]" />
+                        <GlassCard className="p-6 lg:p-10 min-h-[460px] lg:min-h-[520px]">
+                            <div className="flex items-center gap-4 mb-8">
+                                <div className="w-11 h-11 rounded-full bg-[var(--gold)]/10 flex items-center justify-center">
+                                    <Calendar className="w-5 h-5 text-[var(--gold)]" />
                                 </div>
-                                <h3 className="text-sm md:text-base font-black uppercase tracking-[0.2em] text-white">
+                                <h3 className="text-xs md:text-sm font-black uppercase tracking-[0.2em] text-white">
                                     Izaberite datume
                                 </h3>
                             </div>
@@ -137,28 +140,28 @@ export function BookingCalendar() {
                         viewport={{ once: true }}
                         transition={{ duration: 0.8 }}
                     >
-                        <GlassCard className="p-8 md:p-10 lg:sticky lg:top-32">
-                            <div className="flex items-center gap-4 mb-10">
-                                <div className="w-12 h-12 rounded-full bg-[var(--gold)]/10 flex items-center justify-center">
-                                    <CreditCard className="w-6 h-6 text-[var(--gold)]" />
+                        <GlassCard className="p-7 md:p-8 lg:sticky lg:top-32">
+                            <div className="flex items-center gap-4 mb-8">
+                                <div className="w-11 h-11 rounded-full bg-[var(--gold)]/10 flex items-center justify-center">
+                                    <CreditCard className="w-5 h-5 text-[var(--gold)]" />
                                 </div>
                                 <div className="flex items-baseline gap-2">
-                                    <span className="text-4xl font-black text-white">€{pricing.basePrice}</span>
+                                    <span className="text-3xl md:text-4xl font-black text-white">€{pricing.basePrice}</span>
                                     <span className="text-[10px] font-black uppercase tracking-widest text-white/40">
                                         / noć
                                     </span>
                                 </div>
                             </div>
 
-                            <div className="space-y-4 mb-8">
+                            <div className="space-y-4 mb-6">
                                 <div className="grid grid-cols-2 gap-4">
-                                    <div className="p-5 rounded-[24px] bg-white/[0.03] border border-white/10">
+                                    <div className="p-4 rounded-[20px] bg-white/[0.03] border border-white/10">
                                         <p className="text-[10px] font-black uppercase tracking-widest text-[var(--gold)] mb-2">Dolazak</p>
                                         <p className="text-white font-black uppercase tracking-tight">
                                             {dateRange?.from ? format(dateRange.from, "d. MMM", { locale: srLatn }) : "Izaberite"}
                                         </p>
                                     </div>
-                                    <div className="p-5 rounded-[24px] bg-white/[0.03] border border-white/10">
+                                    <div className="p-4 rounded-[20px] bg-white/[0.03] border border-white/10">
                                         <p className="text-[10px] font-black uppercase tracking-widest text-[var(--gold)] mb-2">Odlazak</p>
                                         <p className="text-white font-black uppercase tracking-tight">
                                             {dateRange?.to ? format(dateRange.to, "d. MMM", { locale: srLatn }) : "Izaberite"}
@@ -166,7 +169,7 @@ export function BookingCalendar() {
                                     </div>
                                 </div>
 
-                                <div className="p-5 rounded-[24px] bg-white/[0.03] border border-white/10">
+                                <div className="p-4 rounded-[20px] bg-white/[0.03] border border-white/10">
                                     <p className="text-[10px] font-black uppercase tracking-widest text-[var(--gold)] mb-4">Broj gostiju</p>
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-3 text-white font-black uppercase tracking-tight">
@@ -179,7 +182,7 @@ export function BookingCalendar() {
                             </div>
 
                             {nights > 0 ? (
-                                <div className="space-y-4 py-6 border-y border-white/5 mb-8">
+                                <div className="space-y-4 py-5 border-y border-white/5 mb-6">
                                     <div className="flex justify-between text-sm font-bold text-white/40 uppercase tracking-tight">
                                         <span>€{pricing.basePrice} x {nights} noći</span>
                                         <span className="text-white">€{totals.subtotal}</span>
@@ -190,12 +193,13 @@ export function BookingCalendar() {
                                     </div>
                                     <div className="flex justify-between items-end pt-2">
                                         <span className="text-xs font-black uppercase tracking-[0.2em] text-white">UKUPNO</span>
-                                        <span className="text-3xl font-black text-[var(--gold)] tracking-tighter">€{totals.total}</span>
+                                        <span className="text-2xl md:text-3xl font-black text-[var(--gold)] tracking-tighter">€{totals.total}</span>
                                     </div>
                                 </div>
                             ) : null}
 
                             <PrimaryButton
+                                type="button"
                                 onClick={() => setShowForm(true)}
                                 disabled={!canBook}
                             >
