@@ -114,6 +114,11 @@ export const propertyImages = {
             category: "bedroom"
         },
         {
+            src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/kitchen/IMG_20251129_153453_1280.jpg",
+            alt: "Kuhinja 4",
+            category: "kitchen"
+        },
+        {
             src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/kitchen/IMG_20251129_153351_1280.jpg",
             alt: "Kuhinja 1",
             category: "kitchen"
@@ -126,11 +131,6 @@ export const propertyImages = {
         {
             src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/kitchen/IMG_20251129_153437_1280.jpg",
             alt: "Kuhinja 3",
-            category: "kitchen"
-        },
-        {
-            src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/kitchen/IMG_20251129_153453_1280.jpg",
-            alt: "Kuhinja 4",
             category: "kitchen"
         },
         {
