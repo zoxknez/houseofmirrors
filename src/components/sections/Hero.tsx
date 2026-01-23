@@ -205,7 +205,7 @@ export function Hero() {
                         4 zvezdice
                     </span>
                     <span className="text-white text-[10px] md:text-xs font-black uppercase tracking-[0.2em]">
-                        Zvanična kategorizacija (maksimum po Ministarstvu turizma)
+                        Zvanična kategorizacija (maksimalna ocena po rešenju Ministarstva turizma)
                     </span>
                 </div>
 
