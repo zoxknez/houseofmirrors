@@ -200,9 +200,11 @@ export function Hero() {
                     {propertyData.tagline}
                 </p>
 
-                <div className="mb-8 md:mb-10 inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5">
-                    <span className="text-[var(--gold)] text-[10px] md:text-xs font-black uppercase tracking-[0.2em]">4 zvezdice</span>
-                    <span className="text-white/60 text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em]">
+                <div className="mb-8 md:mb-10 inline-flex items-center gap-3 px-4 sm:px-6 py-3 rounded-full border border-[var(--gold)]/40 bg-[var(--gold)]/15 shadow-[0_0_30px_rgba(212,175,55,0.25)] backdrop-blur">
+                    <span className="px-3 py-1 rounded-full bg-[var(--gold)] text-black text-[11px] md:text-sm font-black uppercase tracking-[0.25em] shadow-[0_0_20px_rgba(212,175,55,0.35)]">
+                        4 zvezdice
+                    </span>
+                    <span className="text-white text-[10px] md:text-xs font-black uppercase tracking-[0.2em]">
                         Zvanična kategorizacija (maksimum po Ministarstvu turizma)
                     </span>
                 </div>

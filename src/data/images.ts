@@ -19,6 +19,11 @@ export const propertyImages = {
 
     gallery: [
         {
+            src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/living/IMG_20251127_115413.jpg",
+            alt: "Dnevna soba 7",
+            category: "living"
+        },
+        {
             src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/living/IMG_20251124_133144.jpg",
             alt: "Dnevna soba 1",
             category: "living"
@@ -46,11 +51,6 @@ export const propertyImages = {
         {
             src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/living/IMG_20251124_201333.jpg",
             alt: "Dnevna soba 6",
-            category: "living"
-        },
-        {
-            src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/living/IMG_20251127_115413.jpg",
-            alt: "Dnevna soba 7",
             category: "living"
         },
         {

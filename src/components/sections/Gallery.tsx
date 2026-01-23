@@ -121,7 +121,7 @@ export function Gallery() {
                                 {selectedCategory === "all" ? "Featured Image" : selectedCategoryMeta.label}
                             </p>
                             <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter mb-4">
-                                {featuredImage.alt}
+                                {selectedCategory === "all" ? selectedCategoryMeta.label : selectedCategoryMeta.label}
                             </h2>
                             <div className="flex items-center gap-4">
                                 <span className="btn-primary !px-6 !py-3 !text-xs">
