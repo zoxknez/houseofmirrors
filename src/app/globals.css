@@ -127,6 +127,11 @@
     content-visibility: auto;
     contain-intrinsic-size: 1px 800px;
   }
+
+  section[id] {
+    content-visibility: visible;
+    contain-intrinsic-size: auto;
+  }
 }
 
 /* ================================

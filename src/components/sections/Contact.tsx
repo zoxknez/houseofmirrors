@@ -18,6 +18,7 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { FormField } from "@/components/ui/FormField";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 type ContactFormData = {
     name: string;
@@ -27,6 +28,7 @@ type ContactFormData = {
 };
 
 export function Contact() {
+    const isDesktop = useMediaQuery("(min-width: 1024px)");
     const [formData, setFormData] = useState<ContactFormData>({
         name: "",
         email: "",
@@ -138,7 +140,7 @@ export function Contact() {
                 <div className="grid lg:grid-cols-5 gap-12 md:gap-16 max-w-7xl mx-auto items-start">
                     {/* Contact Info */}
                     <motion.div
-                        initial={{ opacity: 0, x: -30 }}
+                        initial={{ opacity: 0, x: isDesktop ? -30 : 0 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.8 }}
@@ -231,7 +233,7 @@ export function Contact() {
 
                     {/* Form */}
                     <motion.div
-                        initial={{ opacity: 0, x: 30 }}
+                        initial={{ opacity: 0, x: isDesktop ? 30 : 0 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.8 }}

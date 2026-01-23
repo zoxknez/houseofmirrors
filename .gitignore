@@ -36,6 +36,12 @@ yarn-error.log*
 # vercel
 .vercel
 
+# local assets
+/public/Galerija
+
+# editor
+.vscode
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

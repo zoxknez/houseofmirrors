@@ -72,7 +72,7 @@ export function BookingCalendar() {
         !!dateRange?.from && !!dateRange?.to && nights >= pricing.minNights;
 
     return (
-        <section id="booking" className="relative py-20 md:py-32 bg-black overflow-hidden">
+        <section id="booking" className="relative py-20 md:py-32 bg-black overflow-hidden content-visible">
             <div
                 aria-hidden="true"
                 className="absolute top-0 left-1/4 w-1/2 h-1/2 bg-[var(--gold)]/5 rounded-full blur-[150px] pointer-events-none"
@@ -92,7 +92,7 @@ export function BookingCalendar() {
                 <div className="grid lg:grid-cols-3 gap-10 max-w-7xl mx-auto items-start">
                     {/* Calendar */}
                     <motion.div
-                        initial={{ opacity: 0, x: -30 }}
+                        initial={{ opacity: 0, x: isDesktop ? -30 : 0 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.8 }}
@@ -135,7 +135,7 @@ export function BookingCalendar() {
 
                     {/* Summary */}
                     <motion.div
-                        initial={{ opacity: 0, x: 30 }}
+                        initial={{ opacity: 0, x: isDesktop ? 30 : 0 }}
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.8 }}

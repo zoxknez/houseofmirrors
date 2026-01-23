@@ -67,8 +67,6 @@ Apartman se nalazi u mirnom i bezbednom kraju Neimar, samo 10 minuta od centra g
     { icon: "Tv", name: "65\" Smart TV", category: "entertainment" },
     { icon: "Film", name: "Netflix & HBO Max", category: "entertainment" },
     { icon: "Music", name: "5.1 Hi-Fi sistem", category: "entertainment" },
-    { icon: "Disc", name: "DVD/CD plejer", category: "entertainment" },
-    { icon: "Laptop", name: "Laptop za goste", category: "entertainment" },
 
     // Wellness
     { icon: "Armchair", name: "Profesionalna masažna fotelja", category: "wellness" },
@@ -111,8 +109,8 @@ Apartman se nalazi u mirnom i bezbednom kraju Neimar, samo 10 minuta od centra g
     },
     {
       icon: "Music",
-      title: "Premium zvuk",
-      description: "5.1 Hi-Fi sistem za savršen audio doživljaj"
+      title: "Premium slika i zvuk",
+      description: "65\" TV • 5.1 Hi-Fi sistem za savršen audio doživljaj"
     },
     {
       icon: "Car",

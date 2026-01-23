@@ -13,12 +13,20 @@ export function Gallery() {
     const [selectedCategory, setSelectedCategory] = useState("all");
     const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
     const isDesktop = useMediaQuery("(min-width: 768px)");
+    const hasImages = propertyImages.gallery.length > 0;
 
     const filteredImages = useMemo(() => {
         return selectedCategory === "all"
             ? propertyImages.gallery
             : propertyImages.gallery.filter((img) => img.category === selectedCategory);
     }, [selectedCategory]);
+
+    const selectedCategoryMeta = useMemo(() => {
+        return propertyImages.categories.find((cat) => cat.id === selectedCategory) || propertyImages.categories[0];
+    }, [selectedCategory]);
+
+    const displayImages = filteredImages.length ? filteredImages : propertyImages.gallery;
+    const featuredImage = displayImages[0];
 
     const lightboxIndex = useMemo(() => {
         if (!lightboxSrc) return null;
@@ -88,94 +96,142 @@ export function Gallery() {
                 </div>
 
                 {/* Hero Gallery Layout */}
-                <button
-                    type="button"
-                    aria-label="Otvori galeriju"
-                    className="relative group cursor-pointer overflow-hidden rounded-3xl deluxe-card aspect-[21/9] w-full text-left"
-                    onClick={() => openLightbox(propertyImages.gallery[0].src)}
-                >
-                    <Image
-                        src={propertyImages.gallery[0].src}
-                        alt={propertyImages.gallery[0].alt}
-                        fill
-                        className="object-cover transition-transform duration-1000 group-hover:scale-105"
-                        priority
-                        sizes="100vw"
-                    />
+                {hasImages && featuredImage ? (
+                    <button
+                        type="button"
+                        aria-label="Otvori galeriju"
+                        className="relative group cursor-pointer overflow-hidden rounded-3xl deluxe-card aspect-[21/9] w-full text-left"
+                        onClick={() => openLightbox(featuredImage.src)}
+                    >
+                        <Image
+                            src={featuredImage.src}
+                            alt={featuredImage.alt}
+                            fill
+                            className="object-cover transition-transform duration-1000 group-hover:scale-105"
+                            priority
+                            sizes="100vw"
+                        />
 
-                    {/* Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
+                        {/* Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
 
-                    {/* Content */}
-                    <div className="absolute bottom-10 left-10 text-left">
-                        <p className="text-white/40 text-xs font-black uppercase tracking-[0.3em] mb-2">Featured Image</p>
-                        <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter mb-4">
-                            Dnevni Boravak
-                        </h2>
-                        <div className="flex items-center gap-4">
-                            <span className="btn-primary !px-6 !py-3 !text-xs">
-                                Pogledaj galeriju
-                            </span>
-                            <span className="text-white/60 font-bold uppercase text-[10px] tracking-widest">
-                                {propertyImages.gallery.length} fotografija
-                            </span>
+                        {/* Content */}
+                        <div className="absolute bottom-10 left-10 text-left">
+                            <p className="text-white/40 text-xs font-black uppercase tracking-[0.3em] mb-2">
+                                {selectedCategory === "all" ? "Featured Image" : selectedCategoryMeta.label}
+                            </p>
+                            <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter mb-4">
+                                {featuredImage.alt}
+                            </h2>
+                            <div className="flex items-center gap-4">
+                                <span className="btn-primary !px-6 !py-3 !text-xs">
+                                    Pogledaj galeriju
+                                </span>
+                                <span className="text-white/60 font-bold uppercase text-[10px] tracking-widest">
+                                    {displayImages.length} fotografija
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* Image Previews Stack (Decorative) */}
+                        <div className="absolute bottom-10 right-10 hidden md:flex items-center -space-x-4">
+                            {displayImages.slice(1, 4).map((img, i) => (
+                                <div
+                                    key={i}
+                                    className="w-16 h-16 rounded-xl border-2 border-black overflow-hidden relative shadow-2xl transition-transform hover:-translate-y-2"
+                                >
+                                    <Image
+                                        src={img.src}
+                                        alt="preview"
+                                        fill
+                                        className="object-cover"
+                                        sizes="(min-width: 768px) 64px, 48px"
+                                    />
+                                </div>
+                            ))}
+                            <div className="w-16 h-16 rounded-xl border-2 border-black bg-[var(--accent)] flex items-center justify-center text-white text-xs font-black shadow-2xl transition-transform hover:-translate-y-2">
+                                +{Math.max(displayImages.length - 4, 0)}
+                            </div>
+                        </div>
+                    </button>
+                ) : (
+                    <div className="relative overflow-hidden rounded-3xl deluxe-card aspect-[21/9] w-full flex items-center justify-center text-center p-8">
+                        <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent" />
+                        <div className="relative z-10">
+                            <p className="text-white/40 text-xs font-black uppercase tracking-[0.3em] mb-3">Galerija</p>
+                            <h2 className="text-2xl md:text-4xl font-black text-white uppercase tracking-tighter mb-4">
+                                Fotografije uskoro
+                            </h2>
+                            <p className="text-white/50 text-xs md:text-sm font-bold uppercase tracking-[0.2em]">
+                                Pripremamo nove fotografije apartmana
+                            </p>
                         </div>
                     </div>
+                )}
 
-                    {/* Image Previews Stack (Decorative) */}
-                    <div className="absolute bottom-10 right-10 hidden md:flex items-center -space-x-4">
-                        {propertyImages.gallery.slice(1, 4).map((img, i) => (
-                            <div
-                                key={i}
-                                className="w-16 h-16 rounded-xl border-2 border-black overflow-hidden relative shadow-2xl transition-transform hover:-translate-y-2"
+                {/* Sub-grid for categories */}
+                {selectedCategory === "all" ? (
+                    <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {propertyImages.categories.slice(1, 4).map((cat, i) => {
+                            const firstImgOfCat = propertyImages.gallery.find((img) => img.category === cat.id);
+                            return (
+                                <button
+                                    key={cat.id}
+                                    type="button"
+                                    aria-label={`Otvori kategoriju: ${cat.label}`}
+                                    className="deluxe-card aspect-video relative group cursor-pointer overflow-hidden w-full text-left"
+                                    onClick={() => {
+                                        if (firstImgOfCat) openLightbox(firstImgOfCat.src);
+                                    }}
+                                    disabled={!hasImages || !firstImgOfCat}
+                                >
+                                    {hasImages && (firstImgOfCat || propertyImages.gallery[i + 1]) ? (
+                                        <>
+                                            <Image
+                                                src={firstImgOfCat?.src || propertyImages.gallery[i + 1].src}
+                                                alt={cat.label}
+                                                fill
+                                                className="object-cover transition-transform duration-500 group-hover:scale-110"
+                                                sizes="(min-width: 768px) 33vw, 100vw"
+                                            />
+                                            <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors" />
+                                        </>
+                                    ) : (
+                                        <div className="absolute inset-0 bg-white/[0.02]" />
+                                    )}
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                        <span className="text-white font-black uppercase tracking-[0.2em] text-sm mb-1">{cat.label}</span>
+                                        <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest">
+                                            {propertyImages.gallery.filter((img) => img.category === cat.id).length} slika
+                                        </span>
+                                    </div>
+                                </button>
+                            );
+                        })}
+                    </div>
+                ) : (
+                    <div className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-4">
+                        {displayImages.slice(1, 9).map((img) => (
+                            <button
+                                key={img.src}
+                                type="button"
+                                aria-label={`Otvori fotografiju: ${img.alt}`}
+                                className="deluxe-card aspect-video relative group cursor-pointer overflow-hidden w-full text-left"
+                                onClick={() => openLightbox(img.src)}
+                                disabled={!hasImages}
                             >
                                 <Image
                                     src={img.src}
-                                    alt="preview"
-                                    fill
-                                    className="object-cover"
-                                    sizes="(min-width: 768px) 64px, 48px"
-                                />
-                            </div>
-                        ))}
-                        <div className="w-16 h-16 rounded-xl border-2 border-black bg-[var(--accent)] flex items-center justify-center text-white text-xs font-black shadow-2xl transition-transform hover:-translate-y-2">
-                            +{propertyImages.gallery.length - 4}
-                        </div>
-                    </div>
-                </button>
-
-                {/* Sub-grid for categories */}
-                <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {propertyImages.categories.slice(1, 4).map((cat, i) => {
-                        const firstImgOfCat = propertyImages.gallery.find(img => img.category === cat.id);
-                        return (
-                            <button
-                                key={cat.id}
-                                type="button"
-                                aria-label={`Otvori kategoriju: ${cat.label}`}
-                                className="deluxe-card aspect-video relative group cursor-pointer overflow-hidden w-full text-left"
-                                onClick={() => {
-                                    if (firstImgOfCat) openLightbox(firstImgOfCat.src);
-                                }}
-                            >
-                                <Image
-                                    src={firstImgOfCat?.src || propertyImages.gallery[i + 1].src}
-                                    alt={cat.label}
+                                    alt={img.alt}
                                     fill
                                     className="object-cover transition-transform duration-500 group-hover:scale-110"
-                                    sizes="(min-width: 768px) 33vw, 100vw"
+                                    sizes="(min-width: 768px) 25vw, 50vw"
                                 />
-                                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors" />
-                                <div className="absolute inset-0 flex flex-col items-center justify-center">
-                                    <span className="text-white font-black uppercase tracking-[0.2em] text-sm mb-1">{cat.label}</span>
-                                    <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest">
-                                        {propertyImages.gallery.filter(img => img.category === cat.id).length} slika
-                                    </span>
-                                </div>
+                                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors" />
                             </button>
-                        );
-                    })}
-                </div>
+                        ))}
+                    </div>
+                )}
             </div>
 
             {/* Lightbox */}

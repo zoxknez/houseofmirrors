@@ -200,6 +200,13 @@ export function Hero() {
                     {propertyData.tagline}
                 </p>
 
+                <div className="mb-8 md:mb-10 inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/5">
+                    <span className="text-[var(--gold)] text-[10px] md:text-xs font-black uppercase tracking-[0.2em]">4 zvezdice</span>
+                    <span className="text-white/60 text-[9px] md:text-[10px] font-black uppercase tracking-[0.2em]">
+                        Zvanična kategorizacija (maksimum po Ministarstvu turizma)
+                    </span>
+                </div>
+
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-5 md:gap-6 mb-12 md:mb-20 w-full sm:w-auto">
                     <a href="#booking" className="btn-primary w-full sm:w-auto !px-10 !py-4">
                         Rezerviši sada
