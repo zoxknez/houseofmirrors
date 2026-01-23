@@ -1,18 +1,38 @@
 export const propertyImages = {
     hero: [
         {
-            src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/living/IMG_20251124_133144.jpg",
-            alt: "Dnevna soba 1",
-            priority: true
-        },
-        {
-            src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/bedroom/IMG_20251124_132222.jpg",
-            alt: "Spavaća soba 1",
+            src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/living/IMG_20251127_115413.jpg",
+            alt: "Dnevna soba 7",
             priority: true
         },
         {
             src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/living/IMG_20251124_171135.jpg",
             alt: "Dnevna soba 3",
+            priority: true
+        },
+        {
+            src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/living/IMG_20251124_171209.jpg",
+            alt: "Dnevna soba 4",
+            priority: false
+        },
+        {
+            src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/living/IMG_20251124_201333.jpg",
+            alt: "Dnevna soba 6",
+            priority: false
+        },
+        {
+            src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/living/IMG_20251127_115827.jpg",
+            alt: "Dnevna soba 9",
+            priority: false
+        },
+        {
+            src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/bedroom/IMG_20251124_132222.jpg",
+            alt: "Spavaća soba 1",
+            priority: false
+        },
+        {
+            src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/bedroom/IMG_20251124_132744.jpg",
+            alt: "Spavaća soba 2",
             priority: false
         },
         {
@@ -21,13 +41,8 @@ export const propertyImages = {
             priority: false
         },
         {
-            src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/living/IMG_20251124_171209.jpg",
-            alt: "Dnevna soba 4",
-            priority: false
-        },
-        {
-            src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/bedroom/IMG_20251124_172557.jpg",
-            alt: "Spavaća soba 4",
+            src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/bedroom/IMG_20251124_172646.jpg",
+            alt: "Spavaća soba 7",
             priority: false
         }
     ],

@@ -8,7 +8,7 @@ import { propertyData } from "@/data/property";
 import { propertyImages } from "@/data/images";
 import { GlassCard } from "@/components/ui/GlassCard";
 
-const AUTOPLAY_MS = 5000;
+const AUTOPLAY_MS = 4000;
 
 export function Hero() {
     const images = propertyImages.hero;
@@ -106,7 +106,7 @@ export function Hero() {
                             fill
                             // priority only for the first hero image (LCP)
                             priority={currentSlide === 0}
-                            className="object-cover"
+                            className="object-cover md:object-contain"
                             sizes="100vw"
                         />
                     </motion.div>
