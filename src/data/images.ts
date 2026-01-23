@@ -1,18 +1,33 @@
 export const propertyImages = {
     hero: [
         {
-            src: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/786323726.jpg?k=f6be8686036d3ba5859a03b1e8c3df50c730fc9602670b6206d85c827efc5750&o=",
-            alt: "Dnevna soba sa masažnom foteljom",
+            src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/living/IMG_20251124_133144.jpg",
+            alt: "Dnevna soba 1",
             priority: true
         },
         {
-            src: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/786322119.jpg?k=635ff5c1eb476536f0419ac299feaeb978728129773609f95e0c08442e9e4191&o=",
-            alt: "Spavaća soba sa ogledalom na plafonu",
+            src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/bedroom/IMG_20251124_132222.jpg",
+            alt: "Spavaća soba 1",
             priority: true
         },
         {
-            src: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/786324262.jpg?k=d9710ebc972930d71e359dc47fc60763c53c6e3c6ca9d118f9ed23978b3e72b1&o=",
-            alt: "Entertainment sistem sa velikim TV-om",
+            src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/living/IMG_20251124_171135.jpg",
+            alt: "Dnevna soba 3",
+            priority: false
+        },
+        {
+            src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/bedroom/IMG_20251124_171807.jpg",
+            alt: "Spavaća soba 3",
+            priority: false
+        },
+        {
+            src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/living/IMG_20251124_171209.jpg",
+            alt: "Dnevna soba 4",
+            priority: false
+        },
+        {
+            src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/bedroom/IMG_20251124_172557.jpg",
+            alt: "Spavaća soba 4",
             priority: false
         }
     ],
