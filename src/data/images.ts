@@ -3,46 +3,55 @@ export const propertyImages = {
         {
             src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/living/IMG_20251127_115413.jpg",
             alt: "Dnevna soba 7",
+            position: "center 45%",
             priority: true
         },
         {
             src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/living/IMG_20251124_171135.jpg",
             alt: "Dnevna soba 3",
+            position: "center 45%",
             priority: true
         },
         {
             src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/living/IMG_20251124_171209.jpg",
             alt: "Dnevna soba 4",
+            position: "center 40%",
             priority: false
         },
         {
             src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/living/IMG_20251124_201333.jpg",
             alt: "Dnevna soba 6",
+            position: "center 50%",
             priority: false
         },
         {
             src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/living/IMG_20251127_115827.jpg",
             alt: "Dnevna soba 9",
+            position: "center 35%",
             priority: false
         },
         {
             src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/bedroom/IMG_20251124_132222.jpg",
             alt: "Spavaća soba 1",
+            position: "center 35%",
             priority: false
         },
         {
             src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/bedroom/IMG_20251124_132744.jpg",
             alt: "Spavaća soba 2",
+            position: "center 35%",
             priority: false
         },
         {
             src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/bedroom/IMG_20251124_171807.jpg",
             alt: "Spavaća soba 3",
+            position: "center 30%",
             priority: false
         },
         {
             src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/bedroom/IMG_20251124_172646.jpg",
             alt: "Spavaća soba 7",
+            position: "center 30%",
             priority: false
         }
     ],
