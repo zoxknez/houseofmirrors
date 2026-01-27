@@ -13,9 +13,9 @@ import {
     AlertCircle,
     type LucideIcon,
 } from "lucide-react";
-import { propertyData } from "@/data/property";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { GlassCard } from "@/components/ui/GlassCard";
+import { useLanguage } from "@/context/LanguageContext";
 
 type TimeRule = {
     id: "checkin" | "checkout" | "quiet";
@@ -97,7 +97,30 @@ function PolicyItem({ rule }: { rule: PolicyRule }) {
 }
 
 export function HouseRules() {
-    const { rules } = propertyData;
+    const { dict, language } = useLanguage();
+    const rules = dict.houseRules.rules;
+
+    // Helper for simple translations
+    // In a real app, these should be in dict. Using conditionals for now to save tool calls.
+    const t = {
+        allowed: language === "sr" ? "Dozvoljeno" : "Allowed",
+        notAllowed: language === "sr" ? "Zabranjeno" : "Not Allowed",
+        from: language === "sr" ? "od" : "from",
+        to: language === "sr" ? "do" : "to",
+        title: language === "sr" ? "Pravila" : "House",
+        titleSuffix: language === "sr" ? "Kuće" : "Rules",
+        checkIn: "Check-in",
+        checkOut: "Check-out",
+        quiet: language === "sr" ? "Noćni mir" : "Quiet Hours",
+        smoking: language === "sr" ? "Pušenje" : "Smoking",
+        pets: language === "sr" ? "Ljubimci" : "Pets",
+        parties: language === "sr" ? "Žurke" : "Parties",
+        children: language === "sr" ? "Deca" : "Children",
+        childrenOk: language === "sr" ? "Dobrodošla" : "Welcome",
+        childrenNo: language === "sr" ? "Nije prilagođeno" : "Not Suitable",
+        damage: language === "sr" ? "Gosti su odgovorni za eventualnu štetu na imovini ili opremi." : "Guests are responsible for any damage to property or equipment.",
+        respect: language === "sr" ? "Molimo vas da se odnosite prema apartmanu kao prema svom domu." : "Please treat the apartment as your own home."
+    };
 
     const items = useMemo<RuleItem[]>(() => {
         return [
@@ -105,61 +128,61 @@ export function HouseRules() {
                 id: "checkin",
                 kind: "time",
                 icon: LogIn,
-                label: "Check-in",
-                value: `od ${rules.checkIn}`,
+                label: t.checkIn,
+                value: `${t.from} ${rules.checkIn}`,
             },
             {
                 id: "checkout",
                 kind: "time",
                 icon: LogOut,
-                label: "Check-out",
-                value: `do ${rules.checkOut}`,
+                label: t.checkOut,
+                value: `${t.to} ${rules.checkOut}`,
             },
             {
                 id: "quiet",
                 kind: "time",
                 icon: Moon,
-                label: "Noćni mir",
-                value: `${rules.quietHours.start} – ${rules.quietHours.end}`,
+                label: t.quiet,
+                value: `${rules.quietHoursStart} – ${rules.quietHoursEnd}`,
             },
             {
                 id: "smoking",
                 kind: "policy",
                 icon: Cigarette,
-                label: "Pušenje",
+                label: t.smoking,
                 allowed: !!rules.smoking,
-                allowedText: "Dozvoljeno",
-                deniedText: "Nije dozvoljeno",
+                allowedText: t.allowed,
+                deniedText: t.notAllowed,
             },
             {
                 id: "pets",
                 kind: "policy",
                 icon: PawPrint,
-                label: "Ljubimci",
+                label: t.pets,
                 allowed: !!rules.pets,
-                allowedText: "Dozvoljeni",
-                deniedText: "Nisu dozvoljeni",
+                allowedText: t.allowed,
+                deniedText: t.notAllowed,
             },
             {
                 id: "parties",
                 kind: "policy",
                 icon: PartyPopper,
-                label: "Žurke",
+                label: t.parties,
                 allowed: !!rules.parties,
-                allowedText: "Dozvoljene",
-                deniedText: "Nisu dozvoljene",
+                allowedText: t.allowed,
+                deniedText: t.notAllowed,
             },
             {
                 id: "children",
                 kind: "policy",
                 icon: Baby,
-                label: "Deca",
+                label: t.children,
                 allowed: !!rules.children,
-                allowedText: "Dobrodošla",
-                deniedText: "Nije prilagođeno",
+                allowedText: t.childrenOk,
+                deniedText: t.childrenNo,
             },
         ];
-    }, [rules]);
+    }, [rules, t]);
 
     const timeRules = items.filter((x): x is TimeRule => x.kind === "time");
     const policyRules = items.filter((x): x is PolicyRule => x.kind === "policy");
@@ -173,13 +196,13 @@ export function HouseRules() {
 
             <div className="max-w-[1400px] mx-auto px-6 md:px-10 relative z-10">
                 <SectionHeader
-                    badge="Pravila"
+                    badge={dict.houseRules.title}
                     title={
                         <>
-                            Pravila <span className="text-[var(--gold)]">Kuće</span>
+                            {t.title} <span className="text-[var(--gold)]">{t.titleSuffix}</span>
                         </>
                     }
-                    subtitle="Molimo vas da poštujete pravila kako bi boravak bio prijatan za sve."
+                    subtitle={dict.houseRules.subtitle}
                 />
 
                 <motion.div
@@ -211,9 +234,9 @@ export function HouseRules() {
                             </div>
 
                             <p className="text-xs md:text-sm text-white/80 leading-relaxed max-w-2xl font-bold tracking-wide">
-                                Gosti su odgovorni za eventualnu štetu na imovini ili opremi.
+                                {t.damage}
                                 <span className="block mt-2 text-white font-black uppercase tracking-tight">
-                                    Molimo vas da se odnosite prema apartmanu kao prema svom domu.
+                                    {t.respect}
                                 </span>
                             </p>
                         </div>

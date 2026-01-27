@@ -4,13 +4,14 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Maximize, Users, Bed, Bath } from "lucide-react";
-import { propertyData } from "@/data/property";
 import { propertyImages } from "@/data/images";
 import { GlassCard } from "@/components/ui/GlassCard";
+import { useLanguage } from "@/context/LanguageContext";
 
 const AUTOPLAY_MS = 4000;
 
 export function Hero() {
+    const { dict } = useLanguage();
     const images = propertyImages.hero;
     const count = images.length;
     const reduceMotion = useReducedMotion();
@@ -75,12 +76,12 @@ export function Hero() {
 
     const stats = useMemo(
         () => [
-            { label: "Kvadratura", val: propertyData.details.size, icon: Maximize },
-            { label: "Gostiju", val: propertyData.details.maxGuests, icon: Users },
-            { label: "Spavaće", val: propertyData.details.bedrooms, icon: Bed },
-            { label: "Kupatila", val: propertyData.details.bathrooms, icon: Bath },
+            { label: dict.hero.stats.size, val: dict.property.details.size, icon: Maximize },
+            { label: dict.hero.stats.guests, val: dict.property.details.maxGuests, icon: Users },
+            { label: dict.hero.stats.bedrooms, val: dict.property.details.bedrooms, icon: Bed },
+            { label: dict.hero.stats.bathrooms, val: dict.property.details.bathrooms, icon: Bath },
         ],
-        []
+        [dict]
     );
 
     return (
@@ -142,7 +143,7 @@ export function Hero() {
                     prevSlide();
                 }}
                 className="hidden md:inline-flex absolute left-8 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all"
-                aria-label="Prethodna slika"
+                aria-label="Previous slide"
             >
                 <ChevronLeft className="w-6 h-6 text-white" />
             </button>
@@ -153,7 +154,7 @@ export function Hero() {
                     nextSlide();
                 }}
                 className="hidden md:inline-flex absolute right-8 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all"
-                aria-label="Sledeća slika"
+                aria-label="Next slide"
             >
                 <ChevronRight className="w-6 h-6 text-white" />
             </button>
@@ -174,7 +175,7 @@ export function Hero() {
                                 ? "w-12 bg-[var(--gold)] shadow-[0_0_10px_rgba(212,175,55,0.4)]"
                                 : "w-2 bg-white/20 hover:bg-white/40"
                                 }`}
-                            aria-label={`Slika ${index + 1}`}
+                            aria-label={`Slide ${index + 1}`}
                             aria-current={active ? "true" : undefined}
                         />
                     );
@@ -187,34 +188,34 @@ export function Hero() {
                 <div className="mb-8 md:mb-12 inline-flex items-center gap-4">
                     <div className="w-8 md:w-16 h-px bg-gradient-to-r from-transparent to-[var(--gold)]/50" />
                     <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-[var(--gold)]">
-                        Experience Luxury
+                        {dict.hero.experienceLuxury}
                     </span>
                     <div className="w-8 md:w-16 h-px bg-gradient-to-l from-transparent to-[var(--gold)]/50" />
                 </div>
 
                 <h1 className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter leading-[0.85] text-white mb-6 md:mb-10">
-                    {propertyData.name}
+                    {dict.property.name}
                 </h1>
 
                 <p className="text-[11px] sm:text-xs md:text-sm font-bold uppercase tracking-[0.2em] text-white/40 mb-10 md:mb-14 max-w-md md:max-w-2xl mx-auto leading-relaxed">
-                    {propertyData.tagline}
+                    {dict.property.tagline}
                 </p>
 
                 <div className="mb-8 md:mb-10 inline-flex items-center gap-3 px-4 sm:px-6 py-3 rounded-full border border-[var(--gold)]/40 bg-[var(--gold)]/15 shadow-[0_0_30px_rgba(212,175,55,0.25)] backdrop-blur">
                     <span className="px-3 py-1 rounded-full bg-[var(--gold)] text-black text-[11px] md:text-sm font-black uppercase tracking-[0.25em] shadow-[0_0_20px_rgba(212,175,55,0.35)]">
-                        4 zvezdice
+                        {dict.hero.officialRating}
                     </span>
                     <span className="text-white text-[10px] md:text-xs font-black uppercase tracking-[0.2em]">
-                        Zvanična kategorizacija (maksimalna ocena po rešenju Ministarstva turizma)
+                        {dict.hero.officialRatingDesc}
                     </span>
                 </div>
 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-5 md:gap-6 mb-12 md:mb-20 w-full sm:w-auto">
                     <a href="#booking" className="btn-primary w-full sm:w-auto !px-10 !py-4">
-                        Rezerviši sada
+                        {dict.hero.bookNow}
                     </a>
                     <a href="#gallery" className="btn-ghost w-full sm:w-auto !px-10 !py-4">
-                        Istraži prostor
+                        {dict.hero.explore}
                     </a>
                 </div>
 

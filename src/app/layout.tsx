@@ -3,6 +3,7 @@ import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/sections/Navbar";
 import { Footer } from "@/components/sections/Footer";
+import { LanguageProvider } from "@/context/LanguageContext";
 
 const inter = Inter({
   subsets: ["latin", "latin-ext"],
@@ -17,38 +18,38 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: "House of Mirrors | Luksuzni apartman u Beogradu",
+  title: "House of Mirrors | Luxury Apartment Belgrade",
   description:
-    "Jedinstveni luksuzni apartman sa ogledalima u srcu Beograda. Profesionalna masažna fotelja, 5.1 Hi-Fi sistem, Netflix i HBO Max. Rezervišite direktno za najbolje cene.",
+    "Unique luxury apartment with mirrors in the heart of Belgrade. Professional massage chair, 5.1 Hi-Fi system, Netflix & HBO Max. Book directly for best rates.",
   keywords: [
-    "apartman beograd",
-    "luksuzni smestaj beograd",
-    "kratkoročno iznajmljivanje",
+    "apartment belgrade",
+    "luxury accommodation belgrade",
+    "short term rental",
     "house of mirrors",
-    "stan na dan beograd",
-    "airbnb beograd"
+    "vacation rental belgrade",
+    "airbnb belgrade"
   ],
   authors: [{ name: "House of Mirrors" }],
   openGraph: {
-    title: "House of Mirrors | Luksuzni apartman u Beogradu",
+    title: "House of Mirrors | Luxury Apartment Belgrade",
     description:
-      "Jedinstveni luksuzni apartman sa ogledalima u srcu Beograda. Profesionalna masažna fotelja, 5.1 Hi-Fi sistem, Netflix i HBO Max.",
+      "Unique luxury apartment with mirrors in the heart of Belgrade. Professional massage chair, 5.1 Hi-Fi system, Netflix & HBO Max. Book directly for best rates.",
     type: "website",
-    locale: "sr_RS",
+    locale: "en_US",
     images: [
       {
         url: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/786323726.jpg",
         width: 1024,
         height: 768,
-        alt: "House of Mirrors - Dnevna soba"
+        alt: "House of Mirrors - Living Room"
       }
     ]
   },
   twitter: {
     card: "summary_large_image",
-    title: "House of Mirrors | Luksuzni apartman u Beogradu",
+    title: "House of Mirrors | Luxury Apartment Belgrade",
     description:
-      "Jedinstveni luksuzni apartman sa ogledalima u srcu Beograda."
+      "Unique luxury apartment with mirrors in the heart of Belgrade."
   },
   robots: {
     index: true,
@@ -68,13 +69,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="sr" className="scroll-smooth" suppressHydrationWarning>
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <body
         className={`${inter.variable} ${outfit.variable} antialiased min-h-screen`}
       >
-        <Navbar />
-        {children}
-        <Footer />
+        <LanguageProvider>
+          <Navbar />
+          {children}
+          <Footer />
+        </LanguageProvider>
       </body>
     </html>
   );

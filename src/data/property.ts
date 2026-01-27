@@ -8,9 +8,9 @@ Ovaj moderni apartman od 40m² nudi savršenu kombinaciju opuštanja i high-tech
 Uživajte u profesionalnoj masažnoj fotelji, vrhunskom 5.1 Hi-Fi sistemu i 65" TV-u sa Netflix i HBO Max pristupom. Za dodatnu relaksaciju, na raspolaganju vam je i profesionalni sto za masažu.
 
 Apartman se nalazi u mirnom i bezbednom kraju Neimar, samo 10 minuta od centra grada i 18 minuta hoda od Hrama Svetog Save.`,
-  
+
   shortDescription: "Luksuzno renoviran apartman sa jedinstvenim dizajnom ogledala, profesionalnom masažnom foteljom i premium Hi-Fi sistemom.",
-  
+
   location: {
     address: "Ustanička 10, Apt 15",
     city: "Beograd",
@@ -121,6 +121,8 @@ Apartman se nalazi u mirnom i bezbednom kraju Neimar, samo 10 minuta od centra g
 
   host: {
     name: "Ljubo",
+    phone: "+381 60 777 777",
+    email: "hello@houseofmirrors.rs",
     responseRate: "100%",
     responseTime: "u roku od sat vremena"
   },

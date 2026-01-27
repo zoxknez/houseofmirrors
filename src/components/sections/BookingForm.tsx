@@ -1,25 +1,14 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { motion } from "framer-motion";
 import { format } from "date-fns";
-import { srLatn } from "date-fns/locale";
-import {
-    X,
-    User,
-    Mail,
-    Phone,
-    MessageSquare,
-    Calendar,
-    Users,
-    CreditCard,
-    Loader2,
-    CheckCircle,
-    AlertCircle,
-} from "lucide-react";
+import { srLatn, enUS } from "date-fns/locale";
+import { motion, AnimatePresence } from "framer-motion";
+import { X, Calendar, Users, CreditCard, Loader2, CheckCircle, AlertCircle, User, Mail, Phone, MessageSquare } from "lucide-react";
 import { ModalShell } from "@/components/ui/ModalShell";
 import { FormField } from "@/components/ui/FormField";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface BookingFormProps {
     checkIn: Date;
@@ -31,8 +20,7 @@ interface BookingFormProps {
 }
 
 interface FormData {
-    firstName: string;
-    lastName: string;
+    name: string;
     email: string;
     phone: string;
     message: string;
@@ -42,34 +30,53 @@ function makeRefCode() {
     return `HOM-${Math.random().toString(36).slice(2, 8).toUpperCase()}`;
 }
 
-export function BookingForm({
-    checkIn,
-    checkOut,
-    guests,
-    totalPrice,
-    onClose,
-    onSuccess,
-}: BookingFormProps) {
+export function BookingForm({ checkIn, checkOut, guests, totalPrice, onClose, onSuccess }: BookingFormProps) {
+    const { dict, language } = useLanguage();
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [success, setSuccess] = useState(false);
+
+    // Form state
     const [formData, setFormData] = useState<FormData>({
-        firstName: "",
-        lastName: "",
+        name: "",
         email: "",
         phone: "",
         message: "",
     });
-    const [loading, setLoading] = useState(false);
-    const [success, setSuccess] = useState(false);
-    const [error, setError] = useState<string | null>(null);
 
     const abortRef = useRef<AbortController | null>(null);
     const timeoutRef = useRef<number | null>(null);
 
-    // generate once per modal open
     const refCode = useMemo(() => makeRefCode(), []);
+    const dateLocale = language === "sr" ? srLatn : enUS;
+
+    // Localized strings
+    const t = {
+        title: language === "sr" ? "Rezervacija" : "Reservation",
+        subtitle: language === "sr" ? "Potvrda" : "Confirmation",
+        checkIn: language === "sr" ? "Dolazak" : "Check-in",
+        checkOut: language === "sr" ? "Odlazak" : "Check-out",
+        guests: language === "sr" ? "Gosti" : "Guests",
+        guestsLabel: language === "sr" ? "Gost" : "Guest",
+        guestsPlural: language === "sr" ? "Gosta" : "Guests",
+        total: dict.booking.total,
+        name: dict.contact.name,
+        email: dict.contact.email,
+        phone: dict.contact.phone,
+        notes: language === "sr" ? "Posebni zahtevi (opciono)" : "Special requests (optional)",
+        send: language === "sr" ? "Potvrdi rezervaciju" : "Confirm reservation",
+        sending: dict.contact.sending,
+        successTitle: language === "sr" ? "Zahtev poslat" : "Request sent",
+        successMessage: language === "sr" ? "Primili smo vaš zahtev. Kontaktiraćemo vas uskoro na" : "We received your request. We will contact you soon at",
+        refCode: language === "sr" ? "Referentni broj" : "Reference number",
+        error: dict.contact.error,
+        close: language === "sr" ? "Zatvori" : "Close",
+        payment: language === "sr" ? "Za uplatu" : "Total due",
+        confirmationNote: language === "sr" ? "Primićete email potvrdu sa detaljima za uplatu. Rezervacija je finalna nakon potvrde uplate." : "You will receive an email confirmation with payment details. Reservation is final after payment confirmation."
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
+        setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
     const cleanup = () => {
@@ -85,8 +92,6 @@ export function BookingForm({
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (loading) return;
-
         setLoading(true);
         setError(null);
 
@@ -98,10 +103,11 @@ export function BookingForm({
         try {
             const payload = {
                 ...formData,
-                firstName: formData.firstName.trim(),
-                lastName: formData.lastName.trim(),
+                firstName: formData.name.split(" ")[0] || formData.name, // quick hack if backend expects separate fields, otherwise send full name
+                lastName: formData.name.split(" ").slice(1).join(" ") || "",
+                name: formData.name.trim(), // Send as name as well if API supports it
                 email: formData.email.trim(),
-                phone: formData.phone.replace(/\s+/g, "").trim(),
+                phone: formData.phone.trim(),
                 message: formData.message.trim(),
                 checkIn: format(checkIn, 'yyyy-MM-dd'),
                 checkOut: format(checkOut, 'yyyy-MM-dd'),
@@ -117,25 +123,18 @@ export function BookingForm({
                 signal: controller.signal,
             });
 
-            let data: any = null;
-            try {
-                data = await res.json();
-            } catch {
-                // ignore if response has no json
-            }
-
             if (!res.ok) {
-                throw new Error(data?.error || "Došlo je do greške");
+                const data = await res.json();
+                throw new Error(data.error || t.error);
             }
 
             setSuccess(true);
-
             timeoutRef.current = window.setTimeout(() => {
                 onSuccess();
-            }, 2500);
-        } catch (err) {
-            if ((err as any)?.name === "AbortError") return;
-            setError(err instanceof Error ? err.message : "Došlo je do greške");
+            }, 3000);
+        } catch (err: any) {
+            if (err?.name === "AbortError") return;
+            setError(err.message || t.error);
         } finally {
             setLoading(false);
         }
@@ -147,10 +146,10 @@ export function BookingForm({
             <div className="sticky top-0 z-10 flex items-center justify-between p-6 md:p-8 border-b border-white/5 bg-[#050505]/80 backdrop-blur-md">
                 <div>
                     <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-[var(--gold)] mb-1">
-                        Rezervacija
+                        {t.title}
                     </h3>
                     <h4 className="text-2xl md:text-3xl font-black text-white uppercase tracking-tighter">
-                        POTVRDA
+                        {t.subtitle}
                     </h4>
                 </div>
 
@@ -158,7 +157,7 @@ export function BookingForm({
                     type="button"
                     onClick={() => { cleanup(); onClose(); }}
                     className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-white/5 transition-all duration-300 group"
-                    aria-label="Zatvori"
+                    aria-label={t.close}
                     disabled={loading}
                 >
                     <X className="w-5 h-5 text-white/40 group-hover:text-white transition-colors" />
@@ -176,17 +175,17 @@ export function BookingForm({
                     </motion.div>
 
                     <h4 className="text-xl md:text-2xl font-black text-white uppercase tracking-tighter mb-3">
-                        Zahtev poslat
+                        {t.successTitle}
                     </h4>
 
                     <p className="text-white/40 mb-8 leading-relaxed font-medium text-sm">
-                        Primili smo vaš zahtev. Kontaktiraćemo vas uskoro na{" "}
-                        <span className="text-white">{formData.email}</span> radi potvrde.
+                        {t.successMessage}{" "}
+                        <span className="text-white">{formData.email}</span>.
                     </p>
 
                     <div className="bg-white/[0.03] border border-white/5 p-5 rounded-[20px] max-w-sm mx-auto">
                         <div className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 mb-2">
-                            Referentni broj
+                            {t.refCode}
                         </div>
                         <div className="text-xl font-black text-[var(--gold)] tracking-widest uppercase">
                             {refCode}
@@ -203,9 +202,9 @@ export function BookingForm({
                                     <Calendar className="w-4 h-4 text-[var(--gold)]" />
                                 </div>
                                 <div>
-                                    <p className="text-[10px] font-black text-white/30 uppercase tracking-widest">Dolazak</p>
+                                    <p className="text-[10px] font-black text-white/30 uppercase tracking-widest">{t.checkIn}</p>
                                     <p className="text-white font-black uppercase tracking-tight">
-                                        {format(checkIn, "d. MMM yyyy", { locale: srLatn })}
+                                        {format(checkIn, "d. MMM yyyy", { locale: dateLocale })}
                                     </p>
                                 </div>
                             </div>
@@ -215,9 +214,9 @@ export function BookingForm({
                                     <Calendar className="w-4 h-4 text-[var(--gold)]" />
                                 </div>
                                 <div>
-                                    <p className="text-[10px] font-black text-white/30 uppercase tracking-widest">Odlazak</p>
+                                    <p className="text-[10px] font-black text-white/30 uppercase tracking-widest">{t.checkOut}</p>
                                     <p className="text-white font-black uppercase tracking-tight">
-                                        {format(checkOut, "d. MMM yyyy", { locale: srLatn })}
+                                        {format(checkOut, "d. MMM yyyy", { locale: dateLocale })}
                                     </p>
                                 </div>
                             </div>
@@ -227,16 +226,16 @@ export function BookingForm({
                                     <Users className="w-4 h-4 text-[var(--gold)]" />
                                 </div>
                                 <div>
-                                    <p className="text-[10px] font-black text-white/30 uppercase tracking-widest">Gosti</p>
+                                    <p className="text-[10px] font-black text-white/30 uppercase tracking-widest">{t.guests}</p>
                                     <p className="text-white font-black uppercase tracking-tight">
-                                        {guests} {guests === 1 ? "Gost" : "Gosta"}
+                                        {guests} {guests === 1 ? t.guestsLabel : t.guestsPlural}
                                     </p>
                                 </div>
                             </div>
                         </div>
 
                         <div className="mt-6 pt-6 border-t border-white/5 flex justify-between items-end">
-                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">Za uplatu</span>
+                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">{t.payment}</span>
                             <span className="text-2xl md:text-3xl font-black text-[var(--gold)] tracking-tighter">€{totalPrice}</span>
                         </div>
                     </div>
@@ -256,62 +255,51 @@ export function BookingForm({
 
                         <div className="grid sm:grid-cols-2 gap-5">
                             <FormField
-                                label="Ime"
+                                label={t.name}
                                 required
                                 icon={User}
-                                name="firstName"
-                                value={formData.firstName}
+                                name="name"
+                                value={formData.name}
                                 onChange={handleChange}
-                                placeholder="Petar"
-                                autoComplete="given-name"
+                                placeholder="Petar Petrović"
+                                autoComplete="name"
                             />
                             <FormField
-                                label="Prezime"
+                                label={t.phone}
                                 required
-                                icon={User}
-                                name="lastName"
-                                value={formData.lastName}
+                                icon={Phone}
+                                type="tel"
+                                name="phone"
+                                value={formData.phone}
                                 onChange={handleChange}
-                                placeholder="Petrović"
-                                autoComplete="family-name"
+                                placeholder="+381..."
+                                autoComplete="tel"
+                                inputMode="tel"
                             />
                         </div>
 
                         <FormField
-                            label="Email adresa"
+                            label={t.email}
                             required
                             icon={Mail}
                             type="email"
                             name="email"
                             value={formData.email}
                             onChange={handleChange}
-                            placeholder="petar@email.com"
+                            placeholder="email@example.com"
                             autoComplete="email"
                             inputMode="email"
                         />
 
                         <FormField
-                            label="Telefon"
-                            required
-                            icon={Phone}
-                            type="tel"
-                            name="phone"
-                            value={formData.phone}
-                            onChange={handleChange}
-                            placeholder="+381601234567"
-                            autoComplete="tel"
-                            inputMode="tel"
-                        />
-
-                        <FormField
                             as="textarea"
-                            label="Posebni zahtevi (opciono)"
+                            label={t.notes}
                             icon={MessageSquare}
                             name="message"
                             value={formData.message}
                             onChange={handleChange}
                             rows={3}
-                            placeholder="Npr. kasni dolazak, bebi krevetac..."
+                            placeholder="..."
                         />
 
                         <div className="pt-3">
@@ -319,20 +307,19 @@ export function BookingForm({
                                 {loading ? (
                                     <>
                                         <Loader2 className="w-5 h-5 animate-spin" />
-                                        Šaljem zahtev...
+                                        {t.sending}
                                     </>
                                 ) : (
                                     <>
                                         <CreditCard className="w-5 h-5" />
-                                        Potvrdi rezervaciju
+                                        {t.send}
                                     </>
                                 )}
                             </PrimaryButton>
                         </div>
 
                         <p className="text-center text-[10px] font-black uppercase tracking-widest text-white/20">
-                            Primićete email potvrdu sa detaljima za uplatu.
-                            <span className="block mt-1">Rezervacija je finalna nakon potvrde uplate.</span>
+                            {t.confirmationNote}
                         </p>
                     </form>
                 </>

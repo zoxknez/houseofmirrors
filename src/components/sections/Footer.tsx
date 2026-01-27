@@ -1,128 +1,160 @@
 "use client";
 
-import Link from "next/link";
-import { Heart, ExternalLink } from "lucide-react";
+import { motion } from "framer-motion";
+import { Facebook, Instagram, Twitter, MapPin, Phone, Mail, ArrowUp } from "lucide-react";
 import { propertyData } from "@/data/property";
-
-const footerLinks = {
-    navigation: [
-        { label: "Početna", href: "/" },
-        { label: "Galerija", href: "#gallery" },
-        { label: "Pogodnosti", href: "#amenities" },
-        { label: "Lokacija", href: "#location" },
-        { label: "Kontakt", href: "#contact" },
-    ],
-    external: [
-        { label: "Booking.com", href: "https://www.booking.com/hotel/rs/house-of-mirrors-beograd.hr.html" },
-        { label: "Airbnb", href: "https://www.airbnb.com/rooms/1562587044814690888" },
-    ],
-};
+import { useLanguage } from "@/context/LanguageContext";
 
 export function Footer() {
-    const year = new Date().getFullYear();
+    const { dict, language } = useLanguage();
+    const currentYear = new Date().getFullYear();
+
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    const t = {
+        navigation: language === "sr" ? "Navigacija" : "Navigation",
+        home: language === "sr" ? "Početna" : "Home",
+        gallery: dict.gallery.title,
+        location: dict.location.title,
+        rules: dict.houseRules.title,
+        contact: dict.contact.title,
+        design: language === "sr" ? "Dizajn i razvoj" : "Design & Development",
+        rights: dict.footer.rights,
+        privacy: dict.footer.privacy,
+        terms: dict.footer.terms,
+    };
+
+    const navLinks = [
+        { label: t.home, href: "#hero" },
+        { label: t.gallery, href: "#gallery" },
+        { label: t.location, href: "#location" },
+        { label: t.rules, href: "#rules" },
+        { label: t.contact, href: "#contact" },
+    ];
 
     return (
-        <footer className="bg-black border-t border-white/5 py-20">
+        <footer className="relative bg-[#050505] pt-20 pb-10 overflow-hidden border-t border-white/5">
+            <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[var(--gold)]/20 to-transparent" />
+
             <div className="max-w-[1400px] mx-auto px-6 md:px-10">
-            <div className="grid md:grid-cols-12 gap-12 md:gap-16">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-20 mb-16">
                     {/* Brand */}
-                    <div className="md:col-span-6">
-                        <h3 className="text-xl md:text-2xl font-black text-white uppercase tracking-[0.28em] mb-8">
-                            {propertyData.name}
-                        </h3>
-
-                        <p className="text-white/40 text-xs md:text-sm mb-8 max-w-md leading-relaxed font-bold uppercase tracking-tight">
-                            {propertyData.shortDescription}
-                        </p>
-
-                        <div className="space-y-2 mb-8">
-                            <p className="text-[var(--gold)] text-[10px] font-black uppercase tracking-widest">Lokacija</p>
-                            <p className="text-white font-black uppercase tracking-tight text-xs md:text-sm">
-                                {propertyData.location.address}
-                                <br />
-                                <span className="text-white/40">
-                                    {propertyData.location.postalCode} {propertyData.location.city}
-                                </span>
+                    <div className="space-y-6">
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            className="flex flex-col gap-4"
+                        >
+                            <h2 className="text-2xl font-black uppercase tracking-tighter text-white">
+                                House of <span className="text-[var(--gold)]">Mirrors</span>
+                            </h2>
+                            <p className="text-white/60 text-sm leading-relaxed">
+                                {dict.property.shortDescription}
                             </p>
-                        </div>
+                        </motion.div>
 
-                        {/* small CTA */}
-                        <div className="flex flex-wrap gap-4">
-                            <a
-                                href="#booking"
-                                className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 hover:text-white transition-colors"
-                            >
-                                Rezerviši
-                            </a>
-                            <span className="text-white/10">•</span>
-                            <a
-                                href="#contact"
-                                className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 hover:text-white transition-colors"
-                            >
-                                Postavi pitanje
-                            </a>
+                        <div className="flex gap-4">
+                            {[Instagram, Facebook, Twitter].map((Icon, i) => (
+                                <a
+                                    key={i}
+                                    href="#"
+                                    className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/60 hover:bg-[var(--gold)] hover:text-black transition-all duration-300"
+                                >
+                                    <Icon className="w-4 h-4" />
+                                </a>
+                            ))}
                         </div>
                     </div>
 
                     {/* Navigation */}
-                    <div className="md:col-span-3">
-                        <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-[var(--gold)] mb-8">Navigacija</h4>
-                        <ul className="space-y-5">
-                            {footerLinks.navigation.map((link) => (
-                                <li key={link.href}>
-                                    {link.href === "/" ? (
-                                        <Link
-                                            href="/"
-                                            className="text-white/40 hover:text-white transition-all duration-300 text-xs font-black uppercase tracking-widest"
-                                        >
-                                            {link.label}
-                                        </Link>
-                                    ) : (
-                                        <a
-                                            href={link.href}
-                                            className="text-white/40 hover:text-white transition-all duration-300 text-xs font-black uppercase tracking-widest"
-                                        >
-                                            {link.label}
-                                        </a>
-                                    )}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    {/* External Links */}
-                    <div className="md:col-span-3">
-                        <h4 className="text-[10px] font-black uppercase tracking-[0.4em] text-[var(--gold)] mb-8">Pronađite nas</h4>
-                        <ul className="space-y-5">
-                            {footerLinks.external.map((link) => (
-                                <li key={link.href}>
+                    <div>
+                        <h3 className="text-sm font-black uppercase tracking-widest text-white mb-6">
+                            {t.navigation}
+                        </h3>
+                        <ul className="space-y-4">
+                            {navLinks.map((link, i) => (
+                                <li key={i}>
                                     <a
                                         href={link.href}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        aria-label={`${link.label} (otvara se u novom tabu)`}
-                                        className="text-white/40 hover:text-white transition-all duration-300 text-xs font-black uppercase tracking-widest inline-flex items-center gap-2 group"
+                                        className="text-sm text-white/60 hover:text-[var(--gold)] transition-colors uppercase tracking-wider font-medium"
                                     >
                                         {link.label}
-                                        <ExternalLink className="w-3 h-3 group-hover:text-[var(--gold)] transition-colors" />
                                     </a>
                                 </li>
                             ))}
                         </ul>
                     </div>
+
+                    {/* Contact */}
+                    <div>
+                        <h3 className="text-sm font-black uppercase tracking-widest text-white mb-6">
+                            {dict.contact.title}
+                        </h3>
+                        <ul className="space-y-6">
+                            <li className="flex items-start gap-4">
+                                <MapPin className="w-5 h-5 text-[var(--gold)] shrink-0 mt-0.5" />
+                                <span className="text-sm text-white/60 leading-relaxed">
+                                    {propertyData.location.address},<br />
+                                    {propertyData.location.city}
+                                </span>
+                            </li>
+                            <li className="flex items-center gap-4">
+                                <Phone className="w-5 h-5 text-[var(--gold)] shrink-0" />
+                                <a href={`tel:${propertyData.host.phone}`} className="text-sm text-white/60 hover:text-[var(--gold)] transition-colors">
+                                    {propertyData.host.phone}
+                                </a>
+                            </li>
+                            <li className="flex items-center gap-4">
+                                <Mail className="w-5 h-5 text-[var(--gold)] shrink-0" />
+                                <a href={`mailto:${propertyData.host.email}`} className="text-sm text-white/60 hover:text-[var(--gold)] transition-colors break-all">
+                                    {propertyData.host.email}
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {/* CTA */}
+                    <div className="flex flex-col justify-between">
+                        <div className="bg-[var(--gold)]/10 p-6 rounded-[24px] border border-[var(--gold)]/20 text-center">
+                            <h3 className="text-white font-black uppercase tracking-widest mb-4 text-sm">
+                                {dict.hero.bookNow}
+                            </h3>
+                            <p className="text-[var(--gold)] text-xs mb-6 uppercase tracking-wide opacity-80">
+                                {dict.booking.subtitle}
+                            </p>
+                            <a
+                                href="#booking"
+                                className="inline-flex items-center justify-center w-full h-12 bg-[var(--gold)] text-black font-black uppercase tracking-widest text-xs rounded-xl hover:bg-white transition-colors"
+                            >
+                                {dict.hero.bookNow}
+                            </a>
+                        </div>
+                    </div>
                 </div>
 
-                {/* Bottom Bar */}
-                <div className="mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-                    <p className="text-white/20 text-[10px] font-black uppercase tracking-[0.2em]">
-                        © {year} {propertyData.name}. Sva prava zadržana.
+                <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
+                    <p className="text-xs text-white/40 font-medium uppercase tracking-wider text-center md:text-left">
+                        © {currentYear} House of Mirrors. {t.rights}
                     </p>
 
-                    <p className="text-white/40 text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-2">
-                        Napravljeno sa{" "}
-                        <Heart className="w-4 h-4 text-[var(--gold)] fill-[var(--gold)] motion-reduce:animate-none animate-pulse" />{" "}
-                        u Beogradu
-                    </p>
+                    <div className="flex flex-wrap justify-center gap-6 md:gap-8">
+                        <a href="#" className="text-xs text-white/40 hover:text-white transition-colors uppercase tracking-wider">
+                            {t.privacy}
+                        </a>
+                        <a href="#" className="text-xs text-white/40 hover:text-white transition-colors uppercase tracking-wider">
+                            {t.terms}
+                        </a>
+                    </div>
+
+                    <button
+                        onClick={scrollToTop}
+                        className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/40 hover:bg-[var(--gold)] hover:text-black transition-all"
+                    >
+                        <ArrowUp className="w-4 h-4" />
+                    </button>
                 </div>
             </div>
         </footer>

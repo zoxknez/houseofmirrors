@@ -2,10 +2,10 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { propertyData } from "@/data/property";
 import { Sparkles, Heart, Music, Car, type LucideIcon } from "lucide-react";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { GlassCard } from "@/components/ui/GlassCard";
+import { useLanguage } from "@/context/LanguageContext";
 
 const iconMap = {
     Sparkles,
@@ -15,6 +15,8 @@ const iconMap = {
 } satisfies Record<string, LucideIcon>;
 
 export function Highlights() {
+    const { dict } = useLanguage();
+
     return (
         <section id="highlights" className="relative py-20 md:py-32 bg-black overflow-hidden">
             {/* Background Glow */}
@@ -25,17 +27,17 @@ export function Highlights() {
 
             <div className="max-w-[1400px] mx-auto px-6 md:px-10 relative z-10">
                 <SectionHeader
-                    badge="Ekskluzivno"
+                    badge={dict.hero.experienceLuxury}
                     title={
                         <>
-                            Premium <span className="text-[var(--gold)]">Oprema</span>
+                            {dict.highlights.title}
                         </>
                     }
-                    subtitle="Istaknute pogodnosti koje prave razliku tokom boravka."
+                    subtitle={dict.amenities.subtitle}
                 />
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 max-w-6xl mx-auto auto-rows-fr">
-                    {propertyData.highlights.map((highlight, index) => {
+                    {dict.highlights.items.map((highlight, index) => {
                         const Icon = iconMap[highlight.icon as keyof typeof iconMap] || Sparkles;
 
                         return (

@@ -19,6 +19,7 @@ import { GlassCard } from "@/components/ui/GlassCard";
 import { FormField } from "@/components/ui/FormField";
 import { PrimaryButton } from "@/components/ui/PrimaryButton";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { useLanguage } from "@/context/LanguageContext";
 
 type ContactFormData = {
     name: string;
@@ -28,6 +29,7 @@ type ContactFormData = {
 };
 
 export function Contact() {
+    const { dict, language } = useLanguage();
     const isDesktop = useMediaQuery("(min-width: 1024px)");
     const [formData, setFormData] = useState<ContactFormData>({
         name: "",
@@ -52,6 +54,25 @@ export function Contact() {
     };
 
     useEffect(() => cleanup, []);
+
+    // Simple translations
+    const t = {
+        details: language === "sr" ? "Detalji" : "Details",
+        location: dict.location.title,
+        call: language === "sr" ? "Pozovite nas" : "Call us",
+        email: "Email",
+        host: "Premium Host",
+        responds: (time: string, rate: string) => language === "sr" ? `Odgovaramo ${time} sa ${rate} preciznosti.` : `Responds in ${time} with ${rate} precision.`,
+        sendMessage: language === "sr" ? "Pošaljite poruku" : "Send a message",
+        subject: language === "sr" ? "Tema" : "Subject",
+        contactTitle: language === "sr" ? "Budimo u" : "Get in",
+        contactSuffix: language === "sr" ? "kontaktu" : "Contact",
+        namePlaceholder: "Petar Petrović",
+        emailPlaceholder: "petar@email.com",
+        subjectPlaceholder: language === "sr" ? "Upit za rezervaciju" : "Reservation inquiry",
+        messagePlaceholder: language === "sr" ? "Napišite vašu poruku..." : "Write your message...",
+        messageError: language === "sr" ? "Molimo popunite sva obavezna polja." : "Please fill in all required fields."
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -85,7 +106,7 @@ export function Contact() {
 
             // Basic sanity (HTML required already exists, this is just extra)
             if (!payload.name || !payload.email || !payload.subject || !payload.message) {
-                throw new Error("Molimo popunite sva obavezna polja.");
+                throw new Error(t.messageError);
             }
 
             const res = await fetch("/api/contact", {
@@ -103,7 +124,7 @@ export function Contact() {
             }
 
             if (!res.ok) {
-                throw new Error(data?.error || "Poruka nije poslata. Pokušajte ponovo.");
+                throw new Error(data?.error || dict.contact.error);
             }
 
             setSuccess(true);
@@ -113,7 +134,7 @@ export function Contact() {
             timeoutRef.current = window.setTimeout(() => setSuccess(false), 5000);
         } catch (err) {
             if ((err as any)?.name === "AbortError") return;
-            setError(err instanceof Error ? err.message : "Poruka nije poslata.");
+            setError(err instanceof Error ? err.message : dict.contact.error);
         } finally {
             setLoading(false);
         }
@@ -128,13 +149,13 @@ export function Contact() {
 
             <div className="max-w-[1400px] mx-auto px-6 md:px-10 relative z-10">
                 <SectionHeader
-                    badge="Kontakt"
+                    badge={dict.contact.title}
                     title={
                         <>
-                            Budimo u <span className="text-[var(--gold)]">kontaktu</span>
+                            {t.contactTitle} <span className="text-[var(--gold)]">{t.contactSuffix}</span>
                         </>
                     }
-                    subtitle="Tu smo da odgovorimo na sva vaša pitanja i zahteve"
+                    subtitle={dict.contact.subtitle}
                 />
 
                 <div className="grid lg:grid-cols-5 gap-12 md:gap-16 max-w-7xl mx-auto items-start">
@@ -148,7 +169,7 @@ export function Contact() {
                     >
                         <GlassCard className="p-8 md:p-10 space-y-8 group hover:border-[var(--gold)]/20 transition-all duration-500">
                             <h3 className="text-sm md:text-base font-black uppercase tracking-[0.3em] text-white/40 mb-2">
-                                Detalji
+                                {t.details}
                             </h3>
 
                             <div className="space-y-8">
@@ -158,7 +179,7 @@ export function Contact() {
                                     </div>
                                     <div>
                                         <p className="text-[10px] font-black uppercase tracking-widest text-[var(--gold)] mb-2">
-                                            Lokacija
+                                            {t.location}
                                         </p>
                                         <p className="text-base md:text-lg font-black uppercase tracking-tight text-white leading-tight">
                                             {propertyData.location.address}
@@ -174,7 +195,7 @@ export function Contact() {
                                     </div>
                                     <div>
                                         <p className="text-[10px] font-black uppercase tracking-widest text-[var(--gold)] mb-2">
-                                            Pozovite nas
+                                            {t.call}
                                         </p>
                                         <a
                                             href="tel:+38160777777"
@@ -191,7 +212,7 @@ export function Contact() {
                                     </div>
                                     <div>
                                         <p className="text-[10px] font-black uppercase tracking-widest text-[var(--gold)] mb-2">
-                                            Email
+                                            {t.email}
                                         </p>
                                         <a
                                             href="mailto:hello@houseofmirrors.rs"
@@ -218,14 +239,14 @@ export function Contact() {
                                         {propertyData.host.name}
                                     </p>
                                     <p className="text-[var(--gold)] text-xs font-black uppercase tracking-[0.3em]">
-                                        Premium Host
+                                        {t.host}
                                     </p>
                                 </div>
                             </div>
 
                             <div className="bg-[var(--gold)]/5 border border-[var(--gold)]/10 p-5 rounded-[20px]">
                                 <p className="text-white/60 text-xs md:text-sm font-bold leading-relaxed italic text-center">
-                                    "Odgovaramo {propertyData.host.responseTime} sa {propertyData.host.responseRate} preciznosti."
+                                    "{t.responds(propertyData.host.responseTime, propertyData.host.responseRate)}"
                                 </p>
                             </div>
                         </div>
@@ -241,7 +262,7 @@ export function Contact() {
                     >
                         <GlassCard className="p-8 md:p-12">
                             <h3 className="text-sm font-black uppercase tracking-[0.4em] text-white/40 mb-12">
-                                Pošaljite poruku
+                                {t.sendMessage}
                             </h3>
 
                             {success && (
@@ -253,7 +274,7 @@ export function Contact() {
                                     aria-live="polite"
                                 >
                                     <CheckCircle className="w-6 h-6 text-green-400 flex-shrink-0" />
-                                    <p className="text-green-400 font-bold">Poruka je uspešno poslata! Javićemo vam se uskoro.</p>
+                                    <p className="text-green-400 font-bold">{dict.contact.success}</p>
                                 </motion.div>
                             )}
 
@@ -271,50 +292,50 @@ export function Contact() {
                             <form onSubmit={handleSubmit} className="space-y-7" aria-busy={loading}>
                                 <div className="grid sm:grid-cols-2 gap-6">
                                     <FormField
-                                        label="Ime i prezime"
+                                        label={dict.contact.name}
                                         required
                                         icon={User}
                                         name="name"
                                         value={formData.name}
                                         onChange={handleChange}
-                                        placeholder="Petar Petrović"
+                                        placeholder={t.namePlaceholder}
                                         autoComplete="name"
                                     />
 
                                     <FormField
-                                        label="Email"
+                                        label={dict.contact.email}
                                         required
                                         icon={Mail}
                                         type="email"
                                         name="email"
                                         value={formData.email}
                                         onChange={handleChange}
-                                        placeholder="petar@email.com"
+                                        placeholder={t.emailPlaceholder}
                                         autoComplete="email"
                                         inputMode="email"
                                     />
                                 </div>
 
                                 <FormField
-                                    label="Tema"
+                                    label={t.subject}
                                     required
                                     icon={MessageSquare}
                                     name="subject"
                                     value={formData.subject}
                                     onChange={handleChange}
-                                    placeholder="Upit za rezervaciju"
+                                    placeholder={t.subjectPlaceholder}
                                     autoComplete="off"
                                 />
 
                                 <FormField
                                     as="textarea"
-                                    label="Poruka"
+                                    label={dict.contact.message}
                                     required
                                     rows={6}
                                     name="message"
                                     value={formData.message}
                                     onChange={handleChange}
-                                    placeholder="Napišite vašu poruku..."
+                                    placeholder={t.messagePlaceholder}
                                 />
 
                                 <div className="pt-4">
@@ -322,12 +343,12 @@ export function Contact() {
                                         {loading ? (
                                             <>
                                                 <Loader2 className="w-5 h-5 animate-spin" />
-                                                Šaljem...
+                                                {dict.contact.sending}
                                             </>
                                         ) : (
                                             <>
                                                 <Send className="w-5 h-5" />
-                                                Pošalji poruku
+                                                {dict.contact.send}
                                             </>
                                         )}
                                     </PrimaryButton>

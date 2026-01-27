@@ -4,25 +4,28 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
-
-const navLinks = [
-    { href: "#gallery", label: "Galerija" },
-    { href: "#amenities", label: "Pogodnosti" },
-    { href: "#rules", label: "Pravila" },
-    { href: "#location", label: "Lokacija" },
-    { href: "#contact", label: "Kontakt" },
-];
+import { useLanguage } from "@/context/LanguageContext";
+import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
 
 function getIdFromHref(href: string) {
     return href.startsWith("#") ? href.slice(1) : href;
 }
 
 export function Navbar() {
+    const { dict } = useLanguage();
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const [activeId, setActiveId] = useState<string>("");
 
     const panelRef = useRef<HTMLDivElement | null>(null);
+
+    const navLinks = [
+        { href: "#gallery", label: dict.gallery.title },
+        { href: "#amenities", label: dict.amenities.title },
+        { href: "#rules", label: dict.houseRules.title },
+        { href: "#location", label: dict.location.title },
+        { href: "#contact", label: dict.contact.title },
+    ];
 
     // scrolled state
     useEffect(() => {
@@ -96,7 +99,8 @@ export function Navbar() {
 
         els.forEach((el) => obs.observe(el));
         return () => obs.disconnect();
-    }, []);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [dict]); // Re-run if dict changes (labels change) but IDs are same. Actually IDs are stable. Labels don't affect ID.
 
     const isActive = (href: string) => activeId === getIdFromHref(href);
 
@@ -109,14 +113,14 @@ export function Navbar() {
             <div className="max-w-[1400px] mx-auto px-6 md:px-10">
                 <div className="flex items-center justify-between">
                     {/* Logo */}
-                    <Link href="/" className="flex items-center gap-2 group relative" aria-label="Početna">
+                    <Link href="/" className="flex items-center gap-2 group relative" aria-label="Home">
                         <div className="w-10 h-10 flex items-center justify-center border border-white/10 group-hover:border-[var(--gold)]/50 transition-all duration-700">
                             <div className="w-2 h-2 bg-[var(--gold)] shadow-[0_0_15px_rgba(212,175,55,0.4)]" />
                         </div>
                     </Link>
 
                     {/* Desktop Nav */}
-                    <div className="hidden md:flex items-center gap-12">
+                    <div className="hidden md:flex items-center gap-8 lg:gap-12">
                         {navLinks.map((link) => (
                             <a
                                 key={link.href}
@@ -137,22 +141,28 @@ export function Navbar() {
                             </a>
                         ))}
 
-                        <a href="#booking" className="btn-primary !px-8 !py-3 !text-[9px] !tracking-[0.3em]">
-                            Rezerviši
-                        </a>
+                        <div className="flex items-center gap-6">
+                            <LanguageSwitcher />
+                            <a href="#booking" className="btn-primary !px-8 !py-3 !text-[9px] !tracking-[0.3em]">
+                                {dict.hero.bookNow}
+                            </a>
+                        </div>
                     </div>
 
-                    {/* Mobile Button */}
-                    <button
-                        type="button"
-                        onClick={() => setIsOpen((v) => !v)}
-                        className="md:hidden p-2 rounded-full hover:bg-white/5 border border-transparent hover:border-white/10 transition-all"
-                        aria-label="Toggle menu"
-                        aria-expanded={isOpen}
-                        aria-controls="mobile-nav"
-                    >
-                        {isOpen ? <X className="w-6 h-6 text-white" /> : <Menu className="w-6 h-6 text-white" />}
-                    </button>
+                    {/* Mobile Controls */}
+                    <div className="flex md:hidden items-center gap-4">
+                        {/* Language Switcher moved to inside menu */}
+                        <button
+                            type="button"
+                            onClick={() => setIsOpen((v) => !v)}
+                            className="p-2 rounded-full hover:bg-white/5 border border-transparent hover:border-white/10 transition-all"
+                            aria-label="Toggle menu"
+                            aria-expanded={isOpen}
+                            aria-controls="mobile-nav"
+                        >
+                            {isOpen ? <X className="w-6 h-6 text-white" /> : <Menu className="w-6 h-6 text-white" />}
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -197,8 +207,10 @@ export function Navbar() {
                                 ))}
 
                                 <a href="#booking" onClick={() => setIsOpen(false)} className="btn-primary w-full max-w-[220px]">
-                                    Rezerviši
+                                    {dict.hero.bookNow}
                                 </a>
+
+                                <LanguageSwitcher className="mt-4" />
                             </div>
                         </motion.div>
                     </motion.div>

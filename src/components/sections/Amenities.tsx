@@ -3,10 +3,10 @@
 import React, { useMemo } from "react";
 import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
-import { propertyData } from "@/data/property";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { DividerHeading } from "@/components/ui/DividerHeading";
-import { iconMap, categoryNames, groupByCategory, defaultCategoryOrder } from "@/lib/amenities";
+import { iconMap, groupByCategory, defaultCategoryOrder } from "@/lib/amenities";
+import { useLanguage } from "@/context/LanguageContext";
 
 function getIcon(key?: string) {
     if (!key) return Sparkles;
@@ -14,9 +14,11 @@ function getIcon(key?: string) {
 }
 
 export function Amenities() {
+    const { dict } = useLanguage();
+
     const grouped = useMemo(
-        () => groupByCategory(propertyData.amenities),
-        [propertyData.amenities]
+        () => groupByCategory(dict.amenities.items),
+        [dict.amenities.items]
     );
 
     return (
@@ -26,9 +28,9 @@ export function Amenities() {
 
             <div className="max-w-[1400px] mx-auto px-6 md:px-10 relative z-10">
                 <SectionHeader
-                    badge="Sadržaj"
-                    title={<>Šta nudimo</>}
-                    subtitle="Pažljivo odabrana oprema i pogodnosti za vaš savršen boravak i potpuno opuštanje."
+                    badge={dict.amenities.title}
+                    title={<>{dict.amenities.title}</>}
+                    subtitle={dict.amenities.subtitle}
                 />
 
                 <div className="space-y-10 md:space-y-14">
@@ -46,7 +48,9 @@ export function Amenities() {
                                 transition={{ duration: 0.6, delay: index * 0.08 }}
                             >
                                 <div id={`amenities-${catKey}`}>
-                                    <DividerHeading>{categoryNames[catKey] || catKey}</DividerHeading>
+                                    <DividerHeading>
+                                        {dict.amenities.categories[catKey] || catKey}
+                                    </DividerHeading>
                                 </div>
 
                                 <ul

@@ -8,12 +8,21 @@ import { propertyImages } from "@/data/images";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { useEffect, useMemo } from "react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/context/LanguageContext";
 
 export function Gallery() {
+    const { dict } = useLanguage();
     const [selectedCategory, setSelectedCategory] = useState("all");
     const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
     const isDesktop = useMediaQuery("(min-width: 768px)");
     const hasImages = propertyImages.gallery.length > 0;
+
+    const categories = useMemo(() => {
+        return propertyImages.categories.map((cat) => ({
+            ...cat,
+            label: dict.gallery.categories[cat.id as keyof typeof dict.gallery.categories],
+        }));
+    }, [dict]);
 
     const filteredImages = useMemo(() => {
         return selectedCategory === "all"
@@ -22,8 +31,8 @@ export function Gallery() {
     }, [selectedCategory]);
 
     const selectedCategoryMeta = useMemo(() => {
-        return propertyImages.categories.find((cat) => cat.id === selectedCategory) || propertyImages.categories[0];
-    }, [selectedCategory]);
+        return categories.find((cat) => cat.id === selectedCategory) || categories[0];
+    }, [selectedCategory, categories]);
 
     const displayImages = filteredImages.length ? filteredImages : propertyImages.gallery;
     const featuredImage = displayImages[0];
@@ -75,7 +84,7 @@ export function Gallery() {
             <div className="max-w-[1400px] mx-auto px-6 md:px-10">
                 {/* Category Filters */}
                 <div className="flex flex-wrap justify-center gap-3 mb-10">
-                    {propertyImages.categories.map((cat) => (
+                    {categories.map((cat) => (
                         <button
                             key={cat.id}
                             type="button"
@@ -99,7 +108,7 @@ export function Gallery() {
                 {hasImages && featuredImage ? (
                     <button
                         type="button"
-                        aria-label="Otvori galeriju"
+                        aria-label={dict.gallery.viewGallery}
                         className="relative group cursor-pointer overflow-hidden rounded-3xl deluxe-card aspect-[21/9] w-full text-left"
                         onClick={() => openLightbox(featuredImage.src)}
                     >
@@ -118,17 +127,17 @@ export function Gallery() {
                         {/* Content */}
                         <div className="absolute bottom-10 left-10 text-left">
                             <p className="text-white/40 text-xs font-black uppercase tracking-[0.3em] mb-2">
-                                {selectedCategory === "all" ? "Featured Image" : selectedCategoryMeta.label}
+                                {selectedCategory === "all" ? dict.gallery.title : selectedCategoryMeta.label}
                             </p>
                             <h2 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter mb-4">
-                                {selectedCategory === "all" ? selectedCategoryMeta.label : selectedCategoryMeta.label}
+                                {selectedCategoryMeta.label}
                             </h2>
                             <div className="flex items-center gap-4">
                                 <span className="btn-primary !px-6 !py-3 !text-xs">
-                                    Pogledaj galeriju
+                                    {dict.gallery.viewGallery}
                                 </span>
                                 <span className="text-white/60 font-bold uppercase text-[10px] tracking-widest">
-                                    {displayImages.length} fotografija
+                                    {displayImages.length} {dict.gallery.photoCount}
                                 </span>
                             </div>
                         </div>
@@ -158,12 +167,12 @@ export function Gallery() {
                     <div className="relative overflow-hidden rounded-3xl deluxe-card aspect-[21/9] w-full flex items-center justify-center text-center p-8">
                         <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent" />
                         <div className="relative z-10">
-                            <p className="text-white/40 text-xs font-black uppercase tracking-[0.3em] mb-3">Galerija</p>
+                            <p className="text-white/40 text-xs font-black uppercase tracking-[0.3em] mb-3">{dict.gallery.title}</p>
                             <h2 className="text-2xl md:text-4xl font-black text-white uppercase tracking-tighter mb-4">
-                                Fotografije uskoro
+                                Coming Soon
                             </h2>
                             <p className="text-white/50 text-xs md:text-sm font-bold uppercase tracking-[0.2em]">
-                                Pripremamo nove fotografije apartmana
+                                Photos are being prepared
                             </p>
                         </div>
                     </div>
@@ -172,13 +181,13 @@ export function Gallery() {
                 {/* Sub-grid for categories */}
                 {selectedCategory === "all" ? (
                     <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {propertyImages.categories.slice(1, 4).map((cat, i) => {
+                        {categories.slice(1, 4).map((cat, i) => {
                             const firstImgOfCat = propertyImages.gallery.find((img) => img.category === cat.id);
                             return (
                                 <button
                                     key={cat.id}
                                     type="button"
-                                    aria-label={`Otvori kategoriju: ${cat.label}`}
+                                    aria-label={`${dict.gallery.viewGallery}: ${cat.label}`}
                                     className="deluxe-card aspect-video relative group cursor-pointer overflow-hidden w-full text-left"
                                     onClick={() => {
                                         if (firstImgOfCat) openLightbox(firstImgOfCat.src);
@@ -202,7 +211,7 @@ export function Gallery() {
                                     <div className="absolute inset-0 flex flex-col items-center justify-center">
                                         <span className="text-white font-black uppercase tracking-[0.2em] text-sm mb-1">{cat.label}</span>
                                         <span className="text-white/40 text-[10px] font-bold uppercase tracking-widest">
-                                            {propertyImages.gallery.filter((img) => img.category === cat.id).length} slika
+                                            {propertyImages.gallery.filter((img) => img.category === cat.id).length} {dict.gallery.photoCount}
                                         </span>
                                     </div>
                                 </button>
@@ -215,7 +224,7 @@ export function Gallery() {
                             <button
                                 key={img.src}
                                 type="button"
-                                aria-label={`Otvori fotografiju: ${img.alt}`}
+                                aria-label={`${dict.gallery.viewGallery}: ${img.alt}`}
                                 className="deluxe-card aspect-video relative group cursor-pointer overflow-hidden w-full text-left"
                                 onClick={() => openLightbox(img.src)}
                                 disabled={!hasImages}
@@ -251,7 +260,7 @@ export function Gallery() {
                             onClick={closeLightbox}
                             type="button"
                             className="absolute top-6 right-6 z-[110] p-4 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all"
-                            aria-label="Zatvori"
+                            aria-label="Close"
                         >
                             <X className="w-6 h-6" />
                         </button>
@@ -261,7 +270,7 @@ export function Gallery() {
                             onClick={(e) => { e.stopPropagation(); prevImage(); }}
                             type="button"
                             className="hidden md:inline-flex absolute left-8 top-1/2 -translate-y-1/2 z-[110] p-5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all group"
-                            aria-label="Prethodna slika"
+                            aria-label="Previous"
                         >
                             <ChevronLeft className="w-8 h-8 group-hover:-translate-x-1 transition-transform" />
                         </button>
@@ -269,7 +278,7 @@ export function Gallery() {
                             onClick={(e) => { e.stopPropagation(); nextImage(); }}
                             type="button"
                             className="hidden md:inline-flex absolute right-8 top-1/2 -translate-y-1/2 z-[110] p-5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all group"
-                            aria-label="Sledeća slika"
+                            aria-label="Next"
                         >
                             <ChevronRight className="w-8 h-8 group-hover:translate-x-1 transition-transform" />
                         </button>
@@ -280,7 +289,7 @@ export function Gallery() {
                                 onClick={(e) => { e.stopPropagation(); prevImage(); }}
                                 type="button"
                                 className="p-4 rounded-full bg-white/5 border border-white/10 text-white active:scale-90 transition-all"
-                                aria-label="Prethodna slika"
+                                aria-label="Previous"
                             >
                                 <ChevronLeft className="w-6 h-6" />
                             </button>
@@ -293,7 +302,7 @@ export function Gallery() {
                                 onClick={(e) => { e.stopPropagation(); nextImage(); }}
                                 type="button"
                                 className="p-4 rounded-full bg-white/5 border border-white/10 text-white active:scale-90 transition-all"
-                                aria-label="Sledeća slika"
+                                aria-label="Next"
                             >
                                 <ChevronRight className="w-6 h-6" />
                             </button>
@@ -333,7 +342,7 @@ export function Gallery() {
                                         {filteredImages[lightboxIndex].alt}
                                     </p>
                                     <p className="text-white/40 text-[10px] font-bold uppercase tracking-widest">
-                                        {lightboxIndex + 1} od {filteredImages.length}
+                                        {lightboxIndex + 1} of {filteredImages.length}
                                     </p>
                                 </div>
                             </div>

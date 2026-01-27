@@ -7,10 +7,13 @@ import { HouseRules } from "@/components/sections/HouseRules";
 import { BookingCalendar } from "@/components/sections/BookingCalendar";
 import { Contact } from "@/components/sections/Contact";
 
+import { AboutBanner } from "@/components/sections/AboutBanner";
+
 export default function Home() {
   return (
     <main>
       <Hero />
+      <AboutBanner />
       <Gallery />
       <Highlights />
       <Amenities />
