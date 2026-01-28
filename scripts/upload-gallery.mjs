@@ -37,6 +37,7 @@ async function main() {
       const { url } = await put(key, buffer, {
         access: "public",
         contentType,
+        allowOverwrite: true,
       });
 
       entries.push({

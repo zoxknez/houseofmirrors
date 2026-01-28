@@ -79,7 +79,6 @@ export const en: Dictionary = {
             { icon: "Utensils", name: "Fully Equipped Kitchen", category: "kitchen" },
             { icon: "Refrigerator", name: "Refrigerator", category: "kitchen" },
             { icon: "CookingPot", name: "Stove & Air Fryer", category: "kitchen" },
-            { icon: "Coffee", name: "Coffee Machine", category: "kitchen" },
             { icon: "UtensilsCrossed", name: "Dishwasher", category: "kitchen" },
             { icon: "Droplets", name: "Walk-in Shower", category: "bathroom" },
             { icon: "Wind", name: "Hairdryer", category: "bathroom" },

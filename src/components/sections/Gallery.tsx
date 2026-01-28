@@ -180,8 +180,8 @@ export function Gallery() {
 
                 {/* Sub-grid for categories */}
                 {selectedCategory === "all" ? (
-                    <div className="mt-10 grid grid-cols-1 md:grid-cols-3 gap-6">
-                        {categories.slice(1, 4).map((cat, i) => {
+                    <div className="mt-10 grid grid-cols-1 md:grid-cols-4 gap-6">
+                        {categories.slice(1, 5).map((cat, i) => {
                             const firstImgOfCat = propertyImages.gallery.find((img) => img.category === cat.id);
                             return (
                                 <button

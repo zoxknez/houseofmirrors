@@ -79,7 +79,6 @@ export const sr: Dictionary = {
             { icon: "Utensils", name: "Potpuno opremljena kuhinja", category: "kitchen" },
             { icon: "Refrigerator", name: "Frižider", category: "kitchen" },
             { icon: "CookingPot", name: "Šporet i Air Fryer", category: "kitchen" },
-            { icon: "Coffee", name: "Aparat za kafu", category: "kitchen" },
             { icon: "UtensilsCrossed", name: "Mašina za sudove", category: "kitchen" },
             { icon: "Droplets", name: "Tuš kabina", category: "bathroom" },
             { icon: "Wind", name: "Fen za kosu", category: "bathroom" },

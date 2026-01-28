@@ -31,7 +31,8 @@ export function AboutBanner() {
                                     initial={{ opacity: 0, y: 10 }}
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
-                                    className="text-2xl md:text-4xl font-black uppercase tracking-tighter text-white"
+                                    className="text-2xl md:text-4xl font-black uppercase tracking-normal text-white"
+                                    style={{ wordSpacing: "0.35em" }}
                                 >
                                     {dict.about.title}
                                 </motion.h2>
@@ -64,8 +65,8 @@ export function AboutBanner() {
                                 The user screenshot shows just a banner area. 
                                 I'll keep it simple text focused or add some icons.
                             */}
-                            <div className="hidden md:grid grid-cols-2 gap-4">
-                                <div className="space-y-4 pt-8">
+                            <div className="hidden md:grid grid-cols-2 gap-4 auto-rows-fr">
+                                <div className="space-y-4">
                                     <div className="bg-white/10 p-4 rounded-2xl border border-white/10 backdrop-blur-sm">
                                         <Star className="w-6 h-6 text-[var(--gold)] mb-3" />
                                         <div className="text-2xl font-black text-white">4.98</div>

@@ -59,7 +59,8 @@ export function Contact() {
     const t = {
         details: language === "sr" ? "Detalji" : "Details",
         location: dict.location.title,
-        call: language === "sr" ? "Pozovite nas" : "Call us",
+        call: language === "sr" ? "Telefoni" : "Phones",
+        messaging: language === "sr" ? "WhatsApp / Viber" : "WhatsApp / Viber",
         email: "Email",
         host: "Premium Host",
         responds: (time: string, rate: string) => language === "sr" ? `Odgovaramo ${time} sa ${rate} preciznosti.` : `Responds in ${time} with ${rate} precision.`,
@@ -197,12 +198,45 @@ export function Contact() {
                                         <p className="text-[10px] font-black uppercase tracking-widest text-[var(--gold)] mb-2">
                                             {t.call}
                                         </p>
-                                        <a
-                                            href="tel:+38160777777"
-                                            className="text-base md:text-lg font-black uppercase tracking-tight text-white hover:text-[var(--gold)] transition-colors"
-                                        >
-                                            +381 60 777 777
-                                        </a>
+                                        <div className="space-y-1">
+                                            <a
+                                                href="tel:+381641752332"
+                                                className="text-base md:text-lg font-black uppercase tracking-tight text-white hover:text-[var(--gold)] transition-colors"
+                                            >
+                                                +381 64 175 2332
+                                            </a>
+                                            <a
+                                                href="tel:+385976445994"
+                                                className="text-base md:text-lg font-black uppercase tracking-tight text-white hover:text-[var(--gold)] transition-colors"
+                                            >
+                                                +385 97 644 5994
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-start gap-8 group/item">
+                                    <div className="w-14 h-14 rounded-full bg-[var(--gold)]/10 flex items-center justify-center flex-shrink-0 border border-[var(--gold)]/20 group-hover/item:scale-110 group-hover/item:bg-[var(--gold)]/20 transition-all duration-500">
+                                        <MessageSquare className="w-6 h-6 text-[var(--gold)]" />
+                                    </div>
+                                    <div>
+                                        <p className="text-[10px] font-black uppercase tracking-widest text-[var(--gold)] mb-2">
+                                            {t.messaging}
+                                        </p>
+                                        <div className="space-y-1">
+                                            <a
+                                                href="https://wa.me/381641752332"
+                                                className="text-base md:text-lg font-black uppercase tracking-tight text-white hover:text-[var(--gold)] transition-colors"
+                                            >
+                                                WhatsApp +381 64 175 2332
+                                            </a>
+                                            <a
+                                                href="viber://chat?number=%2B385976445994"
+                                                className="text-base md:text-lg font-black uppercase tracking-tight text-white hover:text-[var(--gold)] transition-colors"
+                                            >
+                                                Viber +385 97 644 5994
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -215,10 +249,10 @@ export function Contact() {
                                             {t.email}
                                         </p>
                                         <a
-                                            href="mailto:hello@houseofmirrors.rs"
+                                            href="mailto:house.of.mirrors.belgrade@gmail.com"
                                             className="text-base md:text-lg font-black uppercase tracking-tight text-white hover:text-[var(--gold)] transition-colors break-all"
                                         >
-                                            hello@houseofmirrors.rs
+                                            house.of.mirrors.belgrade@gmail.com
                                         </a>
                                     </div>
                                 </div>
