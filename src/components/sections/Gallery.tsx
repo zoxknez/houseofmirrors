@@ -24,6 +24,27 @@ export function Gallery() {
         }));
     }, [dict]);
 
+    const imageNumberBySrc = useMemo(() => {
+        const counters: Record<string, number> = {};
+        const map = new Map<string, number>();
+
+        propertyImages.gallery.forEach((img) => {
+            const key = img.category;
+            counters[key] = (counters[key] || 0) + 1;
+            map.set(img.src, counters[key]);
+        });
+
+        return map;
+    }, []);
+
+    const getLocalizedAlt = (img: typeof propertyImages.gallery[number]) => {
+        const label = dict.gallery.categories[img.category as keyof typeof dict.gallery.categories];
+        const index = imageNumberBySrc.get(img.src);
+
+        if (!label || !index) return img.alt;
+        return `${label} ${index}`;
+    };
+
     const filteredImages = useMemo(() => {
         return selectedCategory === "all"
             ? propertyImages.gallery
@@ -151,7 +172,7 @@ export function Gallery() {
                                 >
                                     <Image
                                         src={img.src}
-                                        alt="preview"
+                                        alt={getLocalizedAlt(img)}
                                         fill
                                         className="object-cover"
                                         sizes="(min-width: 768px) 64px, 48px"
@@ -198,7 +219,7 @@ export function Gallery() {
                                         <>
                                             <Image
                                                 src={firstImgOfCat?.src || propertyImages.gallery[i + 1].src}
-                                                alt={cat.label}
+                                                alt={firstImgOfCat ? getLocalizedAlt(firstImgOfCat) : cat.label}
                                                 fill
                                                 className="object-cover transition-transform duration-500 group-hover:scale-110"
                                                 sizes="(min-width: 768px) 33vw, 100vw"
@@ -224,14 +245,14 @@ export function Gallery() {
                             <button
                                 key={img.src}
                                 type="button"
-                                aria-label={`${dict.gallery.viewGallery}: ${img.alt}`}
+                                aria-label={`${dict.gallery.viewGallery}: ${getLocalizedAlt(img)}`}
                                 className="deluxe-card aspect-video relative group cursor-pointer overflow-hidden w-full text-left"
                                 onClick={() => openLightbox(img.src)}
                                 disabled={!hasImages}
                             >
                                 <Image
                                     src={img.src}
-                                    alt={img.alt}
+                                    alt={getLocalizedAlt(img)}
                                     fill
                                     className="object-cover transition-transform duration-500 group-hover:scale-110"
                                     sizes="(min-width: 768px) 25vw, 50vw"
@@ -327,7 +348,7 @@ export function Gallery() {
                             <div className="relative w-full h-full max-w-6xl max-h-[70vh] md:max-h-[85vh]">
                                 <Image
                                     src={filteredImages[lightboxIndex].src}
-                                    alt={filteredImages[lightboxIndex].alt}
+                                    alt={getLocalizedAlt(filteredImages[lightboxIndex])}
                                     fill
                                     className="object-contain"
                                     draggable={false}
@@ -339,7 +360,7 @@ export function Gallery() {
                             <div className="absolute bottom-10 left-1/2 -translate-x-1/2 hidden md:block">
                                 <div className="px-6 py-3 rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-center">
                                     <p className="text-white text-xs font-black uppercase tracking-[0.2em] mb-1">
-                                        {filteredImages[lightboxIndex].alt}
+                                        {getLocalizedAlt(filteredImages[lightboxIndex])}
                                     </p>
                                     <p className="text-white/40 text-[10px] font-bold uppercase tracking-widest">
                                         {lightboxIndex + 1} of {filteredImages.length}

@@ -198,16 +198,16 @@ export function Contact() {
                                         <p className="text-[10px] font-black uppercase tracking-widest text-[var(--gold)] mb-2">
                                             {t.call}
                                         </p>
-                                        <div className="space-y-1">
+                                        <div className="flex flex-col gap-2">
                                             <a
                                                 href="tel:+381641752332"
-                                                className="text-base md:text-lg font-black uppercase tracking-tight text-white hover:text-[var(--gold)] transition-colors"
+                                                className="text-base md:text-lg font-black uppercase tracking-tight text-white hover:text-[var(--gold)] transition-colors break-words"
                                             >
                                                 +381 64 175 2332
                                             </a>
                                             <a
                                                 href="tel:+385976445994"
-                                                className="text-base md:text-lg font-black uppercase tracking-tight text-white hover:text-[var(--gold)] transition-colors"
+                                                className="text-base md:text-lg font-black uppercase tracking-tight text-white hover:text-[var(--gold)] transition-colors break-words"
                                             >
                                                 +385 97 644 5994
                                             </a>
@@ -223,18 +223,20 @@ export function Contact() {
                                         <p className="text-[10px] font-black uppercase tracking-widest text-[var(--gold)] mb-2">
                                             {t.messaging}
                                         </p>
-                                        <div className="space-y-1">
+                                        <div className="flex flex-col gap-2">
                                             <a
                                                 href="https://wa.me/381641752332"
-                                                className="text-base md:text-lg font-black uppercase tracking-tight text-white hover:text-[var(--gold)] transition-colors"
+                                                className="text-base md:text-lg font-black uppercase tracking-tight text-white hover:text-[var(--gold)] transition-colors break-words"
                                             >
-                                                WhatsApp +381 64 175 2332
+                                                WhatsApp
+                                                <span className="ml-2 text-white/70">+381 64 175 2332</span>
                                             </a>
                                             <a
                                                 href="viber://chat?number=%2B385976445994"
-                                                className="text-base md:text-lg font-black uppercase tracking-tight text-white hover:text-[var(--gold)] transition-colors"
+                                                className="text-base md:text-lg font-black uppercase tracking-tight text-white hover:text-[var(--gold)] transition-colors break-words"
                                             >
-                                                Viber +385 97 644 5994
+                                                Viber
+                                                <span className="ml-2 text-white/70">+385 97 644 5994</span>
                                             </a>
                                         </div>
                                     </div>

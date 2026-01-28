@@ -65,26 +65,26 @@ export function AboutBanner() {
                                 The user screenshot shows just a banner area. 
                                 I'll keep it simple text focused or add some icons.
                             */}
-                            <div className="hidden md:grid grid-cols-2 gap-4 auto-rows-fr">
-                                <div className="space-y-4">
-                                    <div className="bg-white/10 p-4 rounded-2xl border border-white/10 backdrop-blur-sm">
+                            <div className="hidden md:grid grid-cols-2 gap-4 auto-rows-fr items-stretch">
+                                <div className="space-y-4 h-full">
+                                    <div className="bg-white/10 p-4 rounded-2xl border border-white/10 backdrop-blur-sm h-full flex flex-col justify-between">
                                         <Star className="w-6 h-6 text-[var(--gold)] mb-3" />
                                         <div className="text-2xl font-black text-white">4.98</div>
                                         <div className="text-[10px] uppercase tracking-wider text-white/60">Rating</div>
                                     </div>
-                                    <div className="bg-white/10 p-4 rounded-2xl border border-white/10 backdrop-blur-sm">
+                                    <div className="bg-white/10 p-4 rounded-2xl border border-white/10 backdrop-blur-sm h-full flex flex-col justify-between">
                                         <Shield className="w-6 h-6 text-[var(--gold)] mb-3" />
                                         <div className="text-xl font-black text-white">Safe</div>
                                         <div className="text-[10px] uppercase tracking-wider text-white/60">Neighborhood</div>
                                     </div>
                                 </div>
-                                <div className="space-y-4">
-                                    <div className="bg-white/10 p-4 rounded-2xl border border-white/10 backdrop-blur-sm">
+                                <div className="space-y-4 h-full">
+                                    <div className="bg-white/10 p-4 rounded-2xl border border-white/10 backdrop-blur-sm h-full flex flex-col justify-between">
                                         <MapPin className="w-6 h-6 text-[var(--gold)] mb-3" />
                                         <div className="text-xl font-black text-white">10 min</div>
                                         <div className="text-[10px] uppercase tracking-wider text-white/60">to Center</div>
                                     </div>
-                                    <div className="bg-white/10 p-4 rounded-2xl border border-white/10 backdrop-blur-sm">
+                                    <div className="bg-white/10 p-4 rounded-2xl border border-white/10 backdrop-blur-sm h-full flex flex-col justify-between">
                                         <Sparkles className="w-6 h-6 text-[var(--gold)] mb-3" />
                                         <div className="text-xl font-black text-white">Luxury</div>
                                         <div className="text-[10px] uppercase tracking-wider text-white/60">Design</div>
