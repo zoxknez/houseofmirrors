@@ -1,3 +1,6 @@
+// Centralized logo URL
+export const LOGO_URL = "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/assets/logo.png";
+
 export const propertyImages = {
     hero: [
         {

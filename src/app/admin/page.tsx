@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import {
     LayoutDashboard,
@@ -13,6 +14,7 @@ import {
     Calendar,
     Users,
     Euro,
+    Search,
     Clock,
     CheckCircle,
     TrendingUp,
@@ -24,6 +26,7 @@ import { LoginForm } from "@/components/admin/LoginForm";
 import { StatCard } from "@/components/admin/StatCard";
 import { BookingCard } from "@/components/admin/BookingCard";
 import { AdminCalendar } from "@/components/admin/AdminCalendar";
+import { LOGO_URL } from "@/data/images";
 import type { Booking, BlockedDate, BookingStatus } from "@/types";
 
 type Tab = "dashboard" | "calendar" | "settings";
@@ -32,6 +35,8 @@ interface Stats {
     totalBookings: number;
     pendingBookings: number;
     confirmedBookings: number;
+    completedBookings: number;
+    cancelledBookings: number;
     todayCheckIns: number;
     todayCheckOuts: number;
     thisMonthRevenue: number;
@@ -50,6 +55,7 @@ export default function AdminPage() {
     const [bookings, setBookings] = useState<Booking[]>([]);
     const [blockedDates, setBlockedDates] = useState<BlockedDate[]>([]);
     const [statusFilter, setStatusFilter] = useState<BookingStatus | "all">("all");
+    const [searchQuery, setSearchQuery] = useState("");
     const [copied, setCopied] = useState(false);
     const [calendarUrl, setCalendarUrl] = useState("");
 
@@ -85,7 +91,28 @@ export default function AdminPage() {
             if (reqId !== requestIdRef.current) return;
 
             setStats(statsData);
-            setBookings(bookingsData.bookings || []);
+            
+            // Auto-complete bookings where checkout date has passed
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            const processedBookings = (bookingsData.bookings || []).map((b: Booking) => {
+                if (b.status === "confirmed") {
+                    const checkOutDate = new Date(b.checkOut);
+                    checkOutDate.setHours(0, 0, 0, 0);
+                    if (checkOutDate < today) {
+                        // Auto-mark as completed (fire-and-forget server update)
+                        fetch(`/api/booking/${b.id}`, {
+                            method: "PATCH",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({ status: "completed" }),
+                        }).catch(console.error);
+                        return { ...b, status: "completed" as const };
+                    }
+                }
+                return b;
+            });
+            
+            setBookings(processedBookings);
             setBlockedDates(blockedData.blockedDates || []);
         } catch (err) {
             console.error("Failed to fetch data:", err);
@@ -226,10 +253,24 @@ export default function AdminPage() {
     };
 
     const filteredBookings = useMemo(() => {
-        return statusFilter === "all"
+        let result = statusFilter === "all"
             ? bookings
             : bookings.filter((b) => b.status === statusFilter);
-    }, [bookings, statusFilter]);
+        
+        // Apply search filter
+        if (searchQuery.trim()) {
+            const query = searchQuery.toLowerCase().trim();
+            result = result.filter((b) =>
+                b.firstName.toLowerCase().includes(query) ||
+                b.lastName.toLowerCase().includes(query) ||
+                b.email.toLowerCase().includes(query) ||
+                b.phone.includes(query) ||
+                b.id.toLowerCase().includes(query)
+            );
+        }
+        
+        return result;
+    }, [bookings, statusFilter, searchQuery]);
 
     const sortedBookings = useMemo(() => {
         const statusPriority: Record<BookingStatus, number> = {
@@ -296,9 +337,13 @@ export default function AdminPage() {
                 <div className="p-6">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-linear-to-br from-gold to-gold/60 rounded-xl flex items-center justify-center">
-                                <span className="text-gray-900 font-bold">HM</span>
-                            </div>
+                            <Image
+                                src={LOGO_URL}
+                                alt="House of Mirrors"
+                                width={40}
+                                height={40}
+                                className="w-10 h-10 object-contain rounded-lg"
+                            />
                             <div className="min-w-0">
                                 <h1 className="font-bold text-white truncate text-sm">House of Mirrors</h1>
                                 <p className="text-[10px] text-white/40 uppercase font-black tracking-widest">Admin Panel</p>
@@ -388,9 +433,9 @@ export default function AdminPage() {
                                     className="space-y-10"
                                 >
                                     {/* Stats Grid */}
-                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                    <div className="grid grid-cols-2 lg:grid-cols-5 gap-4">
                                         <StatCard
-                                            title="Ukupno rezervacija"
+                                            title="Ukupno"
                                             value={stats.totalBookings}
                                             icon={Calendar}
                                             color="blue"
@@ -408,7 +453,13 @@ export default function AdminPage() {
                                             color="green"
                                         />
                                         <StatCard
-                                            title="Prihod ovog meseca"
+                                            title="Završeno"
+                                            value={stats.completedBookings}
+                                            icon={CheckCircle}
+                                            color="blue"
+                                        />
+                                        <StatCard
+                                            title="Prihod meseca"
                                             value={`€${stats.thisMonthRevenue}`}
                                             icon={Euro}
                                             color="gold"
@@ -469,9 +520,33 @@ export default function AdminPage() {
 
                                     {/* Bookings Section */}
                                     <div className="space-y-6">
-                                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                                            <h2 className="text-xl font-black text-white uppercase tracking-tight">Rezervacije</h2>
-                                            <div className="flex flex-wrap gap-1.5 p-1 bg-white/5 rounded-xl border border-white/5">
+                                        <div className="flex flex-col gap-4">
+                                            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                                                <h2 className="text-xl font-black text-white uppercase tracking-tight">Rezervacije</h2>
+                                                
+                                                {/* Search Input */}
+                                                <div className="relative w-full sm:w-64">
+                                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/30" />
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Pretraži..."
+                                                        value={searchQuery}
+                                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                                        className="w-full pl-10 pr-4 py-2.5 bg-white/5 border border-white/10 rounded-xl text-white text-sm placeholder-white/30 focus:outline-none focus:ring-2 focus:ring-gold/30 focus:border-gold/30 transition-all"
+                                                    />
+                                                    {searchQuery && (
+                                                        <button
+                                                            onClick={() => setSearchQuery("")}
+                                                            className="absolute right-3 top-1/2 -translate-y-1/2 text-white/30 hover:text-white"
+                                                        >
+                                                            <X className="w-4 h-4" />
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            </div>
+                                            
+                                            {/* Status Filters */}
+                                            <div className="flex flex-wrap gap-1.5 p-1 bg-white/5 rounded-xl border border-white/5 w-fit">
                                                 {(["all", "pending", "confirmed", "completed", "cancelled"] as const).map((status) => {
                                                     const count = status === "all" 
                                                         ? bookings.length 
@@ -511,9 +586,15 @@ export default function AdminPage() {
                                         {sortedBookings.length === 0 ? (
                                             <div className="bg-white/2 rounded-3xl p-12 text-center border border-white/5">
                                                 <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                                                    <Calendar className="w-8 h-8 text-white/20" />
+                                                    {searchQuery ? (
+                                                        <Search className="w-8 h-8 text-white/20" />
+                                                    ) : (
+                                                        <Calendar className="w-8 h-8 text-white/20" />
+                                                    )}
                                                 </div>
-                                                <p className="text-white/30 font-bold uppercase tracking-widest text-xs">Nema rezervacija</p>
+                                                <p className="text-white/30 font-bold uppercase tracking-widest text-xs">
+                                                    {searchQuery ? "Nema rezultata pretrage" : "Nema rezervacija"}
+                                                </p>
                                             </div>
                                         ) : (
                                             <div className="grid gap-4">

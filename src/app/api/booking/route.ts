@@ -11,6 +11,32 @@ import {
 } from "@/lib/email";
 import type { Booking, BookingRequest } from "@/types";
 
+// Simple in-memory lock to prevent race conditions on concurrent bookings
+// In production with multiple instances, use Redis or database-level locking
+const bookingLock = {
+    locked: false,
+    queue: [] as (() => void)[],
+    
+    async acquire(): Promise<void> {
+        if (!this.locked) {
+            this.locked = true;
+            return;
+        }
+        return new Promise((resolve) => {
+            this.queue.push(resolve);
+        });
+    },
+    
+    release(): void {
+        if (this.queue.length > 0) {
+            const next = this.queue.shift();
+            next?.();
+        } else {
+            this.locked = false;
+        }
+    }
+};
+
 function validateBookingRequest(body: unknown): body is BookingRequest {
     const b = body as BookingRequest;
     return (
@@ -65,39 +91,51 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        // Check availability
-        const isAvailable = await isDateRangeAvailable(body.checkIn, body.checkOut);
-        if (!isAvailable) {
-            return NextResponse.json(
-                { error: "Izabrani datumi nisu više dostupni" },
-                { status: 409 }
-            );
+        // Acquire lock to prevent race conditions
+        await bookingLock.acquire();
+        
+        try {
+            // Check availability (inside lock to prevent race conditions)
+            const isAvailable = await isDateRangeAvailable(body.checkIn, body.checkOut);
+            if (!isAvailable) {
+                return NextResponse.json(
+                    { error: "Izabrani datumi nisu više dostupni" },
+                    { status: 409 }
+                );
+            }
+
+            // Create booking
+            const booking: Booking = {
+                ...body,
+                id: generateBookingId(),
+                createdAt: new Date().toISOString(),
+                status: "pending",
+                source: "direct",
+            };
+
+            await createBooking(booking);
+
+            // Release lock after successful creation
+            bookingLock.release();
+
+            // Send emails (don't wait, fire and forget)
+            Promise.all([
+                sendBookingConfirmation(booking),
+                sendNewBookingNotification(booking),
+            ]).catch(console.error);
+
+            return NextResponse.json({
+                success: true,
+                booking: {
+                    id: booking.id,
+                    status: booking.status,
+                },
+            });
+        } catch (innerError) {
+            // Release lock on error
+            bookingLock.release();
+            throw innerError;
         }
-
-        // Create booking
-        const booking: Booking = {
-            ...body,
-            id: generateBookingId(),
-            createdAt: new Date().toISOString(),
-            status: "pending",
-            source: "direct",
-        };
-
-        await createBooking(booking);
-
-        // Send emails (don't wait, fire and forget)
-        Promise.all([
-            sendBookingConfirmation(booking),
-            sendNewBookingNotification(booking),
-        ]).catch(console.error);
-
-        return NextResponse.json({
-            success: true,
-            booking: {
-                id: booking.id,
-                status: booking.status,
-            },
-        });
     } catch (error) {
         console.error("Booking API error:", error);
         return NextResponse.json(

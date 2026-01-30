@@ -2,10 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 import { LanguageSwitcher } from "@/components/ui/LanguageSwitcher";
+import { LOGO_URL } from "@/data/images";
 
 function getIdFromHref(href: string) {
     return href.startsWith("#") ? href.slice(1) : href;
@@ -110,13 +112,18 @@ export function Navbar() {
             animate={{ y: 0 }}
             className={`navbar ${scrolled ? "scrolled" : ""}`}
         >
-            <div className="max-w-[1400px] mx-auto px-6 md:px-10">
+            <div className="max-w-350 mx-auto px-6 md:px-10">
                 <div className="flex items-center justify-between">
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2 group relative" aria-label="Home">
-                        <div className="w-10 h-10 flex items-center justify-center border border-white/10 group-hover:border-[var(--gold)]/50 transition-all duration-700">
-                            <div className="w-2 h-2 bg-[var(--gold)] shadow-[0_0_15px_rgba(212,175,55,0.4)]" />
-                        </div>
+                        <Image
+                            src={LOGO_URL}
+                            alt="House of Mirrors"
+                            width={48}
+                            height={48}
+                            className="w-10 h-10 md:w-12 md:h-12 object-contain transition-transform duration-500 group-hover:scale-105"
+                            priority
+                        />
                     </Link>
 
                     {/* Desktop Nav */}
@@ -134,7 +141,7 @@ export function Navbar() {
                                 {link.label}
                                 <span
                                     className={[
-                                        "absolute -bottom-2 left-0 h-[1px] bg-[var(--gold)] transition-all duration-500",
+                                        "absolute -bottom-2 left-0 h-px bg-gold transition-all duration-500",
                                         isActive(link.href) ? "w-full" : "w-0 group-hover:w-full",
                                     ].join(" ")}
                                 />
@@ -143,7 +150,7 @@ export function Navbar() {
 
                         <div className="flex items-center gap-6">
                             <LanguageSwitcher />
-                            <a href="#booking" className="btn-primary !px-8 !py-3 !text-[9px] !tracking-[0.3em]">
+                            <a href="#booking" className="btn-primary px-8! py-3! text-[9px]! tracking-[0.3em]!">
                                 {dict.hero.bookNow}
                             </a>
                         </div>
@@ -170,7 +177,7 @@ export function Navbar() {
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
-                        className="md:hidden fixed inset-0 z-[60]"
+                        className="md:hidden fixed inset-0 z-60"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
@@ -184,13 +191,13 @@ export function Navbar() {
                             ref={panelRef}
                             role="dialog"
                             aria-modal="true"
-                            className="absolute top-[72px] left-0 right-0 bg-black/95 backdrop-blur-2xl border-b border-white/5 py-8"
+                            className="absolute top-18 left-0 right-0 bg-black/95 backdrop-blur-2xl border-b border-white/5 py-8"
                             initial={{ y: -12, opacity: 0 }}
                             animate={{ y: 0, opacity: 1 }}
                             exit={{ y: -12, opacity: 0 }}
                             transition={{ duration: 0.25 }}
                         >
-                            <div className="max-w-[1400px] mx-auto px-6 md:px-10 flex flex-col gap-6 items-center text-center">
+                            <div className="max-w-350 mx-auto px-6 md:px-10 flex flex-col gap-6 items-center text-center">
                                 {navLinks.map((link) => (
                                     <a
                                         key={link.href}
@@ -206,7 +213,7 @@ export function Navbar() {
                                     </a>
                                 ))}
 
-                                <a href="#booking" onClick={() => setIsOpen(false)} className="btn-primary w-full max-w-[220px]">
+                                <a href="#booking" onClick={() => setIsOpen(false)} className="btn-primary w-full max-w-55">
                                     {dict.hero.bookNow}
                                 </a>
 
