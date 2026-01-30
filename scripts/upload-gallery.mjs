@@ -9,6 +9,7 @@ const folderMap = {
   "Spavaca soba": { category: "bedroom", label: "Spavaća soba" },
   "Kuhinja": { category: "kitchen", label: "Kuhinja" },
   "Kupatilo": { category: "bathroom", label: "Kupatilo" },
+  "naslovna": { category: "hero", label: "Naslovna", keyPrefix: "gallery/naslovne" },
 };
 
 const contentTypeByExt = {
@@ -19,9 +20,20 @@ const contentTypeByExt = {
 };
 
 async function main() {
+  const onlyArg = process.argv.find((arg) => arg.startsWith("--only="));
+  const onlyFolders = onlyArg
+    ? new Set(
+        onlyArg
+          .replace("--only=", "")
+          .split(",")
+          .map((f) => f.trim())
+          .filter(Boolean)
+      )
+    : null;
   const entries = [];
 
   for (const folderName of Object.keys(folderMap)) {
+    if (onlyFolders && !onlyFolders.has(folderName)) continue;
     const { category, label } = folderMap[folderName];
     const folderPath = path.join(baseDir, folderName);
     const files = (await readdir(folderPath)).filter((f) => !f.startsWith("."));
@@ -33,7 +45,8 @@ async function main() {
       const contentType = contentTypeByExt[ext] || "application/octet-stream";
       const buffer = await readFile(filePath);
 
-      const key = `gallery/${category}/${file}`;
+      const keyPrefix = folderMap[folderName].keyPrefix || `gallery/${category}`;
+      const key = `${keyPrefix}/${file}`;
       const { url } = await put(key, buffer, {
         access: "public",
         contentType,
