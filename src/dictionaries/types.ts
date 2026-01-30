@@ -137,6 +137,12 @@ export interface Dictionary {
         title: string;
         description: string;
         readMore: string;
+        badges: {
+            rating: string;
+            toCenter: string;
+            neighborhood: string;
+            design: string;
+        };
         space: {
             title: string;
             content: string;
