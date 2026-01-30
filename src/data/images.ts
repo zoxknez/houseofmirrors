@@ -1,24 +1,9 @@
 export const propertyImages = {
     hero: [
         {
-            src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/naslovne/IMG_20251124_132744.jpg",
-            alt: "Naslovna 1",
-            priority: true
-        },
-        {
-            src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/naslovne/IMG_20251124_171304.jpg",
-            alt: "Naslovna 2",
-            priority: false
-        },
-        {
             src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/naslovne/IMG_20251124_171807.jpg",
-            alt: "Naslovna 3",
-            priority: false
-        },
-        {
-            src: "https://m9h4hzq4wcfctg7d.public.blob.vercel-storage.com/gallery/naslovne/IMG_20251124_172558.jpg",
-            alt: "Naslovna 4",
-            priority: false
+            alt: "Naslovna",
+            priority: true
         }
     ],
 

@@ -107,7 +107,7 @@ export function Hero() {
                             fill
                             // priority only for the first hero image (LCP)
                             priority={currentSlide === 0}
-                            className="object-cover md:object-contain"
+                            className="object-cover md:object-cover"
                             sizes="100vw"
                         />
                     </motion.div>
