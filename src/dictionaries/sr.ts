@@ -131,6 +131,12 @@ export const sr: Dictionary = {
         title: "O ovom prostoru",
         description: "House of Mirrors je luksuzan, potpuno renoviran apartman namenjen udobnom boravku i opuštanju. Nalazi se u mirnom i bezbednom kraju, na svega 10 minuta od centra grada, što ga čini idealnim izborom za goste koji žele privatnost, ali i dobru povezanost sa gradom.",
         readMore: "O ovom prostoru",
+        badges: {
+            rating: "Ocena",
+            toCenter: "Do centra",
+            neighborhood: "Komšiluk",
+            design: "Dizajn"
+        },
         space: {
             title: "Prostor",
             content: "Ovaj moderno uređen apartman pažljivo je osmišljen kako za kraće, tako i za duže boravke. Svaki detalj - od luksuznog nameštaja do savremene opreme - izabran je sa ciljem da pruži maksimalnu udobnost i opuštanje. Kuhinja je u potpunosti opremljena svim neophodnim aparatima i posuđem, kako biste se osećali kao kod kuće."

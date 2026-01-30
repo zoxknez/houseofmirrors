@@ -22,10 +22,10 @@ export function Highlights() {
             {/* Background Glow */}
             <div
                 aria-hidden="true"
-                className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-[var(--accent)]/5 rounded-full blur-[150px] pointer-events-none"
+                className="absolute top-0 left-1/2 -translate-x-1/2 w-150 h-100 bg-accent/5 rounded-full blur-[150px] pointer-events-none"
             />
 
-            <div className="max-w-[1400px] mx-auto px-6 md:px-10 relative z-10">
+            <div className="max-w-350 mx-auto px-6 md:px-10 relative z-10">
                 <SectionHeader
                     badge={dict.hero.experienceLuxury}
                     title={
@@ -49,16 +49,16 @@ export function Highlights() {
                                 transition={{ duration: 0.6, delay: index * 0.08 }}
                                 className="h-full"
                             >
-                                <GlassCard className="group relative p-5 md:p-6 rounded-2xl flex items-start gap-4 hover:bg-white/[0.04] hover:border-[var(--gold)]/25 transition-all duration-500 overflow-hidden h-full">
+                                <GlassCard className="group relative p-5 md:p-6 rounded-2xl flex items-start gap-4 hover:bg-white/4 hover:border-gold/25 transition-all duration-500 overflow-hidden h-full">
                                     {/* Hover sheen */}
                                     <div
                                         aria-hidden="true"
-                                        className="absolute inset-0 bg-gradient-to-br from-[var(--gold)]/6 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"
+                                        className="absolute inset-0 bg-linear-to-br from-gold/6 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700"
                                     />
 
                                     {/* Icon Circle */}
-                                    <div className="relative w-11 h-11 md:w-12 md:h-12 rounded-full bg-[var(--gold)]/5 border border-[var(--gold)]/20 flex items-center justify-center flex-shrink-0 group-hover:bg-[var(--gold)]/10 group-hover:border-[var(--gold)]/40 transition-all duration-500 shadow-[0_0_24px_rgba(212,175,55,0.08)]">
-                                        <Icon className="w-5 h-5 md:w-6 md:h-6 text-[var(--gold)]" />
+                                    <div className="relative w-11 h-11 md:w-12 md:h-12 rounded-full bg-gold/5 border border-gold/20 flex items-center justify-center shrink-0 group-hover:bg-gold/10 group-hover:border-gold/40 transition-all duration-500 shadow-[0_0_24px_rgba(212,175,55,0.08)]">
+                                        <Icon className="w-5 h-5 md:w-6 md:h-6 text-gold" />
                                     </div>
 
                                     {/* Content */}
@@ -74,7 +74,7 @@ export function Highlights() {
                                     {/* Hover Gold Line */}
                                     <div
                                         aria-hidden="true"
-                                        className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-[var(--gold)]/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                                        className="absolute bottom-0 left-0 right-0 h-0.5 bg-linear-to-r from-transparent via-gold/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                                     />
                                 </GlassCard>
                             </motion.article>

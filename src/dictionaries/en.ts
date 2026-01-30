@@ -131,6 +131,12 @@ export const en: Dictionary = {
         title: "About this space",
         description: "House of Mirrors is a luxury, fully renovated apartment designed for comfort and relaxation. Situated in a quiet, safe neighborhood just 10 minutes from the city center, it offers the perfect blend of privacy and connectivity.",
         readMore: "About this space",
+        badges: {
+            rating: "Rating",
+            toCenter: "To Center",
+            neighborhood: "Neighborhood",
+            design: "Design"
+        },
         space: {
             title: "The Space",
             content: "This modern apartment is thoughtfully designed for both short and extended stays. Every detail—from luxury furniture to state-of-the-art equipment—has been selected to provide maximum comfort. The kitchen is fully equipped with all necessary appliances and kitchenware to make you feel right at home."

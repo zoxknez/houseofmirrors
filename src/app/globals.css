@@ -279,6 +279,13 @@
     transition: all 0.3s ease;
   }
 
+  @media (min-width: 768px) {
+    .navbar {
+      background: rgba(13, 13, 26, 0.95);
+      backdrop-filter: blur(20px);
+    }
+  }
+
   .navbar.scrolled {
     background: rgba(13, 13, 26, 0.95);
     backdrop-filter: blur(20px);

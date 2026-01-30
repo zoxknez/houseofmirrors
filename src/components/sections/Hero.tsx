@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Maximize, Users, Bed, Bath } from "lucide-react";
-import { propertyImages } from "@/data/images";
+import { LOGO_URL, propertyImages } from "@/data/images";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { useLanguage } from "@/context/LanguageContext";
 
@@ -183,9 +183,9 @@ export function Hero() {
             </div>
 
             {/* Main Content */}
-            <div className="relative z-20 max-w-350 mx-auto px-6 md:px-10 py-8 md:py-12 text-center flex flex-col items-center justify-center grow">
+            <div className="relative z-20 max-w-350 mx-auto px-6 md:px-10 py-8 md:py-12 text-center flex flex-col items-center justify-center grow overflow-x-hidden">
                 {/* Badge */}
-                <div className="mb-8 md:mb-12 inline-flex items-center gap-4">
+                <div className="mt-12 md:mt-16 mb-8 md:mb-12 inline-flex items-center gap-4">
                     <div className="w-8 md:w-16 h-px bg-linear-to-r from-transparent to-gold/50" />
                     <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-gold">
                         {dict.hero.experienceLuxury}
@@ -193,9 +193,22 @@ export function Hero() {
                     <div className="w-8 md:w-16 h-px bg-linear-to-l from-transparent to-gold/50" />
                 </div>
 
-                <h1 className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter leading-[0.85] text-white mb-6 md:mb-10">
+                <h1 className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter leading-[0.85] text-white mb-8 md:mb-10">
                     {dict.property.name}
                 </h1>
+
+                <div className="w-full flex justify-center">
+                    <img
+                        src={LOGO_URL}
+                        alt="House of Mirrors"
+                        width={400}
+                        height={400}
+                        style={{ width: 'min(25rem, 90vw)', height: 'min(25rem, 90vw)', maxWidth: '25rem', maxHeight: '25rem', margin: '-5rem auto -3rem' }}
+                        className="object-contain block"
+                        loading="eager"
+                        decoding="async"
+                    />
+                </div>
 
                 <p className="text-[11px] sm:text-xs md:text-sm font-bold uppercase tracking-[0.2em] text-white/40 mb-10 md:mb-14 max-w-md md:max-w-2xl mx-auto leading-relaxed">
                     {dict.property.tagline}

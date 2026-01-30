@@ -17,9 +17,11 @@ export function Navbar() {
     const { dict } = useLanguage();
     const [isOpen, setIsOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const [hidden, setHidden] = useState(false);
     const [activeId, setActiveId] = useState<string>("");
 
     const panelRef = useRef<HTMLDivElement | null>(null);
+    const lastScrollY = useRef(0);
 
     const navLinks = [
         { href: "#gallery", label: dict.gallery.title },
@@ -29,9 +31,21 @@ export function Navbar() {
         { href: "#contact", label: dict.contact.title },
     ];
 
-    // scrolled state
+    // scrolled state and hide/show on scroll
     useEffect(() => {
-        const handleScroll = () => setScrolled(window.scrollY > 50);
+        const handleScroll = () => {
+            const currentScrollY = window.scrollY;
+            setScrolled(currentScrollY > 50);
+            
+            // Hide navbar when scrolling down, show when scrolling up
+            if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
+                setHidden(true);
+            } else if (currentScrollY < lastScrollY.current) {
+                setHidden(false);
+            }
+            
+            lastScrollY.current = currentScrollY;
+        };
         handleScroll();
         window.addEventListener("scroll", handleScroll, { passive: true });
         return () => window.removeEventListener("scroll", handleScroll);
@@ -109,23 +123,12 @@ export function Navbar() {
     return (
         <motion.nav
             initial={{ y: -100 }}
-            animate={{ y: 0 }}
+            animate={{ y: hidden ? -100 : 0 }}
+            transition={{ duration: 0.3 }}
             className={`navbar ${scrolled ? "scrolled" : ""}`}
         >
             <div className="max-w-350 mx-auto px-6 md:px-10">
                 <div className="flex items-center justify-between">
-                    {/* Logo */}
-                    <Link href="/" className="flex items-center gap-2 group relative" aria-label="Home">
-                        <Image
-                            src={LOGO_URL}
-                            alt="House of Mirrors"
-                            width={48}
-                            height={48}
-                            className="w-10 h-10 md:w-12 md:h-12 object-contain transition-transform duration-500 group-hover:scale-105"
-                            priority
-                        />
-                    </Link>
-
                     {/* Desktop Nav */}
                     <div className="hidden md:flex items-center gap-8 lg:gap-12">
                         {navLinks.map((link) => (
@@ -133,7 +136,7 @@ export function Navbar() {
                                 key={link.href}
                                 href={link.href}
                                 className={[
-                                    "text-[10px] font-black uppercase tracking-[0.3em] transition-all duration-500 relative group",
+                                    "text-[10px] font-black uppercase tracking-[0.3em] transition-all duration-500 relative group whitespace-nowrap",
                                     isActive(link.href) ? "text-white" : "text-white/40 hover:text-white",
                                 ].join(" ")}
                                 aria-current={isActive(link.href) ? "true" : undefined}
@@ -147,13 +150,13 @@ export function Navbar() {
                                 />
                             </a>
                         ))}
+                    </div>
 
-                        <div className="flex items-center gap-6">
-                            <LanguageSwitcher />
-                            <a href="#booking" className="btn-primary px-8! py-3! text-[9px]! tracking-[0.3em]!">
-                                {dict.hero.bookNow}
-                            </a>
-                        </div>
+                    <div className="hidden md:flex items-center gap-6 justify-end">
+                        <LanguageSwitcher />
+                        <a href="#booking" className="btn-primary px-8! py-3! text-[9px]! tracking-[0.3em]! whitespace-nowrap">
+                            {dict.hero.bookNow}
+                        </a>
                     </div>
 
                     {/* Mobile Controls */}
