@@ -232,15 +232,27 @@ export default function AdminPage() {
     }, [bookings, statusFilter]);
 
     const sortedBookings = useMemo(() => {
-        return [...filteredBookings].sort(
-            (a, b) => new Date(b.checkIn).getTime() - new Date(a.checkIn).getTime()
-        );
-    }, [filteredBookings]);
+        const statusPriority: Record<BookingStatus, number> = {
+            pending: 0,
+            confirmed: 1,
+            completed: 2,
+            cancelled: 3,
+        };
+        return [...filteredBookings].sort((a, b) => {
+            // If showing all, prioritize pending first
+            if (statusFilter === "all") {
+                const priorityDiff = statusPriority[a.status] - statusPriority[b.status];
+                if (priorityDiff !== 0) return priorityDiff;
+            }
+            // Then sort by check-in date (newest first)
+            return new Date(b.checkIn).getTime() - new Date(a.checkIn).getTime();
+        });
+    }, [filteredBookings, statusFilter]);
 
     if (authenticated === null) {
         return (
             <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[var(--gold)]" />
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gold" />
             </div>
         );
     }
@@ -256,7 +268,7 @@ export default function AdminPage() {
     ];
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+        <div className="min-h-screen bg-linear-to-br from-gray-900 via-gray-800 to-gray-900">
             {/* Mobile Header */}
             <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800 z-40 flex items-center justify-between px-4">
                 <button
@@ -284,7 +296,7 @@ export default function AdminPage() {
                 <div className="p-6">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-gradient-to-br from-[var(--gold)] to-[var(--gold)]/60 rounded-xl flex items-center justify-center">
+                            <div className="w-10 h-10 bg-linear-to-br from-gold to-gold/60 rounded-xl flex items-center justify-center">
                                 <span className="text-gray-900 font-bold">HM</span>
                             </div>
                             <div className="min-w-0">
@@ -310,7 +322,7 @@ export default function AdminPage() {
                                 setSidebarOpen(false);
                             }}
                             className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all ${activeTab === tab.id
-                                ? "bg-[var(--gold)]/10 text-[var(--gold)]"
+                                ? "bg-gold/10 text-gold"
                                 : "text-gray-400 hover:bg-gray-800 hover:text-white"
                                 }`}
                         >
@@ -364,7 +376,7 @@ export default function AdminPage() {
 
                     {loading ? (
                         <div className="flex items-center justify-center h-64">
-                            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-[var(--gold)]" />
+                            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gold" />
                         </div>
                     ) : (
                         <>
@@ -420,7 +432,7 @@ export default function AdminPage() {
 
                                     {/* Quick Stats */}
                                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                                        <div className="bg-white/[0.03] backdrop-blur-sm rounded-2xl p-5 border border-white/5">
+                                        <div className="bg-white/3 backdrop-blur-sm rounded-2xl p-5 border border-white/5">
                                             <div className="flex items-center gap-4">
                                                 <div className="p-3 bg-emerald-500/10 rounded-xl border border-emerald-500/10">
                                                     <TrendingUp className="w-5 h-5 text-emerald-400" />
@@ -431,7 +443,7 @@ export default function AdminPage() {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="bg-white/[0.03] backdrop-blur-sm rounded-2xl p-5 border border-white/5">
+                                        <div className="bg-white/3 backdrop-blur-sm rounded-2xl p-5 border border-white/5">
                                             <div className="flex items-center gap-4">
                                                 <div className="p-3 bg-red-500/10 rounded-xl border border-red-500/10">
                                                     <LogOut className="w-5 h-5 text-red-400" />
@@ -442,7 +454,7 @@ export default function AdminPage() {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div className="bg-white/[0.03] backdrop-blur-sm rounded-2xl p-5 border border-white/5">
+                                        <div className="bg-white/3 backdrop-blur-sm rounded-2xl p-5 border border-white/5">
                                             <div className="flex items-center gap-4">
                                                 <div className="p-3 bg-blue-500/10 rounded-xl border border-blue-500/10">
                                                     <Users className="w-5 h-5 text-blue-400" />
@@ -459,30 +471,45 @@ export default function AdminPage() {
                                     <div className="space-y-6">
                                         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                                             <h2 className="text-xl font-black text-white uppercase tracking-tight">Rezervacije</h2>
-                                            <div className="flex gap-1.5 p-1 bg-white/5 rounded-xl border border-white/5">
-                                                {(["all", "pending", "confirmed", "cancelled"] as const).map((status) => (
-                                                    <button
-                                                        key={status}
-                                                        onClick={() => setStatusFilter(status)}
-                                                        className={`px-4 py-1.5 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all ${statusFilter === status
-                                                            ? "bg-[var(--gold)]/20 text-[var(--gold)]"
-                                                            : "text-white/40 hover:text-white"
-                                                            }`}
-                                                    >
-                                                        {status === "all"
-                                                            ? "Sve"
-                                                            : status === "pending"
-                                                                ? "Na čekanju"
-                                                                : status === "confirmed"
-                                                                    ? "Potvrđeno"
-                                                                    : "Otkazano"}
-                                                    </button>
-                                                ))}
+                                            <div className="flex flex-wrap gap-1.5 p-1 bg-white/5 rounded-xl border border-white/5">
+                                                {(["all", "pending", "confirmed", "completed", "cancelled"] as const).map((status) => {
+                                                    const count = status === "all" 
+                                                        ? bookings.length 
+                                                        : bookings.filter(b => b.status === status).length;
+                                                    const labels: Record<string, string> = {
+                                                        all: "Sve",
+                                                        pending: "Na čekanju",
+                                                        confirmed: "Potvrđeno",
+                                                        completed: "Završeno",
+                                                        cancelled: "Otkazano",
+                                                    };
+                                                    return (
+                                                        <button
+                                                            key={status}
+                                                            onClick={() => setStatusFilter(status)}
+                                                            className={`px-3 py-1.5 text-[10px] font-black uppercase tracking-widest rounded-lg transition-all flex items-center gap-1.5 ${statusFilter === status
+                                                                ? "bg-gold/20 text-gold"
+                                                                : "text-white/40 hover:text-white"
+                                                                }`}
+                                                        >
+                                                            {labels[status]}
+                                                            {count > 0 && (
+                                                                <span className={`min-w-4.5 h-4.5 rounded-full flex items-center justify-center text-[9px] ${
+                                                                    statusFilter === status 
+                                                                        ? "bg-gold/30 text-gold" 
+                                                                        : "bg-white/10 text-white/50"
+                                                                }`}>
+                                                                    {count}
+                                                                </span>
+                                                            )}
+                                                        </button>
+                                                    );
+                                                })}
                                             </div>
                                         </div>
 
                                         {sortedBookings.length === 0 ? (
-                                            <div className="bg-white/[0.02] rounded-3xl p-12 text-center border border-white/5">
+                                            <div className="bg-white/2 rounded-3xl p-12 text-center border border-white/5">
                                                 <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mx-auto mb-4">
                                                     <Calendar className="w-8 h-8 text-white/20" />
                                                 </div>
@@ -526,10 +553,10 @@ export default function AdminPage() {
                                     className="space-y-6"
                                 >
                                     {/* iCal Export */}
-                                    <div className="bg-white/[0.03] backdrop-blur-sm rounded-3xl p-8 border border-white/5">
+                                    <div className="bg-white/3 backdrop-blur-sm rounded-3xl p-8 border border-white/5">
                                         <div className="flex flex-col md:flex-row items-start gap-6">
-                                            <div className="p-4 bg-[var(--gold)]/10 rounded-2xl border border-[var(--gold)]/10">
-                                                <LinkIcon className="w-8 h-8 text-[var(--gold)]" />
+                                            <div className="p-4 bg-gold/10 rounded-2xl border border-gold/10">
+                                                <LinkIcon className="w-8 h-8 text-gold" />
                                             </div>
                                             <div className="flex-1 min-w-0">
                                                 <h3 className="text-xl font-black text-white uppercase tracking-tight mb-2">
@@ -549,7 +576,7 @@ export default function AdminPage() {
                                                     />
                                                     <button
                                                         onClick={copyCalendarUrl}
-                                                        className="px-6 py-3 bg-[var(--gold)] hover:brightness-110 text-gray-900 rounded-xl flex items-center justify-center gap-2 font-black text-xs uppercase tracking-widest transition-all"
+                                                        className="px-6 py-3 bg-gold hover:brightness-110 text-gray-900 rounded-xl flex items-center justify-center gap-2 font-black text-xs uppercase tracking-widest transition-all"
                                                     >
                                                         {copied ? (
                                                             <>
@@ -569,14 +596,14 @@ export default function AdminPage() {
                                     </div>
 
                                     {/* Instructions */}
-                                    <div className="bg-white/[0.03] backdrop-blur-sm rounded-3xl p-8 border border-white/5">
+                                    <div className="bg-white/3 backdrop-blur-sm rounded-3xl p-8 border border-white/5">
                                         <h3 className="text-xl font-black text-white uppercase tracking-tight mb-6">
                                             Kako sinhronizovati kalendar
                                         </h3>
 
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                            <div className="flex gap-4 p-5 bg-white/[0.02] rounded-2xl border border-white/5">
-                                                <span className="flex-shrink-0 w-10 h-10 bg-blue-500/10 text-blue-400 rounded-xl flex items-center justify-center font-black text-lg">
+                                            <div className="flex gap-4 p-5 bg-white/2 rounded-2xl border border-white/5">
+                                                <span className="shrink-0 w-10 h-10 bg-blue-500/10 text-blue-400 rounded-xl flex items-center justify-center font-black text-lg">
                                                     1
                                                 </span>
                                                 <div>
@@ -586,8 +613,8 @@ export default function AdminPage() {
                                                     </p>
                                                 </div>
                                             </div>
-                                            <div className="flex gap-4 p-5 bg-white/[0.02] rounded-2xl border border-white/5">
-                                                <span className="flex-shrink-0 w-10 h-10 bg-pink-500/10 text-pink-400 rounded-xl flex items-center justify-center font-black text-lg">
+                                            <div className="flex gap-4 p-5 bg-white/2 rounded-2xl border border-white/5">
+                                                <span className="shrink-0 w-10 h-10 bg-pink-500/10 text-pink-400 rounded-xl flex items-center justify-center font-black text-lg">
                                                     2
                                                 </span>
                                                 <div>
@@ -599,8 +626,8 @@ export default function AdminPage() {
                                             </div>
                                         </div>
 
-                                        <div className="mt-8 p-5 bg-[var(--gold)]/5 border border-[var(--gold)]/10 rounded-2xl">
-                                            <p className="text-[var(--gold)]/80 text-xs font-bold leading-relaxed">
+                                        <div className="mt-8 p-5 bg-gold/5 border border-gold/10 rounded-2xl">
+                                            <p className="text-gold/80 text-xs font-bold leading-relaxed">
                                                 <strong>Napomena:</strong> Booking.com i Airbnb osvežavaju
                                                 kalendar svakih 3-12 sati. Za trenutnu sinhronizaciju
                                                 bi bio potreban direktan API pristup.
@@ -609,7 +636,7 @@ export default function AdminPage() {
                                     </div>
 
                                     {/* Blocked Dates */}
-                                    <div className="bg-white/[0.03] backdrop-blur-sm rounded-3xl p-8 border border-white/5">
+                                    <div className="bg-white/3 backdrop-blur-sm rounded-3xl p-8 border border-white/5">
                                         <h3 className="text-xl font-black text-white uppercase tracking-tight mb-6">
                                             Blokirani datumi
                                         </h3>
@@ -623,7 +650,7 @@ export default function AdminPage() {
                                                 {blockedDates.map((block) => (
                                                     <div
                                                         key={block.id}
-                                                        className="flex items-center justify-between p-4 bg-white/[0.02] rounded-2xl border border-white/5"
+                                                        className="flex items-center justify-between p-4 bg-white/2 rounded-2xl border border-white/5"
                                                     >
                                                         <div>
                                                             <p className="text-white font-black text-xs uppercase tracking-widest">

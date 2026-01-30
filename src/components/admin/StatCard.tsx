@@ -55,7 +55,7 @@ export function StatCard({
             initial={reduceMotion ? false : { opacity: 0, y: 12 }}
             animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
             transition={{ duration: 0.45 }}
-            className={`bg-gradient-to-br ${colorClasses[color]} backdrop-blur-sm rounded-2xl p-6 border hover:border-white/20 transition-all`}
+            className={`bg-linear-to-br ${colorClasses[color]} backdrop-blur-sm rounded-2xl p-6 border hover:border-white/20 transition-all`}
         >
             <div className="flex items-start justify-between gap-6">
                 <div className="min-w-0">

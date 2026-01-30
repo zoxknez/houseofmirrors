@@ -102,7 +102,7 @@ export function Gallery() {
 
     return (
         <section id="gallery" className="relative py-20 md:py-32">
-            <div className="max-w-[1400px] mx-auto px-6 md:px-10">
+            <div className="max-w-350 mx-auto px-6 md:px-10">
                 {/* Category Filters */}
                 <div className="flex flex-wrap justify-center gap-3 mb-10">
                     {categories.map((cat) => (
@@ -116,7 +116,7 @@ export function Gallery() {
                             className={cn(
                                 "px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-300 border",
                                 selectedCategory === cat.id
-                                    ? "bg-[var(--gold)] text-black border-[var(--gold)] shadow-[0_0_20px_rgba(212,175,55,0.2)]"
+                                    ? "bg-gold text-black border-gold shadow-[0_0_20px_rgba(212,175,55,0.2)]"
                                     : "bg-white/5 text-white/40 border-white/10 hover:border-white/20 hover:text-white"
                             )}
                         >
@@ -130,7 +130,7 @@ export function Gallery() {
                     <button
                         type="button"
                         aria-label={dict.gallery.viewGallery}
-                        className="relative group cursor-pointer overflow-hidden rounded-3xl deluxe-card aspect-[21/9] w-full text-left"
+                        className="relative group cursor-pointer overflow-hidden rounded-3xl deluxe-card aspect-21/9 w-full text-left"
                         onClick={() => openLightbox(featuredImage.src)}
                     >
                         <Image
@@ -143,7 +143,7 @@ export function Gallery() {
                         />
 
                         {/* Overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
+                        <div className="absolute inset-0 bg-linear-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
 
                         {/* Content */}
                         <div className="absolute bottom-10 left-10 text-left">
@@ -154,7 +154,7 @@ export function Gallery() {
                                 {selectedCategoryMeta.label}
                             </h2>
                             <div className="flex items-center gap-4">
-                                <span className="btn-primary !px-6 !py-3 !text-xs">
+                                <span className="btn-primary px-6! py-3! text-xs!">
                                     {dict.gallery.viewGallery}
                                 </span>
                                 <span className="text-white/60 font-bold uppercase text-[10px] tracking-widest">
@@ -179,14 +179,14 @@ export function Gallery() {
                                     />
                                 </div>
                             ))}
-                            <div className="w-16 h-16 rounded-xl border-2 border-black bg-[var(--accent)] flex items-center justify-center text-white text-xs font-black shadow-2xl transition-transform hover:-translate-y-2">
+                            <div className="w-16 h-16 rounded-xl border-2 border-black bg-accent flex items-center justify-center text-white text-xs font-black shadow-2xl transition-transform hover:-translate-y-2">
                                 +{Math.max(displayImages.length - 4, 0)}
                             </div>
                         </div>
                     </button>
                 ) : (
-                    <div className="relative overflow-hidden rounded-3xl deluxe-card aspect-[21/9] w-full flex items-center justify-center text-center p-8">
-                        <div className="absolute inset-0 bg-gradient-to-br from-white/[0.03] to-transparent" />
+                    <div className="relative overflow-hidden rounded-3xl deluxe-card aspect-21/9 w-full flex items-center justify-center text-center p-8">
+                        <div className="absolute inset-0 bg-linear-to-br from-white/3 to-transparent" />
                         <div className="relative z-10">
                             <p className="text-white/40 text-xs font-black uppercase tracking-[0.3em] mb-3">{dict.gallery.title}</p>
                             <h2 className="text-2xl md:text-4xl font-black text-white uppercase tracking-tighter mb-4">
@@ -227,7 +227,7 @@ export function Gallery() {
                                             <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors" />
                                         </>
                                     ) : (
-                                        <div className="absolute inset-0 bg-white/[0.02]" />
+                                        <div className="absolute inset-0 bg-white/2" />
                                     )}
                                     <div className="absolute inset-0 flex flex-col items-center justify-center">
                                         <span className="text-white font-black uppercase tracking-[0.2em] text-sm mb-1">{cat.label}</span>
@@ -271,7 +271,7 @@ export function Gallery() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-xl flex items-center justify-center"
+                        className="fixed inset-0 z-100 bg-black/95 backdrop-blur-xl flex items-center justify-center"
                         onClick={closeLightbox}
                         role="dialog"
                         aria-modal="true"
@@ -280,7 +280,7 @@ export function Gallery() {
                         <button
                             onClick={closeLightbox}
                             type="button"
-                            className="absolute top-6 right-6 z-[110] p-4 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all"
+                            className="absolute top-6 right-6 z-110 p-4 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all"
                             aria-label="Close"
                         >
                             <X className="w-6 h-6" />
@@ -290,7 +290,7 @@ export function Gallery() {
                         <button
                             onClick={(e) => { e.stopPropagation(); prevImage(); }}
                             type="button"
-                            className="hidden md:inline-flex absolute left-8 top-1/2 -translate-y-1/2 z-[110] p-5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all group"
+                            className="hidden md:inline-flex absolute left-8 top-1/2 -translate-y-1/2 z-110 p-5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all group"
                             aria-label="Previous"
                         >
                             <ChevronLeft className="w-8 h-8 group-hover:-translate-x-1 transition-transform" />
@@ -298,14 +298,14 @@ export function Gallery() {
                         <button
                             onClick={(e) => { e.stopPropagation(); nextImage(); }}
                             type="button"
-                            className="hidden md:inline-flex absolute right-8 top-1/2 -translate-y-1/2 z-[110] p-5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all group"
+                            className="hidden md:inline-flex absolute right-8 top-1/2 -translate-y-1/2 z-110 p-5 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-all group"
                             aria-label="Next"
                         >
                             <ChevronRight className="w-8 h-8 group-hover:translate-x-1 transition-transform" />
                         </button>
 
                         {/* Mobile Navigation Bar */}
-                        <div className="md:hidden fixed bottom-10 left-1/2 -translate-x-1/2 z-[110] flex items-center gap-6">
+                        <div className="md:hidden fixed bottom-10 left-1/2 -translate-x-1/2 z-110 flex items-center gap-6">
                             <button
                                 onClick={(e) => { e.stopPropagation(); prevImage(); }}
                                 type="button"

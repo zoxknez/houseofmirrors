@@ -86,7 +86,7 @@ export function Hero() {
 
     return (
         <section
-            className="relative min-h-[100dvh] flex flex-col overflow-hidden bg-black"
+            className="relative min-h-dvh flex flex-col overflow-hidden bg-black"
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
         >
@@ -114,7 +114,7 @@ export function Hero() {
                 </AnimatePresence>
 
                 {/* Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-black/80 z-10" />
+                <div className="absolute inset-0 bg-linear-to-b from-black/70 via-black/50 to-black/80 z-10" />
             </div>
 
             {/* Swipe area (mobile-friendly) */}
@@ -172,7 +172,7 @@ export function Hero() {
                                 goTo(index);
                             }}
                             className={`h-1 rounded-full transition-all duration-500 ${active
-                                ? "w-12 bg-[var(--gold)] shadow-[0_0_10px_rgba(212,175,55,0.4)]"
+                                ? "w-12 bg-gold shadow-[0_0_10px_rgba(212,175,55,0.4)]"
                                 : "w-2 bg-white/20 hover:bg-white/40"
                                 }`}
                             aria-label={`Slide ${index + 1}`}
@@ -183,14 +183,14 @@ export function Hero() {
             </div>
 
             {/* Main Content */}
-            <div className="relative z-20 max-w-[1400px] mx-auto px-6 md:px-10 py-8 md:py-12 text-center flex flex-col items-center justify-center flex-grow">
+            <div className="relative z-20 max-w-350 mx-auto px-6 md:px-10 py-8 md:py-12 text-center flex flex-col items-center justify-center grow">
                 {/* Badge */}
                 <div className="mb-8 md:mb-12 inline-flex items-center gap-4">
-                    <div className="w-8 md:w-16 h-px bg-gradient-to-r from-transparent to-[var(--gold)]/50" />
-                    <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-[var(--gold)]">
+                    <div className="w-8 md:w-16 h-px bg-linear-to-r from-transparent to-gold/50" />
+                    <span className="text-[10px] md:text-xs font-black uppercase tracking-[0.4em] text-gold">
                         {dict.hero.experienceLuxury}
                     </span>
-                    <div className="w-8 md:w-16 h-px bg-gradient-to-l from-transparent to-[var(--gold)]/50" />
+                    <div className="w-8 md:w-16 h-px bg-linear-to-l from-transparent to-gold/50" />
                 </div>
 
                 <h1 className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter leading-[0.85] text-white mb-6 md:mb-10">
@@ -201,8 +201,8 @@ export function Hero() {
                     {dict.property.tagline}
                 </p>
 
-                <div className="mb-8 md:mb-10 inline-flex items-center gap-3 px-4 sm:px-6 py-3 rounded-full border border-[var(--gold)]/40 bg-[var(--gold)]/15 shadow-[0_0_30px_rgba(212,175,55,0.25)] backdrop-blur">
-                    <span className="px-3 py-1 rounded-full bg-[var(--gold)] text-black text-[11px] md:text-sm font-black uppercase tracking-[0.25em] shadow-[0_0_20px_rgba(212,175,55,0.35)]">
+                <div className="mb-8 md:mb-10 inline-flex items-center gap-3 px-4 sm:px-6 py-3 rounded-full border border-gold/40 bg-gold/15 shadow-[0_0_30px_rgba(212,175,55,0.25)] backdrop-blur">
+                    <span className="px-3 py-1 rounded-full bg-gold text-black text-[11px] md:text-sm font-black uppercase tracking-[0.25em] shadow-[0_0_20px_rgba(212,175,55,0.35)]">
                         {dict.hero.officialRating}
                     </span>
                     <span className="text-white text-[10px] md:text-xs font-black uppercase tracking-[0.2em]">
@@ -211,10 +211,10 @@ export function Hero() {
                 </div>
 
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-5 md:gap-6 mb-12 md:mb-20 w-full sm:w-auto">
-                    <a href="#booking" className="btn-primary w-full sm:w-auto !px-10 !py-4">
+                    <a href="#booking" className="btn-primary w-full sm:w-auto px-10! py-4!">
                         {dict.hero.bookNow}
                     </a>
-                    <a href="#gallery" className="btn-ghost w-full sm:w-auto !px-10 !py-4">
+                    <a href="#gallery" className="btn-ghost w-full sm:w-auto px-10! py-4!">
                         {dict.hero.explore}
                     </a>
                 </div>
@@ -224,10 +224,10 @@ export function Hero() {
                     {stats.map((stat, i) => (
                         <GlassCard
                             key={i}
-                            className="group p-5 md:p-7 hover:border-[var(--gold)]/20 transition-all duration-700 text-center flex flex-col items-center justify-center rounded-[28px] hover:bg-white/[0.04] relative overflow-hidden border-white/5"
+                            className="group p-5 md:p-7 hover:border-gold/20 transition-all duration-700 text-center flex flex-col items-center justify-center rounded-[28px] hover:bg-white/4 relative overflow-hidden border-white/5"
                         >
-                            <div className="absolute inset-0 bg-gradient-to-br from-[var(--gold)]/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                            <stat.icon className="w-5 h-5 md:w-6 md:h-6 text-[var(--gold)] mx-auto mb-3 group-hover:scale-110 transition-transform duration-500" />
+                            <div className="absolute inset-0 bg-linear-to-br from-gold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                            <stat.icon className="w-5 h-5 md:w-6 md:h-6 text-gold mx-auto mb-3 group-hover:scale-110 transition-transform duration-500" />
                             <p className="text-[8px] md:text-[9px] font-black uppercase tracking-[0.2em] text-white/30 mb-2 group-hover:text-white/50 transition-colors">
                                 {stat.label}
                             </p>
@@ -242,11 +242,11 @@ export function Hero() {
             {/* Ambient Glows */}
             <div
                 aria-hidden="true"
-                className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[var(--gold)]/5 rounded-full blur-[120px] pointer-events-none"
+                className="absolute top-1/4 left-1/4 w-125 h-125 bg-gold/5 rounded-full blur-[120px] pointer-events-none"
             />
             <div
                 aria-hidden="true"
-                className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-[var(--gold)]/3 rounded-full blur-[120px] pointer-events-none"
+                className="absolute bottom-1/4 right-1/4 w-125 h-125 bg-gold/3 rounded-full blur-[120px] pointer-events-none"
             />
         </section>
     );
