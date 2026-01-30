@@ -37,7 +37,10 @@ yarn-error.log*
 .vercel
 
 # local assets
-/public/Galerija
+/public/Galerija/*
+!/public/Galerija/Logo/
+/public/Galerija/Logo/*
+!/public/Galerija/Logo/logo.png
 
 # editor
 .vscode
