@@ -8,7 +8,7 @@ export interface Booking {
     lastName: string;
     email: string;
     phone: string;
-    message?: string;
+    message: string;
     checkIn: string; // ISO date string YYYY-MM-DD
     checkOut: string; // ISO date string YYYY-MM-DD
     guests: number;
@@ -25,7 +25,7 @@ export interface BookingRequest {
     lastName: string;
     email: string;
     phone: string;
-    message?: string;
+    message: string;
     checkIn: string;
     checkOut: string;
     guests: number;

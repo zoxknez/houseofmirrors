@@ -48,6 +48,8 @@ function validateBookingRequest(body: unknown): body is BookingRequest {
         /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(b.email) &&
         typeof b.phone === "string" &&
         b.phone.trim().length > 0 &&
+        typeof b.message === "string" &&
+        b.message.trim().length > 0 &&
         typeof b.checkIn === "string" &&
         /^\d{4}-\d{2}-\d{2}$/.test(b.checkIn) &&
         typeof b.checkOut === "string" &&

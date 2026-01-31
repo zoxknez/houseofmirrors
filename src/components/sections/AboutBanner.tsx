@@ -11,8 +11,8 @@ export function AboutBanner() {
     const [isOpen, setIsOpen] = useState(false);
 
     const badgeValue = {
-        safe: language === "sr" ? "Sigurno" : "Safe",
-        luxury: language === "sr" ? "Luksuzno" : "Luxury",
+        safe: language === "sr" ? "Siguran" : "Safe",
+        luxury: language === "sr" ? "Luksuzan" : "Luxury",
     };
 
     // Prevent body scroll when modal is open (handled by ModalShell mostly, but good to ensure if we build custom)

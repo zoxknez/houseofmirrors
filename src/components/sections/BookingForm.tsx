@@ -63,13 +63,18 @@ export function BookingForm({ checkIn, checkOut, guests, totalPrice, onClose, on
         name: dict.contact.name,
         email: dict.contact.email,
         phone: dict.contact.phone,
-        notes: language === "sr" ? "Posebni zahtevi (opciono)" : "Special requests (optional)",
+        notes: language === "sr" ? "Posebni zahtevi" : "Special requests",
+        phoneNote:
+            language === "sr"
+                ? "Rezervacija je validna tek nakon telefonskog razgovora sa domaćinom."
+                : "Reservation is valid only after a phone call with the host.",
         send: language === "sr" ? "Potvrdi rezervaciju" : "Confirm reservation",
         sending: dict.contact.sending,
         successTitle: language === "sr" ? "Zahtev poslat" : "Request sent",
         successMessage: language === "sr" ? "Primili smo vaš zahtev. Kontaktiraćemo vas uskoro na" : "We received your request. We will contact you soon at",
         refCode: language === "sr" ? "Referentni broj" : "Reference number",
         error: dict.contact.error,
+        requiredError: language === "sr" ? "Molimo popunite sva polja." : "Please fill in all fields.",
         close: language === "sr" ? "Zatvori" : "Close",
         payment: language === "sr" ? "Za uplatu" : "Total due",
         confirmationNote: language === "sr" ? "Primićete email potvrdu sa detaljima za uplatu. Rezervacija je finalna nakon potvrde uplate." : "You will receive an email confirmation with payment details. Reservation is final after payment confirmation."
@@ -94,6 +99,12 @@ export function BookingForm({ checkIn, checkOut, guests, totalPrice, onClose, on
         e.preventDefault();
         setLoading(true);
         setError(null);
+
+        if (!formData.name.trim() || !formData.email.trim() || !formData.phone.trim() || !formData.message.trim()) {
+            setError(t.requiredError);
+            setLoading(false);
+            return;
+        }
 
         // abort previous if any
         if (abortRef.current) abortRef.current.abort();
@@ -264,18 +275,23 @@ export function BookingForm({ checkIn, checkOut, guests, totalPrice, onClose, on
                                 placeholder="Petar Petrović"
                                 autoComplete="name"
                             />
-                            <FormField
-                                label={t.phone}
-                                required
-                                icon={Phone}
-                                type="tel"
-                                name="phone"
-                                value={formData.phone}
-                                onChange={handleChange}
-                                placeholder="+381..."
-                                autoComplete="tel"
-                                inputMode="tel"
-                            />
+                            <div className="space-y-2">
+                                <FormField
+                                    label={t.phone}
+                                    required
+                                    icon={Phone}
+                                    type="tel"
+                                    name="phone"
+                                    value={formData.phone}
+                                    onChange={handleChange}
+                                    placeholder="+381..."
+                                    autoComplete="tel"
+                                    inputMode="tel"
+                                />
+                                <p className="text-white/50 text-[11px] leading-relaxed">
+                                    {t.phoneNote}
+                                </p>
+                            </div>
                         </div>
 
                         <FormField
@@ -294,6 +310,7 @@ export function BookingForm({ checkIn, checkOut, guests, totalPrice, onClose, on
                         <FormField
                             as="textarea"
                             label={t.notes}
+                            required
                             icon={MessageSquare}
                             name="message"
                             value={formData.message}

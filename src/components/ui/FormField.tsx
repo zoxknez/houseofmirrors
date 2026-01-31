@@ -28,6 +28,7 @@ export function FormField(props: InputProps | TextareaProps) {
                 {as === "textarea" ? (
                     <textarea
                         {...rest}
+                        required={required}
                         className={[
                             "w-full",
                             Icon ? "pl-11" : "pl-4",
@@ -39,6 +40,7 @@ export function FormField(props: InputProps | TextareaProps) {
                 ) : (
                     <input
                         {...rest}
+                        required={required}
                         className={[
                             "w-full",
                             Icon ? "pl-11" : "pl-4",
