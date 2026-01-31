@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Facebook, Instagram, Twitter, MapPin, Phone, Mail, ArrowUp } from "lucide-react";
+import { MapPin, Phone, Mail, ArrowUp } from "lucide-react";
 import { propertyData } from "@/data/property";
 import { useLanguage } from "@/context/LanguageContext";
 
@@ -56,17 +56,7 @@ export function Footer() {
                             </p>
                         </motion.div>
 
-                        <div className="flex gap-4">
-                            {[Instagram, Facebook, Twitter].map((Icon, i) => (
-                                <a
-                                    key={i}
-                                    href="#"
-                                    className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/60 hover:bg-[var(--gold)] hover:text-black transition-all duration-300"
-                                >
-                                    <Icon className="w-4 h-4" />
-                                </a>
-                            ))}
-                        </div>
+                        
                     </div>
 
                     {/* Navigation */}

@@ -105,8 +105,10 @@ export function HouseRules() {
     const t = {
         allowed: language === "sr" ? "Dozvoljeno" : "Allowed",
         notAllowed: language === "sr" ? "Zabranjeno" : "Not Allowed",
+        petsNotAllowed: language === "sr" ? "Zabranjeni" : "Not Allowed",
+        partiesNotAllowed: language === "sr" ? "Zabranjene" : "Not Allowed",
         from: language === "sr" ? "od" : "from",
-        to: language === "sr" ? "do" : "to",
+        to: language === "sr" ? "do" : "till",
         title: language === "sr" ? "Pravila" : "House",
         titleSuffix: language === "sr" ? "Kuće" : "Rules",
         checkIn: "Check-in",
@@ -161,7 +163,7 @@ export function HouseRules() {
                 label: t.pets,
                 allowed: !!rules.pets,
                 allowedText: t.allowed,
-                deniedText: t.notAllowed,
+                deniedText: t.petsNotAllowed,
             },
             {
                 id: "parties",
@@ -170,7 +172,7 @@ export function HouseRules() {
                 label: t.parties,
                 allowed: !!rules.parties,
                 allowedText: t.allowed,
-                deniedText: t.notAllowed,
+                deniedText: t.partiesNotAllowed,
             },
             {
                 id: "children",

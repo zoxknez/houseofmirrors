@@ -62,8 +62,11 @@ export function Contact() {
         call: language === "sr" ? "Telefoni" : "Phones",
         messaging: language === "sr" ? "WhatsApp / Viber" : "WhatsApp / Viber",
         email: "Email",
-        host: "Premium Host",
-        responds: (time: string, rate: string) => language === "sr" ? `Odgovaramo ${time} sa ${rate} preciznosti.` : `Responds in ${time} with ${rate} precision.`,
+        host: language === "sr" ? "Premium domaćin" : "Premium Host",
+        responds: (time: string, rate: string) =>
+            language === "sr"
+                ? `Odgovaramo ${time} sa ${rate} preciznosti.`
+                : `Responds ${time} with ${rate} precision.`,
         sendMessage: language === "sr" ? "Pošaljite poruku" : "Send a message",
         subject: language === "sr" ? "Tema" : "Subject",
         contactTitle: language === "sr" ? "Budimo u" : "Get in",
@@ -74,6 +77,8 @@ export function Contact() {
         messagePlaceholder: language === "sr" ? "Napišite vašu poruku..." : "Write your message...",
         messageError: language === "sr" ? "Molimo popunite sva obavezna polja." : "Please fill in all required fields."
     };
+
+    const responseTime = language === "sr" ? propertyData.host.responseTime : "within an hour";
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
@@ -282,7 +287,7 @@ export function Contact() {
 
                             <div className="bg-[var(--gold)]/5 border border-[var(--gold)]/10 p-5 rounded-[20px]">
                                 <p className="text-white/60 text-xs md:text-sm font-bold leading-relaxed italic text-center">
-                                    "{t.responds(propertyData.host.responseTime, propertyData.host.responseRate)}"
+                                    "{t.responds(responseTime, propertyData.host.responseRate)}"
                                 </p>
                             </div>
                         </div>

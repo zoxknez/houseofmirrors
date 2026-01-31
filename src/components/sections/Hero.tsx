@@ -86,6 +86,7 @@ export function Hero() {
 
     return (
         <section
+            id="hero"
             className="relative min-h-dvh flex flex-col overflow-hidden bg-black"
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
@@ -136,51 +137,57 @@ export function Hero() {
             />
 
             {/* Desktop Navigation Arrows */}
-            <button
-                type="button"
-                onClick={() => {
-                    resetTimer();
-                    prevSlide();
-                }}
-                className="hidden md:inline-flex absolute left-8 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all"
-                aria-label="Previous slide"
-            >
-                <ChevronLeft className="w-6 h-6 text-white" />
-            </button>
-            <button
-                type="button"
-                onClick={() => {
-                    resetTimer();
-                    nextSlide();
-                }}
-                className="hidden md:inline-flex absolute right-8 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all"
-                aria-label="Next slide"
-            >
-                <ChevronRight className="w-6 h-6 text-white" />
-            </button>
+            {count > 1 && (
+                <>
+                    <button
+                        type="button"
+                        onClick={() => {
+                            resetTimer();
+                            prevSlide();
+                        }}
+                        className="hidden md:inline-flex absolute left-8 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all"
+                        aria-label="Previous slide"
+                    >
+                        <ChevronLeft className="w-6 h-6 text-white" />
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => {
+                            resetTimer();
+                            nextSlide();
+                        }}
+                        className="hidden md:inline-flex absolute right-8 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-white/5 backdrop-blur-sm border border-white/10 hover:bg-white/10 transition-all"
+                        aria-label="Next slide"
+                    >
+                        <ChevronRight className="w-6 h-6 text-white" />
+                    </button>
+                </>
+            )}
 
             {/* Slide Indicators */}
-            <div className="absolute bottom-10 md:bottom-12 left-1/2 -translate-x-1/2 z-20 flex gap-3">
-                {images.map((_, index) => {
-                    const active = index === currentSlide;
-                    return (
-                        <button
-                            key={index}
-                            type="button"
-                            onClick={() => {
-                                resetTimer();
-                                goTo(index);
-                            }}
-                            className={`h-1 rounded-full transition-all duration-500 ${active
-                                ? "w-12 bg-gold shadow-[0_0_10px_rgba(212,175,55,0.4)]"
-                                : "w-2 bg-white/20 hover:bg-white/40"
-                                }`}
-                            aria-label={`Slide ${index + 1}`}
-                            aria-current={active ? "true" : undefined}
-                        />
-                    );
-                })}
-            </div>
+            {count > 1 && (
+                <div className="absolute bottom-10 md:bottom-12 left-1/2 -translate-x-1/2 z-20 flex gap-3">
+                    {images.map((_, index) => {
+                        const active = index === currentSlide;
+                        return (
+                            <button
+                                key={index}
+                                type="button"
+                                onClick={() => {
+                                    resetTimer();
+                                    goTo(index);
+                                }}
+                                className={`h-1 rounded-full transition-all duration-500 ${active
+                                    ? "w-12 bg-gold shadow-[0_0_10px_rgba(212,175,55,0.4)]"
+                                    : "w-2 bg-white/20 hover:bg-white/40"
+                                    }`}
+                                aria-label={`Slide ${index + 1}`}
+                                aria-current={active ? "true" : undefined}
+                            />
+                        );
+                    })}
+                </div>
+            )}
 
             {/* Main Content */}
             <div className="relative z-20 max-w-350 mx-auto px-6 md:px-10 py-8 md:py-12 text-center flex flex-col items-center justify-center grow overflow-x-hidden">

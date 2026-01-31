@@ -7,8 +7,13 @@ import { useLanguage } from "@/context/LanguageContext";
 import { ModalShell } from "@/components/ui/ModalShell";
 
 export function AboutBanner() {
-    const { dict } = useLanguage();
+    const { dict, language } = useLanguage();
     const [isOpen, setIsOpen] = useState(false);
+
+    const badgeValue = {
+        safe: language === "sr" ? "Sigurno" : "Safe",
+        luxury: language === "sr" ? "Luksuzno" : "Luxury",
+    };
 
     // Prevent body scroll when modal is open (handled by ModalShell mostly, but good to ensure if we build custom)
     // Actually ModalShell probably handles it? Let's check BookingForm used ModalShell. 
@@ -78,12 +83,12 @@ export function AboutBanner() {
                                 </div>
                                 <div className="bg-white/10 p-3 md:p-4 rounded-2xl border border-white/10 backdrop-blur-sm flex flex-col justify-between min-h-30">
                                     <Shield className="w-5 h-5 md:w-6 md:h-6 text-gold mb-2 md:mb-3" />
-                                    <div className="text-lg md:text-xl font-black text-white">Safe</div>
+                                    <div className="text-lg md:text-xl font-black text-white">{badgeValue.safe}</div>
                                     <div className="text-[9px] md:text-[10px] uppercase tracking-wider text-white/60">{dict.about.badges.neighborhood}</div>
                                 </div>
                                 <div className="bg-white/10 p-3 md:p-4 rounded-2xl border border-white/10 backdrop-blur-sm flex flex-col justify-between min-h-30">
                                     <Sparkles className="w-5 h-5 md:w-6 md:h-6 text-gold mb-2 md:mb-3" />
-                                    <div className="text-lg md:text-xl font-black text-white">Luxury</div>
+                                    <div className="text-lg md:text-xl font-black text-white">{badgeValue.luxury}</div>
                                     <div className="text-[9px] md:text-[10px] uppercase tracking-wider text-white/60">{dict.about.badges.design}</div>
                                 </div>
                             </div>

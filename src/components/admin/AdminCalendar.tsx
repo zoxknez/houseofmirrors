@@ -197,9 +197,9 @@ export function AdminCalendar({
     };
 
     return (
-        <div className="bg-[#0A0A0A]/50 backdrop-blur-xl rounded-2xl p-6 border border-white/5 shadow-2xl">
+        <div className="bg-[#0A0A0A]/50 backdrop-blur-xl rounded-2xl p-6 lg:p-8 xl:p-10 border border-white/5 shadow-2xl">
             {/* Header */}
-            <div className="flex items-center justify-between mb-8">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
                 <div>
                     <h2 className="text-xl font-black text-white uppercase tracking-tight">
                         {format(currentMonth, "LLLL yyyy", { locale: sr })}
@@ -209,7 +209,7 @@ export function AdminCalendar({
                     </p>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
                     <button
                         onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
                         className="p-2.5 hover:bg-white/5 rounded-xl border border-white/5 transition-all group"
@@ -235,98 +235,102 @@ export function AdminCalendar({
                 </div>
             </div>
 
-            {/* Week days */}
-            <div className="grid grid-cols-7 gap-1 mb-4">
-                {weekDays.map((d) => (
-                    <div key={d} className="text-center text-[10px] font-black text-white/20 uppercase tracking-widest py-2">
-                        {d}
+            <div className="overflow-x-auto -mx-4 px-4 pb-2">
+                <div className="min-w-[680px] lg:min-w-full">
+                    {/* Week days */}
+                    <div className="grid grid-cols-7 gap-1 md:gap-2 mb-4">
+                        {weekDays.map((d) => (
+                            <div key={d} className="text-center text-[10px] md:text-xs font-black text-white/30 uppercase tracking-widest py-2">
+                                {d}
+                            </div>
+                        ))}
                     </div>
-                ))}
-            </div>
 
-            {/* Calendar grid */}
-            <div className="grid grid-cols-7 gap-1.5">
-                {gridDays.map((day) => {
-                    const k = dayKey(day);
-                    const status = statusByDay.get(k);
-                    const outside = !isSameMonth(day, currentMonth);
-                    const isSelected = isInSelectedRange(day);
-                    const isToday = isSameDay(day, new Date());
+                    {/* Calendar grid */}
+                    <div className="grid grid-cols-7 gap-1.5 md:gap-2">
+                        {gridDays.map((day) => {
+                            const k = dayKey(day);
+                            const status = statusByDay.get(k);
+                            const outside = !isSameMonth(day, currentMonth);
+                            const isSelected = isInSelectedRange(day);
+                            const isToday = isSameDay(day, new Date());
 
-                    const disabled =
-                        !!status && status.type !== "blocked"; // bookings disabled for range selection
-                    const blocked = status?.type === "blocked";
+                            const disabled =
+                                !!status && status.type !== "blocked"; // bookings disabled for range selection
+                            const blocked = status?.type === "blocked";
 
-                    let bgClass = "bg-white/[0.02] hover:bg-white/[0.05]";
-                    let textClass = outside ? "text-white/20" : "text-white/60";
-                    let borderClass = "border-white/5";
+                            let bgClass = "bg-white/[0.02] hover:bg-white/[0.05]";
+                            let textClass = outside ? "text-white/20" : "text-white/60";
+                            let borderClass = "border-white/5";
 
-                    if (status) {
-                        borderClass = "border-transparent";
-                        if (status.type === "pending") {
-                            bgClass = "bg-[var(--gold)]/10";
-                            textClass = "text-[var(--gold)] font-bold";
-                        }
-                        if (status.type === "confirmed") {
-                            bgClass = "bg-emerald-500/10";
-                            textClass = "text-emerald-400 font-bold";
-                        }
-                        if (status.type === "completed") {
-                            bgClass = "bg-blue-500/10";
-                            textClass = "text-blue-400 font-bold";
-                        }
-                        if (status.type === "blocked") {
-                            bgClass = "bg-red-500/10";
-                            textClass = "text-red-400 font-bold";
-                        }
-                    }
+                            if (status) {
+                                borderClass = "border-transparent";
+                                if (status.type === "pending") {
+                                    bgClass = "bg-[var(--gold)]/10";
+                                    textClass = "text-[var(--gold)] font-bold";
+                                }
+                                if (status.type === "confirmed") {
+                                    bgClass = "bg-emerald-500/10";
+                                    textClass = "text-emerald-400 font-bold";
+                                }
+                                if (status.type === "completed") {
+                                    bgClass = "bg-blue-500/10";
+                                    textClass = "text-blue-400 font-bold";
+                                }
+                                if (status.type === "blocked") {
+                                    bgClass = "bg-red-500/10";
+                                    textClass = "text-red-400 font-bold";
+                                }
+                            }
 
-                    if (isSelected) {
-                        bgClass = "bg-[var(--gold)]/20";
-                        borderClass = "border-[var(--gold)]/30";
-                        textClass = "text-[var(--gold)] font-black";
-                    }
+                            if (isSelected) {
+                                bgClass = "bg-[var(--gold)]/20";
+                                borderClass = "border-[var(--gold)]/30";
+                                textClass = "text-[var(--gold)] font-black";
+                            }
 
-                    if (isToday && !isSelected && !status) {
-                        borderClass = "border-[var(--gold)]/50";
-                        textClass = "text-[var(--gold)] font-black";
-                    }
+                            if (isToday && !isSelected && !status) {
+                                borderClass = "border-[var(--gold)]/50";
+                                textClass = "text-[var(--gold)] font-black";
+                            }
 
-                    return (
-                        <button
-                            key={k}
-                            onClick={() => handleDayClick(day)}
-                            disabled={disabled}
-                            className={[
-                                "aspect-square rounded-xl relative group transition-all border flex flex-col items-center justify-center gap-1",
-                                bgClass,
-                                textClass,
-                                borderClass,
-                                disabled ? "opacity-40 cursor-not-allowed" : "",
-                            ].join(" ")}
-                            aria-label={`Dan ${format(day, "d. MMM", { locale: sr })}`}
-                        >
-                            <span className="text-sm tracking-tighter">{format(day, "d")}</span>
+                            return (
+                                <button
+                                    key={k}
+                                    onClick={() => handleDayClick(day)}
+                                    disabled={disabled}
+                                    className={[
+                                        "aspect-square rounded-xl md:rounded-2xl relative group transition-all border flex flex-col items-center justify-center gap-1",
+                                        bgClass,
+                                        textClass,
+                                        borderClass,
+                                        disabled ? "opacity-40 cursor-not-allowed" : "",
+                                    ].join(" ")}
+                                    aria-label={`Dan ${format(day, "d. MMM", { locale: sr })}`}
+                                >
+                                    <span className="text-sm md:text-base tracking-tighter">{format(day, "d")}</span>
 
-                            {isToday && (
-                                <div className="w-1 h-1 bg-[var(--gold)] rounded-full shadow-[0_0_8px_var(--gold)]" />
-                            )}
+                                    {isToday && (
+                                        <div className="w-1 h-1 bg-[var(--gold)] rounded-full shadow-[0_0_8px_var(--gold)]" />
+                                    )}
 
-                            {/* Tooltip (desktop hover) */}
-                            {status && (
-                                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 px-3 py-2 bg-[#1A1A1A] border border-white/10 rounded-xl text-[10px] font-bold uppercase tracking-widest whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all pointer-events-none z-20 shadow-2xl">
-                                    {status.type === "blocked"
-                                        ? `Blokirano: ${status.blocked.reason || "Nije dostupno"}`
-                                        : `${status.booking.firstName} ${status.booking.lastName}`}
-                                    <div className="absolute top-full left-1/2 -translate-x-1/2 border-8 border-transparent border-t-[#1A1A1A]" />
-                                </div>
-                            )}
+                                    {/* Tooltip (desktop hover) */}
+                                    {status && (
+                                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 px-3 py-2 bg-[#1A1A1A] border border-white/10 rounded-xl text-[10px] font-bold uppercase tracking-widest whitespace-nowrap opacity-0 group-hover:opacity-100 transition-all pointer-events-none z-20 shadow-2xl">
+                                            {status.type === "blocked"
+                                                ? `Blokirano: ${status.blocked.reason || "Nije dostupno"}`
+                                                : `${status.booking.firstName} ${status.booking.lastName}`}
+                                            <div className="absolute top-full left-1/2 -translate-x-1/2 border-8 border-transparent border-t-[#1A1A1A]" />
+                                        </div>
+                                    )}
 
-                            {/* tiny badge hint */}
-                            {blocked && <div className="absolute top-1.5 right-1.5 w-1 h-1 rounded-full bg-red-400 animate-pulse" />}
-                        </button>
-                    );
-                })}
+                                    {/* tiny badge hint */}
+                                    {blocked && <div className="absolute top-1.5 right-1.5 w-1 h-1 rounded-full bg-red-400 animate-pulse" />}
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
             </div>
 
             {/* Legend */}

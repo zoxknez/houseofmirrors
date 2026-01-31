@@ -1,9 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
-import { Navbar } from "@/components/sections/Navbar";
-import { Footer } from "@/components/sections/Footer";
 import { LanguageProvider } from "@/context/LanguageContext";
+import { AppShell } from "@/components/layout/AppShell";
 
 const inter = Inter({
   subsets: ["latin", "latin-ext"],
@@ -74,9 +73,7 @@ export default function RootLayout({
         className={`${inter.variable} ${outfit.variable} antialiased min-h-screen`}
       >
         <LanguageProvider>
-          <Navbar />
-          {children}
-          <Footer />
+          <AppShell>{children}</AppShell>
         </LanguageProvider>
       </body>
     </html>

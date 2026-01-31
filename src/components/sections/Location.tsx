@@ -8,7 +8,7 @@ import { GlassCard } from "@/components/ui/GlassCard";
 import { useLanguage } from "@/context/LanguageContext";
 
 export function Location() {
-    const { dict } = useLanguage();
+    const { dict, language } = useLanguage();
     const { location } = propertyData;
     const { lat, lng } = location.coordinates;
 
@@ -21,6 +21,20 @@ export function Location() {
         { name: dict.location.nearby.park, distance: "400 m", time: "5 min", icon: Trees },
         { name: dict.location.nearby.center, distance: "3.5 km", time: "10 min", icon: Building2 },
     ];
+
+    const t = {
+        mapTitle: language === "sr" ? "Mapa lokacije" : "Location Map",
+        neighborhood: language === "sr" ? "Komšiluk" : "Neighborhood",
+        nearby: language === "sr" ? "U blizini" : "Nearby",
+        openMap: language === "sr" ? "Otvori mapu" : "Open Map",
+        directions: language === "sr" ? "Uputstva" : "Directions",
+        transport: language === "sr" ? "Prevoz" : "Transport",
+        busStation: language === "sr" ? "Autobuska stanica" : "Bus Station",
+        acrossStreet: language === "sr" ? "preko puta" : "across street",
+        nature: language === "sr" ? "Priroda" : "Nature",
+        parks: language === "sr" ? "Parkovi i zelenilo" : "Parks & Greenery",
+        walkTime: language === "sr" ? "5 min hoda" : "5 min walk",
+    };
 
     return (
         <section id="location" className="relative py-20 md:py-32 bg-black overflow-hidden">
@@ -55,7 +69,7 @@ export function Location() {
                             {/* Map Container */}
                             <div className="relative flex-grow w-full h-full min-h-[300px]">
                                 <iframe
-                                    title="Location Map"
+                                    title={t.mapTitle}
                                     src={embedSrc}
                                     className="absolute inset-0 w-full h-full"
                                     style={{ border: 0 }}
@@ -72,7 +86,7 @@ export function Location() {
                                     rel="noreferrer"
                                     className="inline-flex items-center justify-center gap-3 h-14 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 text-white font-black uppercase tracking-[0.2em] text-[11px] hover:bg-white/10 transition-all shadow-xl"
                                 >
-                                    Open Map <ExternalLink className="w-4 h-4" />
+                                    {t.openMap} <ExternalLink className="w-4 h-4" />
                                 </a>
                                 <a
                                     href={directionsLink}
@@ -80,7 +94,7 @@ export function Location() {
                                     rel="noreferrer"
                                     className="inline-flex items-center justify-center gap-3 h-14 rounded-2xl bg-[var(--gold)] text-black font-black uppercase tracking-[0.2em] text-[11px] hover:scale-[1.02] active:scale-95 transition-all shadow-[0_10px_30px_rgba(212,175,55,0.15)]"
                                 >
-                                    Directions <Navigation className="w-4 h-4" />
+                                    {t.directions} <Navigation className="w-4 h-4" />
                                 </a>
                             </div>
                         </div>
@@ -124,7 +138,7 @@ export function Location() {
                                     </div>
                                     <div>
                                         <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--gold)] mb-1">
-                                            Neighborhood
+                                            {t.neighborhood}
                                         </h3>
                                         <p className="text-white mb-2 font-black uppercase tracking-tight text-sm md:text-base">
                                             {dict.location.neighborhood}
@@ -137,7 +151,7 @@ export function Location() {
                             <GlassCard className="p-7 md:p-8">
                                 <div className="flex items-center gap-3 mb-6">
                                     <Navigation className="w-5 h-5 text-[var(--gold)]" />
-                                    <h3 className="text-xs md:text-sm font-black uppercase tracking-[0.3em] text-white">Nearby</h3>
+                                    <h3 className="text-xs md:text-sm font-black uppercase tracking-[0.3em] text-white">{t.nearby}</h3>
                                 </div>
                                 <div className="space-y-3">
                                     {attractions.map((attraction, index) => (
@@ -161,16 +175,16 @@ export function Location() {
                         <div className="grid grid-cols-2 gap-4">
                             <GlassCard className="p-5 text-center group hover:bg-white/[0.04] transition-all duration-500 rounded-[28px]">
                                 <Bus className="w-7 h-7 text-[var(--gold)] mx-auto mb-3 group-hover:scale-110 transition-transform" />
-                                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--gold)] mb-1">Transport</p>
-                                <p className="text-[11px] md:text-sm text-white font-black uppercase">Bus Station</p>
-                                <p className="text-[10px] text-white/40 font-bold uppercase mt-1">across street</p>
+                                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--gold)] mb-1">{t.transport}</p>
+                                <p className="text-[11px] md:text-sm text-white font-black uppercase">{t.busStation}</p>
+                                <p className="text-[10px] text-white/40 font-bold uppercase mt-1">{t.acrossStreet}</p>
                             </GlassCard>
 
                             <GlassCard className="p-5 text-center group hover:bg-white/[0.04] transition-all duration-500 rounded-[28px]">
                                 <TreeDeciduous className="w-7 h-7 text-[var(--gold)] mx-auto mb-3 group-hover:scale-110 transition-transform" />
-                                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--gold)] mb-1">Nature</p>
-                                <p className="text-[11px] md:text-sm text-white font-black uppercase">Parks & Greenery</p>
-                                <p className="text-[10px] text-white/40 font-bold uppercase mt-1">5 min walk</p>
+                                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--gold)] mb-1">{t.nature}</p>
+                                <p className="text-[11px] md:text-sm text-white font-black uppercase">{t.parks}</p>
+                                <p className="text-[10px] text-white/40 font-bold uppercase mt-1">{t.walkTime}</p>
                             </GlassCard>
                         </div>
                     </motion.div>
